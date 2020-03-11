@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="../../css/mui.min.css" />
+		<link rel="stylesheet" href="../../css/base.css">
+		<script src="../../js/vue.min.js"></script>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<title>培训效果评估</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	</head>
+
+	<style type="text/css">
+		p {
+			font-size: 0.35rem;
+			color: #000000;
+		}
+
+		.my-header {
+			height: 0.88rem;
+			background-color: #51BFF7;
+			color: #fff;
+		}
+
+		.my-header .mui-title {
+			color: #FFF;
+			font-size: 0.36rem;
+		}
+
+		.my-header a,
+		.my-header h1 {
+			line-height: 0.88rem;
+		}
+
+		.mui-content>h3 {
+			text-align: center;
+			font-size: 0.45rem;
+		}
+
+		.mui-content>p {
+			text-align: center;
+		}
+
+		.name {
+			color: darkgoldenrod;
+		}
+	</style>
+	<body style="padding:0.1rem 0.4rem;">
+		<header class="mui-bar mui-bar-nav my-header">
+			<h1 class="mui-title">培训效果评估表</h1>
+		</header>
+		<div class="mui-content" id="app">
+			<!-- <h3>课程名称</h3> -->
+			<!-- <h3>线路项目三部一班停工培训</h3> -->
+			<!-- <p>培训讲师:<span class="name">李晓艺</span></p>
+			<p>培训日期:<span class="name">2019.05.15~2019.05.18</span></p> -->
+			<div style="height: 0.1rem;"></div>
+			<div style="height: 0.1rem;"></div>
+			<div style="height: 0.1rem;"></div>
+			<ul>
+				<h4>一. 课程内容评价</h4>
+				<li v-for="(item, index) in courseContent">
+					<p>{{item.topic}}</p>
+					<!-- <p>{{item.userChoose}}</p> -->
+					<div class="mui-input-row mui-radio mui-left">
+						<label>5分</label>
+						<input type="radio" :name="'radio'+index" value="5" v-model="item.userChoose">
+					</div>
+					<div class="mui-input-row mui-radio mui-left">
+						<label>4分</label>
+						<input type="radio" :name="'radio'+index" value="4" v-model="item.userChoose">
+					</div>
+					<div class="mui-input-row mui-radio mui-left">
+						<label>3分</label>
+						<input type="radio" :name="'radio'+index" value="3" v-model="item.userChoose">
+					</div>
+					<div class="mui-input-row mui-radio mui-left">
+						<label>2分</label>
+						<input type="radio" :name="'radio'+index" value="2" v-model="item.userChoose">
+					</div>
+				</li>
+			</ul>
+			<ul>
+				<h4>二. 讲师评价</h4>
+				<li v-for="(item, index) in lecturer">
+					<p>{{item.topic}}</p>
+					<!-- <p>{{item.userChoose}}</p> -->
+					<div class="mui-input-row mui-radio mui-left my">
+						<label>5分</label>
+						<input type="radio" :name="'radio1'+index" value="5" v-model="item.userChoose">
+					</div>
+					<div class="mui-input-row mui-radio mui-left">
+						<label>4分</label>
+						<input type="radio" :name="'radio1'+index" value="4" v-model="item.userChoose">
+					</div>
+					<div class="mui-input-row mui-radio mui-left">
+						<label>3分</label>
+						<input type="radio" :name="'radio1'+index" value="3" v-model="item.userChoose">
+					</div>
+					<div class="mui-input-row mui-radio mui-left">
+						<label>2分</label>
+						<input type="radio" :name="'radio1'+index" value="2" v-model="item.userChoose">
+					</div>
+				</li>
+			</ul>
+			<ul>
+				<h4>三. 培训收获</h4>
+				<li v-for="(item, index) in harvest">
+					<p>{{item.topic}}</p>
+					<!-- <p>{{item.userChoose}}</p> -->
+					<div class="mui-input-row mui-radio mui-left my">
+						<label>5分</label>
+						<input type="radio" :name="'radio2'+index" value="5" v-model="item.userChoose">
+					</div>
+					<div class="mui-input-row mui-radio mui-left">
+						<label>4分</label>
+						<input type="radio" :name="'radio2'+index" value="4" v-model="item.userChoose">
+					</div>
+					<div class="mui-input-row mui-radio mui-left">
+						<label>3分</label>
+						<input type="radio" :name="'radio2'+index" value="3" v-model="item.userChoose">
+					</div>
+					<div class="mui-input-row mui-radio mui-left">
+						<label>2分</label>
+						<input type="radio" :name="'radio2'+index" value="2" v-model="item.userChoose">
+					</div>
+				</li>
+			</ul>
+			<ul>
+				<h4>四. 实际效果评价</h4>
+				<li>
+					<p>16.课程综合评估</p>
+					<!-- <p>{{actualEffect.userChoose}}</p> -->
+					<div class="mui-input-row mui-radio mui-left my">
+						<label>非常满意</label>
+						<input type="radio" name="radio4" value="5" v-model="actualEffect.userChoose">
+					</div>
+					<div class="mui-input-row mui-radio mui-left">
+						<label>满意</label>
+						<input type="radio" name="radio4" value="4" v-model="actualEffect.userChoose">
+					</div>
+					<div class="mui-input-row mui-radio mui-left">
+						<label>一般</label>
+						<input type="radio" name="radio4" value="3" v-model="actualEffect.userChoose">
+					</div>
+					<div class="mui-input-row mui-radio mui-left">
+						<label>不满意</label>
+						<input type="radio" name="radio4" value="2" v-model="actualEffect.userChoose">
+					</div>
+				</li>
+			</ul>
+			<div class="mui-input-row" style="margin: 10px 5px;">
+				<h4>五. 培训效果述评</h4>
+				<!-- {{trainEffect.userChoose}} -->
+				<textarea id="textarea" rows="5" placeholder="请输入您的述评" v-model="trainEffect.userChoose"></textarea>
+			</div>
+			<div class="mui-input-row" style="margin: 10px 5px;">
+				<h4>六. 改善建议与要求</h4>
+				<!-- {{advice.userChoose}} -->
+				<textarea id="textarea" rows="5" placeholder="请输入你的要求与建议" v-model="advice.userChoose"></textarea>
+			</div>
+			<button type="button" class="mui-btn mui-btn-block mui-btn-primary" @click="tijiao">提交</button>
+		</div>
+		<script type="text/javascript">
+			mui.init()
+
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					courseContent: [{
+							topic: "1.课程适合我的工作和个人发展的需要",
+							userChoose: null
+						},
+						{
+							topic: "2.课程内容深度适中,易于理解",
+							userChoose: null
+						},
+						{
+							topic: "3.课程内容切合实际,便于应用",
+							userChoose: null
+						},
+						{
+							topic: "4.实用性和可操作性,解疑释惑",
+							userChoose: null
+						},
+					],
+					lecturer: [{
+							topic: "5.培训师有充分准备,教材清晰",
+							userChoose: null
+						},
+						{
+							topic: "6.培训师能表达清楚,态度友善",
+							userChoose: null
+						},
+						{
+							topic: "7.培训方式生动多样,鼓励参与",
+							userChoose: null
+						},
+						{
+							topic: "8.对培训内容有独特精辟见解",
+							userChoose: null
+						},
+						{
+							topic: "9.对进度与现场气氛把握很好",
+							userChoose: null
+						},
+					],
+					harvest: [{
+							topic: "10.获得适用的新知识",
+							userChoose: null
+						},
+						{
+							topic: "11.获得新的管理理念",
+							userChoose: null
+						},
+						{
+							topic: "12.理顺了过去工作中的一些模糊概念",
+							userChoose: null
+						},
+						{
+							topic: "13.获得了有效的技能或技术或方法",
+							userChoose: null
+						},
+						{
+							topic: "14.促进客观地观察自己以及自己的工作",
+							userChoose: null
+						},
+						{
+							topic: "15.掌握了工作流程.工艺及规章",
+							userChoose: null
+						}
+					],
+					actualEffect: {
+						userChoose: null
+					},
+					trainEffect: {
+						userChoose: null
+					},
+					advice: {
+						userChoose: null
+					},
+				},
+				methods: {
+					tijiao() {
+						var _this = this
+						mui.plusReady(function() {
+							var self = plus.webview.currentWebview();
+							var courseId = self.courseId
+							var userMsg = {
+								courseId: courseId,
+								contentA: _this.courseContent[0].userChoose,
+								contentB: _this.courseContent[1].userChoose,
+								contentC: _this.courseContent[2].userChoose,
+								contentD: _this.courseContent[3].userChoose,
+								teacherA: _this.lecturer[0].userChoose,
+								teacherB: _this.lecturer[1].userChoose,
+								teacherC: _this.lecturer[2].userChoose,
+								teacherD: _this.lecturer[3].userChoose,
+								teacherE: _this.lecturer[4].userChoose,
+								harvestA: _this.harvest[0].userChoose,
+								harvestB: _this.harvest[1].userChoose,
+								harvestC: _this.harvest[2].userChoose,
+								harvestD: _this.harvest[3].userChoose,
+								harvestE: _this.harvest[4].userChoose,
+								harvestF: _this.harvest[5].userChoose,
+								effect: _this.actualEffect.userChoose,
+								descri: _this.trainEffect.userChoose,
+								advice: _this.advice.userChoose,
+							}
+							// console.log(userMsg);
+							for(var name in userMsg){
+								if(userMsg[name] == null){
+									mui.alert("请您填写完整", '提示', '确定', function(e) {
+									}, 'div')
+									return false
+								}
+							}
+							app.request1("app", "exam/addEvaluation", JSON.stringify(userMsg), "post", function(data) {
+								console.log(data);
+								if (data.code == 0) {
+									mui.alert("提交成功,谢谢您的参与", '提示', '确定', function(e) {
+										plus.webview.currentWebview().close();
+									}, 'div')
+								}
+							})
+						})
+					}
+				},
+				created() {
+					mui.plusReady(function() {
+						var self = plus.webview.currentWebview();
+						var courseId = {
+							courseId: self.courseId
+						}
+						// app.request1("app", "exam/addEvaluation", JSON.stringify(courseId), "post", function(data) {
+						// 	console.log(data);
+						// })
+					})
+				}
+			})
+		</script>
+	</body>
+</html>

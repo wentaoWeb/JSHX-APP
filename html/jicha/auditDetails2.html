@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/mui.poppicker.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css">
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/main.js"></script>
+		<script src="../../js/app.js"></script>
+		<style>
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+			}
+			
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			.my-header {
+				height: 0.88rem;
+				background-color: #FFF;
+				color: #fff;
+			}
+			
+			.my-header .mui-title {
+				color: #000;
+				font-size: 0.36rem;
+				font-weight: 800;
+			}
+			
+			.my-header a,
+			.my-header h1 {
+				line-height: 0.88rem;
+			}
+			
+			.mui-bar-nav.mui-bar .mui-icon {
+				padding: 0;
+				margin: 0;
+				color: #000;
+			}
+			
+			.mui-segmented-control .mui-control-item.mui-active {
+				color: #51BFF7;
+				background-color: transparent;
+				font-size: 0.4rem;
+				font-weight: 800;
+			}
+			
+			.mui-segmented-control {
+				border: none;
+			}
+			
+			.mui-segmented-control .mui-control-item {
+				border-left: none;
+				font-size: 0.34rem;
+				color: #666;
+			}
+			
+			.apply {
+				margin: 0 0.3rem;
+				border-bottom: 1px solid #ccc;
+				padding-top: 0.2rem;
+				padding-bottom: 0.15rem;
+				box-sizing: border-box;
+			}
+			
+			.apply input {
+				border: none;
+				outline: none;
+				color: rgba(51, 51, 51);
+				font-size: 0.36rem;
+				margin-top: 0.16rem;
+				width: 100%;
+				padding: 0px !important;
+				margin-bottom: 0px;
+			}
+			
+			.apply label {
+				font-size: 0.24rem;
+				color: rgb(148, 148, 148);
+			}
+			
+			.apply p {
+				font-size: 20px;
+				margin-top: 0;
+				margin-top: 20px;
+				color: #000;
+			}
+			
+			.mui-table-view:before {
+				height: 0px;
+			}
+			
+			.mui-table-view-cell {
+				padding: 18px 15px;
+			}
+			
+			.mui-table-view-cell>a:not(.mui-btn) {
+				font-size: 0.32rem;
+			}
+			
+			.padd em {
+				position: absolute;
+				right: 25px;
+				font-size: 0.34rem;
+			}
+			
+			.padd input {
+				width: auto;
+				height: auto;
+				padding: 0;
+				border: none;
+				position: absolute;
+				right: -150px;
+				font-size: 0.34rem;
+			}
+			
+			.box p {
+				height: 50px;
+				background-color: #F8F7FC;
+				font-size: 0.4rem;
+				line-height: 56px;
+				text-indent: 20px;
+				color: #666666;
+			}
+			
+			.mui-table-view-cell span {
+				position: absolute;
+				right: 1rem;
+			}
+			
+			.hege {
+				color: #33CC66;
+			}
+			
+			.weigui {
+				color: #FF0000;
+			}
+			
+			.buguifan {
+				color: #FF9900;
+			}
+			.apply img{
+				width: 126px;
+				height: 56px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="mui-off-canvas-wrap mui-draggable">
+				<!-- 主页面容器 -->
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav my-header">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">稽查详情</h1>
+					<a href="javascript:;" class="mui-icon mui-pull-right" style="font-size:18px;font-weight: 600;color: #51BFF7;"
+					 @click="add">完成</a>
+				</header>
+				<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll">
+					<div>
+						<div style="padding: 10px 10px;">
+							<div id="segmentedControl" class="mui-segmented-control">
+								<a class="mui-control-item mui-active" href="#item1">
+									项目信息
+								</a>
+							</div>
+						</div>
+						<div class="detail">
+							<div id="item1" class="mui-control-content mui-active">
+								<div class="apply">
+									<label>施工编号</label>
+									<input type="text" v-model="jicha.projectNum" placeholder="施工编号" readonly="readonly" />
+									<!--<p>{{entityList.projectNum}}</p>-->
+								</div>
+								<div class="apply">
+									<label>项目名称</label>
+									<input type="text" v-model="jicha.projectName" placeholder="项目名称" readonly="readonly" />
+									<!--<p>{{entityList.cooperateGroup}}</p>-->
+								</div>
+								<!-- <div class="apply">
+									<label>施工地点</label>
+									<input type="text" v-model="jicha.workSite" placeholder="施工地点" readonly="readonly" />
+								</div> -->
+
+								<div class="apply">
+									<label>施工队伍</label>
+									<input type="text" v-model="jicha.workUnit" placeholder="施工队伍" readonly="readonly" />
+									<!--<p>{{ entityList.workUnit }}</p>-->
+								</div>
+								<div class="apply">
+									<label>施工日期</label>
+									<input type="text" v-model="jicha.workStartTime" placeholder="施工日期" readonly="readonly" />
+									<!--<p>{{ entityList.workStartTime }}</p>-->
+								</div>
+								<div class="apply">
+									<label>计划工作时间</label>
+									<input type="text" v-model="jicha.planDate" placeholder="计划工作时间" readonly="readonly" />
+									<!--<p>{{entityList.planDate}}</p>-->
+								</div>
+								<div class="apply">
+									<label style="display: block;">工作负责人</label>
+									<!--<p></p>-->
+									<button v-if="entityList.workPrincipal == ''" type="button" class="mui-btn mui-btn-danger" @click="toPencil('1')">工作负责人签名</button>
+									<img v-if="entityList.workPrincipal != ''" :src="jicha.workPrincipal" >
+									<!-- <input type="text" v-model="jicha.workPrincipal" placeholder="请输入负责人" /> -->
+								</div>
+								<div class="apply">
+									<label style="display: block;">工作票签发人</label>
+									<!--<p></p>-->
+									<button v-if="entityList.workTicketSigner == ''" type="button" class="mui-btn mui-btn-danger" @click="toPencil('2')">工作票签发人签名</button>
+									<img v-if="entityList.workTicketSigner != ''" :src="jicha.workTicketSigner" >
+									<!-- <input type="text" v-model="jicha.workTicketSigner" placeholder="请输入签发人" /> -->
+								</div>
+								<div class="apply">
+									<label style="display: block;">工作许可人</label>
+									<!--<p></p>-->
+									<button v-if="entityList.workPermission == ''" type="button" class="mui-btn mui-btn-danger" @click="toPencil('3')">工作许可人签名</button>
+									<img v-if="entityList.workPermission != ''" :src="jicha.workPermission" >
+									<!-- <input type="text" v-model="jicha.workPermission" placeholder="请输入许可人" /> -->
+								</div>
+								<div class="apply">
+									<label>稽查员</label>
+									<!--<p>{{entityList.projectNum}}</p>-->
+									<input type="text" v-model="jicha.projectNum" placeholder="稽查员" readonly="readonly" />
+								</div>
+								<div class="apply">
+									<label>工作内容</label>
+									<!--<p>{{entityList.workContent}}</p>-->
+									<input type="text" v-model="jicha.workContent" placeholder="工作内容" readonly="readonly" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script src="../../assets/mui/js/mui.zoom.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../assets/mui/js/mui.previewimage.js" type="text/javascript" charset="utf-8"></script>
+
+		<script>
+			var dataA;
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				dataA = {
+					id: self.ids,
+				}
+				// console.log(dataA.id)
+				// self.addEventListener('show', function() {
+				// 	location.reload();
+				// 	// window.vm.ajax();
+				// });
+			})
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					entityList: [],
+					jicha: {},
+					ruleData: [{
+						value: '0',
+						text: '合格'
+					}, {
+						value: '1',
+						text: '不规范'
+					}, {
+						value: '2',
+						text: '违规'
+					}],
+				},
+				methods: {
+					toPencil(sta) {
+						let id = vm.jicha.id;
+						vm.jicha.checkPlanId = id;
+						var checkRecordNum = localStorage.getItem("checkRecordNum");
+						vm.jicha.checkRecordNum = checkRecordNum;
+						mui.ajax(baseURL + '/app/sceneCheck/insertCheckRecord', {
+							data: JSON.stringify(vm.jicha),
+							dataType: 'json',
+							//processData:false,
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token,
+								"Content-type": "application/json"
+							},
+							type: 'POST',
+							success: function(res) {
+								if (res.code == 0) {
+									mui.openWindow({
+										url: 'pencil.html', //String类型,要打开的界面的地址
+										id: 'pencil.html', //String类型,要打开的界面的id
+										createNew: true,
+										styles: {
+										    cachemode:"noCache",													 
+										},
+										extras: {
+											// technicalId: item.technicalId, //自定义扩展参数，可以用来处理页面间传值
+											Aid:dataA.id,
+											status: sta
+										},
+										waiting: {
+											autoShow: true,
+											title: '正在加载 '
+										}
+									})
+								}
+							}
+						});
+
+					},
+					ajax() {
+						mui.plusReady(function() {
+							// console.log(JSON.stringify(dataA) )
+							app.request("app", "sceneCheck/infoById", dataA, "get", function(data) {
+								// console.log(data);
+								// console.log(JSON.stringify(data));
+								vm.entityList = data.map.entityList[0];
+								// console.log(JSON.stringify(vm.entityList))
+								let jicah = data.map.entityList[0];
+								if (jicah.workPrincipal != '') {
+									jicah.workPrincipal = jicah.workPrincipal.replace('D:/js_hx_control/', baseURL + '/file/');
+								}
+								if (jicah.workTicketSigner != '') {
+									jicah.workTicketSigner = jicah.workTicketSigner.replace('D:/js_hx_control/', baseURL + '/file/');
+								}
+								if (jicah.workPermission != '') {
+									jicah.workPermission = jicah.workPermission.replace('D:/js_hx_control/', baseURL + '/file/');
+								}
+								vm.jicha = jicah;
+								// vm.jicha = data.map.entityList[0]
+								// console.log(JSON.stringify((vm.jicha)))
+							})
+						})
+					},
+					add() {
+						if (vm.jicha.workPrincipal == '') {
+							alert('工作负责人请签字！');
+							return false;
+						}
+						if (vm.jicha.workTicketSigner == '') {
+							alert('工作票签发人请签字！');
+							return false;
+						}
+						if (vm.jicha.workPermission == '') {
+							alert('工作许可人请签字！');
+							return false;
+						}
+						var checkRecordNum = localStorage.getItem("checkRecordNum");
+						mui.ajax(baseURL + '/app/sceneCheck/ifExcuteCheckContent', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token
+							},
+							type: 'POST',
+							data: {
+								"checkRecordNum": checkRecordNum
+							},
+							success: function(res) {
+								// console.log(res);
+								if (res.statue == 0) {
+									alert(res.msg);
+								} else {
+									mui.confirm(res.msg, '提示', ['取消', '确认'], function(e) {
+										if (e.index == 1) {
+											// console.log(dataA.id)
+											mui.openWindow({
+												url: 'auditDetails.html', //String类型,要打开的界面的地址
+												id: 'auditDetails.html', //String类型,要打开的界面的id	
+												createNew: true,
+												styles: {
+												    cachemode:"noCache",
+												},
+												extras: {
+													// technicalId: item.technicalId, //自定义扩展参数，可以用来处理页面间传值  
+													ids: dataA.id
+												},
+												waiting: {
+													autoShow: true,
+													title: '正在加载 '
+												}
+											})
+										} 
+									}, 'div')
+								}
+							},
+						})
+
+					},
+				},
+
+				mounted: function() {
+					this.ajax()
+				}
+			});
+			mui('#offCanvasSideScroll').scroll();
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="../../css/steps.css" />
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/mui.poppicker.css">
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css" />
+
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../libs/layer/layer.js"></script>
+		<script src="../../libs/bootstrap.min.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/main.js"></script>
+		<script src="../../js/steps.js"></script>
+		<script src="../../js/app.js"></script>
+		<style>
+			#table {
+				width: 90%;
+				margin: 0 auto;
+				padding-top: 10px;
+			}
+
+			.btn {
+				position: fixed;
+				width: 100%;
+				bottom: 0px;
+				display: flex;
+				justify-content: space-around;
+			}
+
+			.btn button {
+				width: 50%;
+				height: 40px;
+			}
+			.mui-btn-blue{
+				border-top-right-radius: 0px;
+				border-bottom-right-radius: 0px;
+			}
+			.mui-btn-red{
+				border-top-left-radius: 0px;
+				border-bottom-left-radius: 0px;
+			}
+			.apply{
+				padding: 10px 0;
+			}
+			.apply label{
+				color: #aaaaaa;
+			}
+			.apply span{				
+				padding-left: 10px;
+			}
+			
+			
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="mui-off-canvas-wrap mui-draggable">
+				<!-- 主页面容器 -->
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav my-header">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">详情</h1>
+
+				</header>
+				<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll">
+					<form id="table">
+						<div class="apply">
+							<label>申请编号</label><span>{{integralInfo.punishFormNum}}</span>
+						</div>
+						<div class="apply">
+							<label>申请名称</label><span>{{entityList.backlogName}}</span>
+						</div>
+						<div class="apply">
+							<label>申请内容</label><span>{{entityList.backlogContent}}</span>
+						</div>
+						<div class="apply">
+							<label>申请类型</label><span>{{entityList.applyType}}</span>
+						</div>
+						<div class="apply">
+							<label>工程名称</label><span>{{integralInfo.projectName}}</span>
+						</div>
+						<div class="apply">
+							<label>所在部门</label><span>{{integralInfo.deptName}}</span>
+						</div>
+						<div class="apply">
+							<label>奖励类型</label><span>{{integralInfo.className}}</span>
+						</div>
+						<div class="apply">
+							<label>奖励原因</label><span>{{integralInfo.awardType}}</span>
+						</div>
+						<div class="apply">
+							<label>工程负责人</label><span>{{integralInfo.projectPeople}}</span>
+						</div>
+						<div id="steps1" style="height: 200px;"></div>
+						<div class="apply" style="margin-bottom: 50px;" v-show="backlogState == 0">
+							<label>办理意见</label>
+							<textarea placeholder="请填写办理意见" v-model="backlogOpinion"></textarea>
+						</div>
+					</form>
+					<div class="btn" v-show="backlogState == 0">
+						<button type="button" class="mui-btn mui-btn-blue" @click="execute">同意</button>
+						<button type="button" class="mui-btn mui-btn-red" @click="rebut">驳回</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			var data;
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				self.addEventListener('show', function() {
+					location.reload();
+				});
+				data = {
+					id: self.ids,
+					backlogState: self.backlogState
+				}
+				window.vm.id = data.id;
+				window.vm.backlogState = data.backlogState;
+				// console.log(data.id)
+			})
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					id: null,
+					entityList: {},
+					backlogOpinion: '',
+					backlogState: null,
+					integralInfo: {},
+					num: null,
+					userInfo: []
+				},
+				methods: {
+					getUserInfo() {
+						mui.ajax(baseURL + '/appSysBacklog/selectAuditUserInfo', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token
+							},
+							type: 'POST',
+							data: {
+
+							},
+							success: function(res) {
+								// console.log(JSON.stringify(res));
+								if (res.code == 0) {
+									let list = []
+									for (var i = 0; i < res.userEntities.length; i++) {
+										var obj = {};
+										obj.title = res.userEntities[i].awUserName;
+										obj.description = '未办理';
+										obj.icon = '<img src="' + res.userEntities[i].headUrl.replace('D:/js_hx_control/head/jpg\\', baseURL +
+											'/file/head/jpg/') + '" >';
+										list.push(obj);
+									}
+									vm.userInfo = list;
+									// console.log(list)
+								} else {
+									alert(res.msg);
+								}
+
+							}
+						});
+					},
+					getApplyFlow() {
+						var url;
+						if (vm.entityList.applyType == '积分申请单') {
+							url = '/appSysBacklog/integralApplyFlow';
+						} else {
+							url = '/appSysBacklog/checkFunishFlow';
+						}
+						mui.ajax(baseURL + url, {
+							// dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token
+							},
+							type: 'POST',
+							data: {
+								"id": vm.entityList.backlogContentId
+							},
+							success: function(res) {
+								console.log(res.entityList.length);
+								console.log(vm.userInfo)
+								// if (res.code == 0) {
+								// 	if (res.entityList.length == 0) {
+								// 		vm.num = res.entityList.length;
+								// 		vm.userInfo[res.entityList.length].description = '审核中';
+								// 		vm.getNum();
+								// 	}
+								// 	if (res.entityList.length === 1) {
+								// 		vm.num = res.entityList.length;
+								// 		vm.userInfo[res.entityList.length - 1].description = '已完成&nbsp;&nbsp;&nbsp;&nbsp;' + res.entityList[res.entityList
+								// 			.length - 1].backlogOpinion;
+								// 		vm.userInfo[res.entityList.length].description = '审核中';
+								// 		vm.getNum();
+								// 	}
+								// 	if (res.entityList.length === 2) {
+								// 		vm.num = res.entityList.length;
+								// 		vm.userInfo[res.entityList.length - 2].description = '已完成&nbsp;&nbsp;&nbsp;&nbsp;' + res.entityList[res.entityList
+								// 			.length - 2].backlogOpinion;
+								// 		vm.userInfo[res.entityList.length - 1].description = '已完成&nbsp;&nbsp;&nbsp;&nbsp;' + res.entityList[res.entityList
+								// 			.length - 1].backlogOpinion;
+								// 		vm.userInfo[res.entityList.length].description = '审核中';
+								// 		vm.getNum();
+								// 	}
+								// 	if (res.entityList.length === 3) {
+								// 		vm.num = res.entityList.length;
+								// 		vm.userInfo[res.entityList.length - 3].description = '已完成&nbsp;&nbsp;&nbsp;&nbsp;' + res.entityList[res.entityList
+								// 			.length - 3].backlogOpinion;
+								// 		vm.userInfo[res.entityList.length - 2].description = '已完成&nbsp;&nbsp;&nbsp;&nbsp;' + res.entityList[res.entityList
+								// 			.length - 2].backlogOpinion;
+								// 		vm.userInfo[res.entityList.length - 1].description = '已完成&nbsp;&nbsp;&nbsp;&nbsp;' + res.entityList[res.entityList
+								// 			.length - 1].backlogOpinion;
+								// 		vm.userInfo[res.entityList.length].description = '审核中';
+								// 		vm.getNum();
+								// 	}
+								// 	if (res.entityList.length === 4) {
+								// 		vm.num = 3;
+								// 		vm.userInfo[res.entityList.length - 4].description = '已完成&nbsp;&nbsp;&nbsp;&nbsp;' + res.entityList[res.entityList
+								// 			.length - 3].backlogOpinion;
+								// 		vm.userInfo[res.entityList.length - 3].description = '已完成&nbsp;&nbsp;&nbsp;&nbsp;' + res.entityList[res.entityList
+								// 			.length - 2].backlogOpinion;
+								// 		vm.userInfo[res.entityList.length - 2].description = '已完成&nbsp;&nbsp;&nbsp;&nbsp;' + res.entityList[res.entityList
+								// 			.length - 1].backlogOpinion;
+								// 		vm.userInfo[res.entityList.length - 1].description = '已完成&nbsp;&nbsp;&nbsp;&nbsp;' + res.entityList[res.entityList
+								// 			.length - 1].backlogOpinion;
+								// 		vm.getNum();
+								// 	}
+								// } else {
+								// 	alert(res.msg);
+								// }
+
+							}
+						});
+					},
+					getNum() {
+						var steps1 = steps({
+							el: "#steps1",
+							data: vm.userInfo,
+							active: vm.num,
+							direction: "vertical",
+							iconType: "custom",
+							customClass: "custom-class"
+						});
+					},
+					execute() {
+						var url;
+						if (!vm.backlogOpinion) {
+							alert('请填写办理意见！');
+							return false;
+						}
+						if (vm.entityList.applyType == '积分申请单') {
+							url = '/appSysBacklog/transactIntegralApply';
+						} else {
+							url = '/appSysBacklog/transactPunishForm';
+						}
+						mui.ajax(baseURL + url, {
+							// dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token
+							},
+							type: 'POST',
+							data: {
+								"id": vm.entityList.backlogContentId,
+								"userId": app.getState().user.userId, //1
+								"backlogId": vm.entityList.id,
+								"backlogOpinion": vm.backlogOpinion
+							},
+							success: function(res) {
+								console.log(JSON.stringify(res));
+								if (res.code == 0) {
+									mui.back();
+								} else {
+									alert(res.msg);
+								}
+
+							}
+						});
+					},
+					rebut() {
+						var btnArray = ['否', '是'];
+						mui.confirm('您确认驳回吗？', '提示', btnArray, function(e) {
+						     if (e.index == 1) {
+						        var url;
+						        if (!vm.backlogOpinion) {
+						        	alert('请填写办理意见！');
+						        	return false;
+						        }
+						        if (vm.entityList.applyType == '积分申请单') {
+						        	url = '/appSysBacklog/rejectIntegralApply';
+						        } else {
+						        	url = '/appSysBacklog/rejectPunishFormApply';
+						        }
+						        mui.ajax(baseURL + url, {
+						        	dataType: 'json',
+						        	timeout: 5000,
+						        	headers: {
+						        		"token": app.getState().token
+						        	},
+						        	type: 'POST',
+						        	data: {
+						        		"id": vm.entityList.backlogContentId,
+						        		"userId": app.getState().user.userId, //1
+						        		"backlogId": vm.entityList.id,
+						        		"backlogOpinion": vm.backlogOpinion
+						        	},
+						        	success: function(res) {
+						        		console.log(JSON.stringify(res));
+						        		if (res.code == 0) {
+						        			mui.back();
+						        		} else {
+						        			alert(res.msg);
+						        		}
+						        
+						        	}
+						        });
+						    }
+						})
+						
+					},
+					getDetail() {
+						mui.ajax(baseURL + '/appSysBacklog/selectBacklogById', {
+							// dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token
+							},
+							type: 'POST',
+							data: {
+								"id": vm.id //app.getState().user.userId
+							},
+							success: function(res) {
+								// console.log(JSON.stringify(res));
+								if (res.code == 0) {
+									if (res.sysBacklogEntity.applyType == 3) {
+										res.sysBacklogEntity.applyType = '积分申请单';
+										mui.ajax(baseURL + '/appSysBacklog/selectIntegralApplyDetails', {
+											dataType: 'json',
+											timeout: 5000,
+											headers: {
+												"token": app.getState().token
+											},
+											type: 'POST',
+											data: {
+												"backlogContentId": res.sysBacklogEntity.backlogContentId
+											},
+											success: function(res) {
+												// console.log(JSON.stringify(res));
+												if (res.code == 0) {
+													vm.integralInfo = res.integralInfo;
+												} else {
+													alert(res.msg);
+												}
+											}
+										});
+									}
+									if (res.sysBacklogEntity.applyType == 4) {
+										res.sysBacklogEntity.applyType = '处罚申请单';
+										mui.ajax(baseURL + '/appSysBacklog/selectPunishFormDetails', {
+											dataType: 'json',
+											timeout: 5000,
+											headers: {
+												"token": app.getState().token
+											},
+											type: 'POST',
+											data: {
+												"id": res.sysBacklogEntity.backlogContentId
+											},
+											success: function(res) {												
+												if (res.code == 0) {
+													console.log(res);
+												} else {
+													alert(res.msg);
+												}
+											}
+										});
+									}
+									vm.entityList = res.sysBacklogEntity;
+									vm.getApplyFlow();
+								} else {
+									alert(res.msg);
+								}
+
+							}
+						});
+					}
+				},
+				created() {
+					this.getUserInfo();
+				},
+				mounted() {
+					setTimeout(() => {
+						this.getDetail();
+					}, 800)
+
+				}
+			});
+			mui('#offCanvasSideScroll').scroll();
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+		</script>
+	</body>
+
+</html>

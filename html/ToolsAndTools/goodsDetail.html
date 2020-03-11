@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title></title>
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/app.js"></script>
+		<style type="text/css">
+			html,
+			body,
+			 {
+				width: 100%;
+				height: 100%;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			.my-header {
+				height: 0.88rem;
+				background-color: #FFF;
+				color: #fff;
+			}
+
+			.my-header .mui-title {
+				color: #000;
+				font-size: 0.36rem;
+				font-weight: 800;
+			}
+
+			.my-header a,
+			.my-header h1 {
+				line-height: 0.88rem;
+			}
+
+			.mui-bar-nav.mui-bar .mui-icon {
+				padding: 0;
+				margin: 0;
+				color: #000;
+			}
+
+			/* .mui-slider,
+			.mui-slider-group,
+			.mui-slider-item,
+			.mui-slider {
+				margin-top: 49px;
+			} */
+			ul li{
+				padding: 10px 15px;
+			}
+			ul:last-child{
+				border: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 主页面标题 -->
+			<header class="mui-bar mui-bar-nav my-header">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">详情</h1>
+			</header>
+			<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll" style="height: 100%;">
+				<div class="mui-scroll">
+					<ul v-for="item in goods" style=" border-bottom: 1px solid #BBB5B5;">						
+						<li style="color: red;">工器具编号：{{item.toolSonCode}}</p>	
+						<li>归属部门：{{item.useDept}}</p>	
+						<li>检查单位：{{item.checkUnit}}</p>	
+						<li>是否送检：{{item.ifInspect}}</p>	
+						<li>下次送检日期：{{item.nextCheckDate}}</p>	
+						<!-- <li>部门名称：{{item.deptName}}</p>	 -->
+						<li>仓库类型：{{item.warehouseTypeName}}</p>	
+						<li>仓储位置：{{item.warehousePlace}}</p>						
+						<li>工器具型号：{{item.toolModelNumber}}</p>	
+						<li>工器具名称：{{item.toolName}}</p>	
+						<li>单位：{{item.toolUnit}}</p>	
+						<li>工器具状态：{{item.toolStatus}}</p>	
+						<li>供应商：{{item.supplier}}</p>	
+						<li>生产厂家：{{item.manufacturer}}</p>	
+						<li>出厂编号：{{item.leavefactoryCode}}</p>	
+					</ul>
+				</div>
+			</div>			
+			<!-- <div class="mui-slider">
+				<div class="mui-slider-group">
+					<div class="mui-slider-item">
+						<a href="#"><img src="../../images/HXDL.png" /></a>
+						<p>归属部门：</p>
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+					</div>
+				</div>
+			</div> -->
+		</div>
+		<script type="text/javascript">
+					
+			var dataA;
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				self.addEventListener('show', function() {
+
+				});
+				dataA = {
+					"toolCode": self.code
+				}
+			})
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					goods:[]
+				},
+				methods: {
+					getData() {
+						mui.plusReady(function() {
+							mui.ajax(baseURL + '/app/toolManage/tool/selectToolInfoDetail', {
+								dataType: 'json',
+								timeout: 5000,
+								headers: {
+									"token": app.getState().token,
+									// 'Content-Type': 'application/json'
+								},
+								data: {
+									"toolCode": dataA.toolCode
+								},
+								type: 'get',
+								success: function(res) {
+									if (res.code == 0) {
+										var good = res.appToolEntities;
+										good.forEach(item =>{
+											switch (item.toolStatus) {
+												case 1001:
+													item.toolStatus = '闲置';
+													break;
+												case 1002:
+													item.toolStatus = '使用';
+													break;
+												case 1003:
+													item.toolStatus = '维修';
+													break;
+												case 1004:
+													item.toolStatus = '报废';
+													break;
+												case 1005:
+													item.toolStatus = '借用';
+													break;
+												case 1006:
+													item.toolStatus = '领用';
+													break;
+												case 1007:
+													item.toolStatus = '归还';
+													break;
+												case 1008:
+													item.toolStatus = '送检中';
+													break;
+												case 1009:
+													item.toolStatus = '封存';
+													break;
+												default:
+													break;
+											}
+										})
+										vm.goods = good;
+									} else {
+										alert(res.msg)
+									}
+								}
+							});
+						})
+					}
+				},
+				mounted() {
+					this.getData();
+				}
+			})
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});	
+		</script>
+	</body>
+</html>

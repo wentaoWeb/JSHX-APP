@@ -1,0 +1,455 @@
+{
+	"login.html": {
+		"refer": [
+			"reg.html",
+			"index.html",
+			"sys/main.html",
+			"loginWait.html",
+			"html/sys/main.html"
+		],
+		"resources": [
+			"css/home.css",
+			"js/app.js",
+			"images/login.png",
+			"css/login.css",
+			"fonts/mui.ttf",
+			"js/mui.enterfocus.js",
+			"css/icons-extra.css",
+			"css/mui.min.css",
+			"css/style.css",
+			"loginWait.html",
+			"html/sys/main.html",
+			"images/logo.png",
+			"js/mui.min.js",
+			"libs/rem.js"
+		]
+	},
+	"sys/main.html": {
+		"refer": [
+			"service/ask.html",
+			"service/floatUser.html",
+			"service/home.html",
+			"service/map.html"
+		]
+	},
+	"loginWait.html": {
+		"resources": [
+			"images/logo.png",
+			"js/mui.min.js",
+			"login.html",
+			"images/bg11.jpg",
+			"libs/rem.js",
+			"css/mui.min.css",
+			"css/style.css",
+			"html/sys/index.html"
+		],
+		"refer": [
+			"login.html",
+			"html/sys/main.html",
+			"reg.html",
+			"html/sys/user.html",
+			"html/sys/index.html",
+			"html/sys/message.html"
+		]
+	},
+	"html/sys/user.html": {
+		"resources": [
+			"fonts/mui-icons-extra.ttf",
+			"images/timg (1).jpg",
+			"js/public.js",
+			"js/vue.min.js",
+			"css/icons-extra.css",
+			"assets/mui/css/mui.min.css",
+			"css/base.css",
+			"css/main.css",
+			"images/bg.png",
+			"js/main.js",
+			"js/app.js",
+			"libs/jquery.min.js",
+			"assets/mui/fonts/mui.ttf",
+			"libs/rem.js",
+			"assets/mui/js/mui.min.js"
+		],
+		"refer": [
+			"login.html",
+			"html/sys/qqqq.html"
+		]
+	},
+	"html/sys/index.html": {
+		"resources": [
+			"css/base.css",
+			"images/iconMain/icon/wzyt.png",
+			"images/bg3.jpg",
+			"images/iconMain/icon/wxxxcx.png",
+			"images/bg.png",
+			"images/iconMain/icon/gcxc.png",
+			"images/bg2.jpg",
+			"images/iconMain/icon/cfdtz.png",
+			"images/bg4.jpg",
+			"images/iconMain/icon/zlzxxx.png",
+			"images/iconMain/icon/ksjggb.png",
+			"css/icons-extra.css",
+			"images/iconMain/icon/rysqgl.png",
+			"images/iconMain/icon/mhqdj1.png",
+			"images/iconMain/icon/claqlc.png",
+			"images/iconMain/icon/jlgzlxdkj.png",
+			"images/iconMain/icon/jfsqtz.png",
+			"images/iconMain/icon/xfjljc.png",
+			"images/iconMain/icon/clyyx.png",
+			"images/iconMain/icon/jczgqk.png",
+			"css/main.css",
+			"images/iconMain/icon/xftj.png",
+			"images/iconMain/icon/mhqdj2.png",
+			"images/iconMain/icon/xcjcqk.png",
+			"images/iconMain/icon/zxks.png",
+			"images/bg5.jpg",
+			"assets/mui/css/mui.min.css",
+			"images/iconMain/icon/cfshsp.png",
+			"images/iconMain/icon/jfsqtb.png",
+			"images/iconMain/icon/zaqhd.png",
+			"images/iconMain/icon/jlfj.png",
+			"images/iconMain/icon/jfsqsh.png",
+			"images/iconMain/icon/anyp.png",
+			"assets/mui/js/mui.min.js",
+			"js/main.js",
+			"js/app.js",
+			"libs/jquery.min.js",
+			"libs/rem.js",
+			"fonts/mui-icons-extra.ttf"
+		],
+		"refer": [
+			"html/jicha/auditOne.html",
+			"html/safe/peopleApply.html",
+			"html/safe/information.html",
+			"html/safe/jfApply.html",
+			"html/safe/jfExamine.html",
+			"html/onlineTest/assessment.html",
+			"html/SafetyTraining/xianxia/index.html",
+			"html/onlineTest/kaoshiList.html",
+			"html/SafetyTraining/OnlineLearning.html",
+			"html/SafetyTraining/offlineTrainingList.html",
+			"html/sys/qqqq.html"
+		]
+	},
+	"html/sys/message.html": {
+		"resources": [
+			"images/60x60.gif",
+			"js/public.js",
+			"css/icons-extra.css",
+			"assets/mui/css/mui.min.css",
+			"fonts/mui-icons-extra.ttf",
+			"css/base.css",
+			"css/main.css",
+			"js/main.js",
+			"libs/jquery.min.js",
+			"libs/rem.js",
+			"assets/mui/js/mui.min.js"
+		]
+	},
+	"html/sys/main.html": {
+		"resources": [
+			"js/main.js",
+			"css/base.css",
+			"libs/jquery.min.js",
+			"html/sys/index.html",
+			"css/main.css",
+			"assets/mui/fonts/mui.ttf",
+			"assets/mui/js/mui.min.js",
+			"css/icons-extra.css",
+			"assets/mui/css/mui.min.css",
+			"fonts/mui-icons-extra.ttf"
+		],
+		"refer": [
+			"html/sys/user.html",
+			"html/sys/index.html",
+			"html/sys/message.html"
+		]
+	},
+	"html/jicha/auditOne.html": {
+		"resources": [
+			"libs/bootstrap.min.js",
+			"libs/layer/layer.js",
+			"libs/layer/skin/default/layer.css",
+			"libs/vue.min.js",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css",
+			"css/icons-extra.css",
+			"assets/mui/css/mui.min.css",
+			"js/main.js",
+			"js/app.js",
+			"css/base.css",
+			"libs/jquery.min.js",
+			"css/main.css",
+			"assets/mui/fonts/mui.ttf",
+			"js/vue.min.js",
+			"images/iconMain/icon/cfshsp.png",
+			"libs/rem.js",
+			"assets/mui/js/mui.min.js"
+		],
+		"refer": [
+			"html/jicha/auditDetails.html"
+		]
+	},
+	"html/safe/peopleApply.html": {
+		"resources": [
+			"css/base.css",
+			"css/main.css",
+			"assets/swiper/css/swiper.min.css",
+			"css/icons-extra.css",
+			"assets/mui/css/mui.min.css",
+			"libs/bootstrap.min.js",
+			"images/apple.jpg",
+			"images/android.jpg",
+			"assets/swiper/js/swiper.min.js",
+			"libs/vue.min.js",
+			"js/main.js",
+			"libs/jquery.min.js",
+			"assets/mui/fonts/mui.ttf",
+			"js/public.js",
+			"libs/rem.js",
+			"assets/mui/js/mui.min.js"
+		],
+		"refer": [
+			"html/safe/people.html"
+		]
+	},
+	"html/safe/information.html": {
+		"resources": [
+			"images/icon/glgs.png",
+			"js/main.js",
+			"css/base.css",
+			"libs/jquery.min.js",
+			"css/main.css",
+			"assets/mui/fonts/mui.ttf",
+			"js/public.js",
+			"assets/swiper/css/swiper.min.css",
+			"images/icon/zz.png",
+			"assets/mui/css/mui.min.css",
+			"css/icons-extra.css",
+			"libs/bootstrap.min.js",
+			"images/icon/xmb.png",
+			"images/apple.jpg",
+			"images/android.jpg",
+			"assets/swiper/js/swiper.min.js",
+			"libs/rem.js",
+			"libs/vue.min.js",
+			"assets/mui/js/mui.min.js",
+			"images/icon/ssgs.png",
+			"html/safe/users.html"
+		],
+		"refer": [
+			"html/safe/users.html"
+		]
+	},
+	"reg.html": {
+		"resources": [
+			"js/public.js",
+			"css/reg.css",
+			"css/mui.min.css",
+			"css/style.css"
+		]
+	},
+	"html/safe/jfApply.html": {
+		"resources": [
+			"libs/bootstrap.min.js",
+			"libs/layer/layer.js",
+			"css/base.css",
+			"js/mui.picker.min.js",
+			"css/main.css",
+			"js/mui.poppicker.js",
+			"js/safe/people.js",
+			"libs/layer/skin/default/layer.css",
+			"libs/vue.min.js",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css",
+			"css/icons-extra.css",
+			"assets/mui/css/mui.min.css",
+			"js/main.js",
+			"libs/jquery.min.js",
+			"assets/mui/fonts/mui.ttf",
+			"js/public.js",
+			"libs/rem.js",
+			"assets/mui/js/mui.min.js"
+		]
+	},
+	"html/safe/jfExamine.html": {
+		"resources": [
+			"libs/layer/layer.js",
+			"js/main.js",
+			"css/base.css",
+			"libs/jquery.min.js",
+			"css/main.css",
+			"assets/mui/fonts/mui.ttf",
+			"js/public.js",
+			"libs/layer/skin/default/layer.css",
+			"assets/mui/css/mui.min.css",
+			"css/icons-extra.css",
+			"libs/bootstrap.min.js",
+			"js/safe/people.js",
+			"libs/rem.js",
+			"libs/vue.min.js",
+			"assets/mui/js/mui.min.js"
+		]
+	},
+	"html/onlineTest/assessment.html": {
+		"resources": [
+			"js/app.js",
+			"css/base.css",
+			"fonts/mui.ttf",
+			"libs/rem.js",
+			"css/mui.min.css",
+			"js/vue.min.js",
+			"js/mui.js"
+		]
+	},
+	"html/SafetyTraining/xianxia/index.html": {
+		"resources": [
+			"html/SafetyTraining/xianxia/css/calendar.css",
+			"html/SafetyTraining/xianxia/js/calendar.js",
+			"html/SafetyTraining/xianxia/js/mui.min.js",
+			"html/SafetyTraining/xianxia/css/reset.css",
+			"html/SafetyTraining/xianxia/images/bg_back.png"
+		]
+	},
+	"html/onlineTest/kaoshiList.html": {
+		"resources": [
+			"js/app.js",
+			"css/base.css",
+			"fonts/mui.ttf",
+			"libs/rem.js",
+			"css/mui.min.css",
+			"js/vue.min.js",
+			"js/mui.js"
+		],
+		"refer": [
+			"html/onlineTest/kaoshi.html"
+		]
+	},
+	"html/onlineTest/kaoshi.html": {
+		"resources": [
+			"css/base.css",
+			"css/mui.min.css",
+			"js/app.js",
+			"fonts/mui.ttf",
+			"libs/rem.js",
+			"js/vue.min.js",
+			"js/mui.js"
+		]
+	},
+	"html/SafetyTraining/OnlineLearning.html": {
+		"resources": [
+			"js/app.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/vue.min.js",
+			"js/mui.js",
+			"css/OnlineLearning.css",
+			"images/HXDL.png"
+		],
+		"refer": [
+			"html/SafetyTraining/video.html"
+		]
+	},
+	"html/SafetyTraining/video.html": {
+		"resources": [
+			"js/mui.min.js",
+			"libs/rem.js",
+			"js/app.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/vue.min.js"
+		]
+	},
+	"html/SafetyTraining/offlineTrainingList.html": {
+		"resources": [
+			"js/app.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/vue.min.js",
+			"js/mui.js",
+			"css/OnlineLearning.css",
+			"images/HXDL.png"
+		]
+	},
+	"html/sys/qqqq.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		]
+	},
+	"html/jicha/auditDetails.html": {
+		"resources": [
+			"css/base.css",
+			"js/mui.picker.min.js",
+			"js/mui.poppicker.js",
+			"css/mui.poppicker.css",
+			"assets/mui/css/mui.min.css",
+			"assets/mui/fonts/mui.ttf",
+			"libs/rem.js",
+			"libs/vue.min.js",
+			"assets/mui/js/mui.min.js",
+			"html/jicha/auditDetails2.html",
+			"js/common.js",
+			"libs/jquery.min.js",
+			"js/app.js",
+			"js/main.js",
+			"libs/layer/layer.js",
+			"libs/layer/skin/default/layer.css",
+			"libs/bootstrap.min.js"
+		],
+		"refer": [
+			"html/jicha/auditDetails2.html"
+		]
+	},
+	"html/jicha/auditDetails2.html": {
+		"resources": [
+			"css/base.css",
+			"html/jicha/auditDetails.html",
+			"css/mui.poppicker.css",
+			"assets/mui/css/mui.min.css",
+			"css/mui.picker.min.css",
+			"js/mui.picker.min.js",
+			"assets/mui/fonts/mui.ttf",
+			"js/mui.poppicker.js",
+			"libs/rem.js",
+			"libs/vue.min.js",
+			"assets/mui/js/mui.min.js",
+			"js/main.js",
+			"js/app.js",
+			"libs/jquery.min.js",
+			"assets/mui/js/mui.previewimage.js",
+			"assets/mui/js/mui.zoom.js"
+		],
+		"refer": [
+			"html/jicha/auditDetails.html"
+		]
+	},
+	"html/safe/people.html": {
+		"resources": [
+			"assets/mui/js/mui.previewimage.js",
+			"js/getImgs.js",
+			"libs/layer/layer.js",
+			"assets/mui/js/mui.zoom.js",
+			"js/common.js",
+			"js/mui.picker.min.js",
+			"js/mui.poppicker.js",
+			"libs/layer/skin/default/layer.css",
+			"img/+@2x.png",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css",
+			"js/cropper.min.js",
+			"css/upload.css"
+		]
+	},
+	"html/safe/users.html": {
+		"resources": [
+			"images/user-photo.png",
+			"html/safe/information.html"
+		],
+		"refer": [
+			"html/safe/information.html"
+		]
+	}
+}

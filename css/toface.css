@@ -1,0 +1,144 @@
+body,
+            div,
+            dl,
+            dt,
+            dd,
+            ul,
+            ol,
+            li,
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6,
+            pre,
+            code,
+            form,
+            fieldset,
+            legend,
+            input,
+            textarea,
+            p,
+            blockquote,
+            th,
+            td,
+            hr,
+            button,
+            article,
+            aside,
+            details,
+            figcaption,
+            figure,
+            footer,
+            header,
+            hgroup,
+            menu,
+            nav,
+            section,
+            br {
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: "microsoft yahei";
+                color: #FFFFFF;
+                overflow-x: hidden;
+                overflow-y: hidden;
+                background: #333333;
+				/* opacity: 0.1; */
+            }
+            .mui-bar{
+                background: #333333;
+                box-shadow: none;
+            }
+            .back{
+                font-size: 22px;
+                height: 100px;
+                line-height: 100px;
+                padding:0 10px;
+                border: 0px solid red;
+                margin-left: 10px;
+            }
+            .back img{    
+                width: 12px;
+                height: 24px;
+            }
+            .mui-content{
+                width: 80%;
+                margin: 80px auto 50px auto;
+                background:#333333 ;
+                text-align: center;
+                border: 0px solid red;
+            }
+            .mui-content div{
+                width: 100%;
+                background:#333333;
+                border: 0px solid red;
+            }
+            .mui-content label{                
+                color: #FFFFFF;
+                text-align: center;
+                border: 0px solid red;
+            }
+            .mui-btn {
+                padding: 10px;
+                width: 80%;
+                margin: auto;
+            }
+            .mui-content-setting1 {
+                width: 100%;
+                background: #333333;
+                border: 0px solid red;
+                padding: 0 10px;
+                font-size: 20px;
+                float: left;
+            }
+            .button {
+                /* background: url(icon/setting/button.png) no-repeat; */
+                background-size: 100% 100%;
+                -moz-background-size: 100% 100%;
+                font-size: 20px;
+                width: 80%;
+                height: 50px;
+                margin: auto;
+                line-height: 50px;
+                border: none;
+                color: #FFFFFF;
+            }
+			/* Safari 和 Chrome */
+             video{
+                /* transform: rotateY(180deg);
+                -webkit-transform: rotateY(180deg);    
+                -moz-transform: rotateY(180deg); */
+            } 
+			.mui-bar-nav.mui-bar .mui-icon {
+			    /* padding: 0;
+			    margin: 0; */
+			    color: #fff;
+			}
+			.mui-bar-nav~.mui-content{
+				padding: 0;
+			}
+			.my-header {
+			    height: 0.88rem;
+			    background-color: #51BFF7;
+			    color: #fff;
+			}
+			
+			.my-header .mui-title {
+			    color: #FFF;
+			    font-size: 0.36rem;
+			}
+			
+			.my-header a,
+			.my-header h1 {
+			    line-height: 0.88rem;
+			}
+			
+			.mui-bar-nav.mui-bar .mui-icon {
+			    padding: 0;
+			    margin: 0;
+			    color: #fff;
+			}

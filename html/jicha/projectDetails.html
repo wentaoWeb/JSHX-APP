@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/app.js"></script>
+		<style>
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+				background-color: #FFF;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			.my-header {
+				height: 0.88rem;
+				background-color: #FFF;
+				color: #fff;
+			}
+
+			.my-header .mui-title {
+				color: #000;
+				font-size: 0.36rem;
+				font-weight: 800;
+			}
+
+			.my-header a,
+			.my-header h1 {
+				line-height: 0.88rem;
+			}
+
+			.mui-bar-nav.mui-bar .mui-icon {
+				padding: 0;
+				margin: 0;
+				color: #000;
+			}
+
+			.mui-segmented-control .mui-control-item.mui-active {
+				color: #51BFF7;
+				background-color: transparent;
+				font-size: 0.4rem;
+				font-weight: 800;
+			}
+
+			.jiange {
+				background-color: #F8F7FC;
+				height: 0.2rem;
+			}
+
+			.info {
+				padding: 0.2rem;
+			}
+
+			.info p {
+				font-size: 0.4rem;
+				padding: 0.1rem;
+				color: #000;
+			}
+
+			.info img {
+				width: 23%;
+				float: left;
+				margin: 1%;
+			}
+
+			.info span {
+				color: #999999;
+				margin-right: 0.4rem;
+			}
+
+			.hege {
+				color: #33CC66 !important;
+			}
+
+			.weigui {
+				color: #FF0000 !important;
+			}
+
+			.buguifan {
+				color: #FF9900 !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav my-header">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">项目详情</h1>
+				<a href="javascript:;" class="mui-icon mui-pull-right" style="font-size:18px;font-weight: 600;color: #51BFF7;"
+				 @click="edit()"  v-show="showEdit">编辑</a>
+			</header>
+			<div class="mui-content">
+				<div class="jiange"></div>
+				<div class="info">
+					<p><span>项目名称</span>{{checkContent}}</p>
+					<p class="weigui"><span>稽查结果</span>{{checkResultTypeId}}</p>
+					<!-- <p><span>整改类型</span>现场整改</p> -->
+				</div>
+				<div class="jiange"></div>
+				<div class="info">
+					<p>{{remark}}</p>
+					<!-- <img v-for="item in pic" :src="item.replace('E:\\js_hx_control','http://10.0.0.195:888/js_hx_control')"> -->
+					<img style="width: 31%;" v-for="item in pic" :src="item.replace('D:/js_hx_control', baseURL + '/file')">
+				</div>
+			</div>
+		</div>
+
+		<script>
+			mui.init({
+				swipeBack: true //启用右滑关闭功能  
+			});
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				self.addEventListener('show', function() {
+					location.reload();
+				});
+				data = {
+					menuId: self.menuId,
+					checkRecordNum: self.checkRecordNum,
+					// checkResultTypeId: self.checkResultTypeId,
+					checkContent: self.checkContent
+				}
+				window.vm.menuId = data.menuId;
+				window.vm.checkRecordNum = data.checkRecordNum;
+				// window.vm.checkResultTypeId = data.checkResultTypeId;
+				window.vm.checkContent = data.checkContent;
+				// console.log(data.checkContent)
+			})
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					menuId: '',
+					checkRecordNum: '',
+					checkResultTypeId: '',
+					checkContent: '',
+					pic: [],
+					remark: '',
+					showEdit:true
+				},
+				methods: {
+					edit() {
+						mui.openWindow({
+							url: "auditof.html",
+							id: "auditof.html",
+							extras: {
+								menuId: vm.menuId, //自定义扩展参数，可以用来处理页面间传值  
+								checkRecordNum: vm.checkRecordNum,
+								checkContent: vm.checkContent
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载 '
+							}
+						})
+					},
+					editOrNo() {
+						var checkRecordNum = localStorage.getItem('checkRecordNum');
+						// console.log(checkRecordNum)
+						mui.ajax(baseURL + '/app/sceneCheck/checkContent/editorialJudgment', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token
+							},
+							type: 'POST',
+							data: {
+								"checkRecordNum": checkRecordNum
+							},
+							success: function(res) {
+								// console.log(JSON.stringify(res))
+								if (res.code == 0) {
+									if (res.status == 0) {
+										vm.showEdit = true;
+									} else {
+										vm.showEdit = false;
+									}
+								} else {
+									alert(res.msg);
+								}
+							},
+						})
+					},
+					getProjectDetail() {
+						var checkRecordNum = localStorage.getItem("checkRecordNum");
+						var menuId = localStorage.getItem("menuId");
+						mui.ajax(baseURL + '/app/sceneCheck/selectCheckContent', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token
+							},
+							type: 'POST',
+							data: {
+								"checkRecordNum": checkRecordNum,
+								"menuId": menuId
+							},
+							success: function(res) {
+								console.log(JSON.stringify(res));
+								let picInfo = res.pictureEntities;
+								let pic = [];
+								for (var i = 0; i < picInfo.length; i++) {
+									if (picInfo[i].checkResultTypeId == 2) {
+										picInfo[i].checkResultTypeId = '不规范'
+									}
+									if (picInfo[i].checkResultTypeId == 3) {
+										picInfo[i].checkResultTypeId = '违章'
+									}
+									pic.push(picInfo[i].url);
+								}
+								vm.checkResultTypeId = picInfo[0].checkResultTypeId;
+								vm.remark = picInfo[0].remark;
+								vm.pic = pic;
+							},
+						})
+					}
+				},
+				mounted() {
+					this.getProjectDetail();
+					this.editOrNo();
+				}
+			})
+		</script>
+	</body>
+
+</html>

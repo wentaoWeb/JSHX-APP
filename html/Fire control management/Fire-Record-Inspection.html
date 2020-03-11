@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>消防记录检查</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css">
+		<link rel="stylesheet" href="../../css/mui.poppicker.css">
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/bootstrap.min.js"></script>
+		<script src="../../libs/layer/layer.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<!--<script src="../../js/public.js"></script>-->
+		<script src="../../js/main.js"></script>
+		<script src="../../js/app.js"></script>
+		<style>
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+				background-color: #F8F7FC;
+			}
+			
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			.my-header {
+				height: 0.88rem;
+				background-color: #fff;
+				color: #000;
+			}
+			
+			.my-header .mui-title {
+				color: #000;
+				font-size: 0.36rem;
+			}
+			
+			.my-header a,
+			.my-header h1 {
+				line-height: 0.88rem;
+			}
+			
+			.mui-bar-nav.mui-bar .mui-icon {
+				padding: 0;
+				margin: 0;
+				color: #000 !important;
+			}
+			
+			.mui-bar-nav~.mui-content {
+				background-color: #f8f7fc;
+			}
+			
+			.mui-table-view:before {
+				height: 0;
+			}
+			
+			.mui-table-view:after {
+				height: 0;
+			}
+			
+			.mui-search {
+				padding: 10px;
+				background: #fff !important;
+			}
+			
+			.mui-search input[type=search] {
+				padding-left: 30px;
+				padding-top: 10px;
+				background: #F3F3F3;
+			}
+			
+			.mui-icon {
+				line-height: 2.5;
+			}
+			
+			.mui-search.mui-active:before {
+				left: 15px;
+			}
+			
+			.detail {
+				background-color: #fff;
+				margin-top: 15px;
+			}
+			
+			.detail img {
+				margin-right: 10px;
+				width: 0.5rem;
+				vertical-align: middle;
+			}
+			
+			.detail h1 {
+				border-bottom: 1px solid #eee;
+				padding: 20px;
+				font-size: 0.38rem;
+			}
+			
+			.bottom {
+				box-shadow: 0 4px 4px #DDDDDD;
+			}
+			
+			.bottom label {
+				line-height: 0.8rem;
+				font-size: 0.32rem;
+				color: #666;
+			}
+			
+			.bottom .label2 {
+				float: right;
+				padding-right: 30px;
+			}
+			
+			.bottom label span {
+				margin-left: 3px;
+				color: #000;
+				font-size: 0.36rem;
+			}
+			
+			.mui-pull-right {
+				font-size: 18px;
+				font-weight: 600;
+				color: #51BFF7;
+			}
+			
+			.img {
+				height: 30px;
+				text-align: center;
+				line-height: 0.3rem;
+			}
+			
+			.img img {
+				margin: 0.12rem;
+				width: 0.5rem;
+				vertical-align: middle;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- 侧滑导航根容器 -->
+		<div id="app">
+			<div class="mui-off-canvas-wrap mui-draggable">
+				<header class="mui-bar mui-bar-nav my-header">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">消防记录检查</h1>
+				</header>
+				<div class="mui-content mui-scroll-wrapper content" id="offCanvasContentScroll">
+					<div>
+						<!--搜索框 start-->
+						<div class="mui-input-row mui-search">
+							<input type="search" class="mui-input-clear" v-model="searchVal" />
+							<span class="mui-icon mui-icon-clear mui-hidden"></span>
+							<span class="mui-placeholder">
+							<span class="mui-icon mui-icon-search"></span>
+							</span>
+						</div>
+						<!--搜索框 end-->
+						<ul>
+							<li class="detail" v-for="item in list">
+								<h1>
+									<span @click="addTo(item.id)">
+								  <img src="../../images/iconMain/icon/Fire Extinguisher.png" alt="">{{item.fireExtinguisherBottleCode}}
+									</span>
+									<span><img src="../../images/iconMain/icon/del.png" alt="" style="float:right;" @click="remove(item.id)"></span>
+							</h1>
+								<div style="padding:15px" class="bottom">
+									<label>灭火器箱编号
+										<span>{{item.fireExtinguisherBoxCode}}</span>
+									</label>
+									<br>
+									<label>消防设施类型
+										<span>{{item.fireControlType}}</span>
+									</label>
+									<br>
+									<label>放置地点
+										<span>{{item.place}}</span>
+									</label>
+									<br>
+									<label>出厂日期
+										<span>{{item.produceDate}}</span>
+									</label>
+									<br>
+									<label>检查日期
+										<span>{{item.inspectDate}}</span>
+									</label>
+									<br>
+									<label>责任人
+										<span>{{item.liablePerson}}</span>
+									</label>
+									<label class="label2">检查人
+										<span>{{item.liablePerson}}</span>
+									</label>
+									<br>
+									<label>规格
+										<span>{{item.model}}</span>
+									</label>
+									<label class="label2">检查结果
+										<span>{{item.inspectStatus}}</span>
+									</label>
+									<br>
+								</div>
+							</li>
+							<li class="img" @click="openPage"><img src="../../images/iconMain/icon/add.png" alt="">增加</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		var vm = new Vue({
+			el: "#app",
+			data: {
+				entityList: [],
+				searchVal: ""
+			},
+			methods: {
+				ajax() {
+					mui.plusReady(function() {
+						app.request("app", "fireSafe/query", {}, "get", function(data) {
+							vm.entityList = data.page;
+							//							console.log(JSON.stringify(vm.entityList));
+						})
+					})
+				},
+				// 更新
+				addTo(id) {
+					mui.openWindow({
+						url: 'Fire-Record-Inspection2.html',
+						id: 'Fire-Record-Inspection2.html',
+						extras: {
+							ids: id
+						},
+						show: {
+							autoShow: true,
+							aniShow: 'slide-in-right',
+							duration: 100
+						},
+						waiting: {
+							aotoShow: true,
+							title: '正在加载'
+						}
+					})
+				},
+				// 新增
+				openPage() {
+					mui.openWindow({
+						url: 'Fire-Record-Inspection3.html',
+						id: 'Fire-Record-Inspection3.html',
+						extras: {
+
+						},
+						show: {
+							autoShow: true,
+							aniShow: 'slide-in-right',
+							duration: 100
+						},
+						waiting: {
+							autoShow: true,
+							title: '正在加载'
+						},
+					})
+				},
+				// 删除
+				remove(id) {
+					mui.ajax(baseURL + '/app/fireSafe/delete', {
+						data: {
+							id: id
+						},
+						dataType: 'json',
+						type: 'POST',
+						timeout: 5000,
+						headers: {
+							"token": app.getState().token,
+						},
+						success: function(res) {
+							console.log(JSON.stringify(res))
+						}
+					})
+				}
+			},
+			computed: {
+				list: function() {
+					// 声明一个空数组存放数据
+					var arr = [];
+					// 循环数据中的每一项
+					for(var i = 0; i < this.entityList.length; i++) {
+						// 判断输入框的值是否可以匹配到数据
+						if(String(this.entityList[i].fireExtinguisherBoxCode).search(this.searchVal) != -1) {
+							// 向空数据添加数据
+							arr.push(this.entityList[i]);
+						}
+					}
+					// 返回筛选后的数据
+					return arr;
+				}
+			},
+			created() {
+				this.ajax()
+			}
+		})
+		mui('#offCanvasSideScroll').scroll();
+		mui('#offCanvasContentScroll').scroll();
+		mui.init({
+				swipeBack: true, //启用右滑关闭功能
+			})
+			//			// 列表上下滑动带有弹力的效果
+			//			(function(mui) {
+			//				mui(".mui-scroll-wrapper").scroll({
+			//					bounce: true; // 滚动条是否有弹力，默认是true
+			//					indicators: true, // 是否显示滚动条，默认是true
+			//				})
+			//			})(mui);
+			//		// 基本配置
+			//		mui.init({
+			//			pullRefresh: {
+			//				container: "#offCanvasContentScroll", //待刷新区域标识，querySelector能定位的css选择器均可，比如：id、.class等
+			//				// 下拉刷新
+			//				down: {
+			//					contentdown: "下拉可以刷新",
+			//					contentover: "释放立即刷新",
+			//					contentrefresh: "正在刷新...",
+			//					contentmore: "刷新完成",
+			//					auto: false,
+			//					callback: function() {
+			//
+			//					}
+			//				},
+			//				// 上拉加载
+			//				up: {
+			//					height: 50, //可选.默认50.触发上拉加载拖动距离
+			//					auto: true, //可选,默认false.自动上拉加载一次
+			//					contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
+			//					contentnomore: "没有更多数据了", //可选，请求完毕若没有更多数据时显示的提醒内容；
+			//					callback: function() { //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+			//
+			//					}
+			//				}
+			//				// 下拉刷新函数
+			//				function downFn() {
+			//					//业务逻辑代码，比如通过ajax从服务器获取新数据； ...... 
+			//					//注意，加载完新数据后，必须执行如下代码，
+			//					//注意：若为ajax请求，则需将如下代码放置在处理完ajax响应数据之后 	
+			//					alert("释放立即刷新执行完毕");
+			//					// 模拟
+			//					setTimeout(function() {
+			//						mui("#pullrefresh").pullRefresh().endPulldownToRefresh(); //这行代码会隐藏掉 “正在加载...” 容器
+			//					}, 3000);
+			//				}
+			//				// 上拉加载函数
+			//				function upFn() {
+			//					//业务逻辑代码，比如通过ajax从服务器获取新数据； ...... 
+			//					// 两个注意事项： 
+			//					//1、若为ajax请求，则需将如下代码放置在处理完ajax响应数据之后 //
+			//					//2、注意this的作用域， 若存在匿名函数， 需将this复制后使用
+			//					alert("上拉加载触发了...");
+			//					var _this = this;
+			//					//endPullupToRefresh(true|false),true:没有更多数据;false:有数据
+			//					_this.endPullUpToRefresh(false);
+			//				}
+			//			}
+			//		});
+	</script>
+
+</html>

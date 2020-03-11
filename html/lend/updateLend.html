@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title></title>
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css">
+		<link rel="stylesheet" href="../../css/mui.poppicker.css">
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/app.js"></script>
+		<style type="text/css">
+			html,
+			body,
+				{
+				width: 100%;
+				height: 100%;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			.my-header {
+				height: 0.88rem;
+				background-color: #FFF;
+				color: #fff;
+			}
+
+			.my-header .mui-title {
+				color: #000;
+				font-size: 0.36rem;
+				font-weight: 800;
+			}
+
+			.my-header a,
+			.my-header h1 {
+				line-height: 0.88rem;
+			}
+
+			.mui-bar-nav.mui-bar .mui-icon {
+				padding: 0;
+				margin: 0;
+				color: #000;
+			}
+
+			#btn {
+				z-index: 99999999999999999;
+				position: fixed;
+				bottom: 0px;
+			}
+
+			.mui-btn-block {
+				margin-bottom: 0px;
+			}
+
+			ul li {
+				padding: 15px 15px;
+			}
+
+			.time {
+				padding: 0px 15px;
+			}
+
+			li {
+				border-bottom: 1px solid #BBB5B5;
+			}
+
+			/* li:last-child{
+				border: none;
+			} */
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 主页面标题 -->
+			<header class="mui-bar mui-bar-nav my-header">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">工器具选择</h1>
+			</header>
+			<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll" style="height: 100%;">
+				<div class="mui-scroll">
+					<div class="content" style="padding-bottom: 50px;">
+						<p class="time" style="margin-bottom: 0px;margin-top: 15px;">使用时间：<input class="doTime" type="datetime-local"
+							 :value="toolUseDate" v-model="toolUseDate" /></p>
+						<p class="time" style="margin-bottom: 0px;">预计归还时间：<input class="returnTime" type="datetime-local" :value="toolUseDate"
+							 v-model="predictReturnDate" /></p>
+						<ul>
+							<!-- {{select}} -->
+							<li v-for="(item,index) in goods">
+								<p>工器具类型：{{item.toolTypeName}}</p>
+								<p>规格类型：{{item.standardType}}</p>
+								<p>工器具型号：{{item.toolModelNumber}}</p>
+								<p>工器具名称：{{item.toolName}}</p>
+								<p>工器具单位：{{item.toolUnit}}</p>
+								<p>
+									领用申请数量：
+									<div class="mui-content-padded">
+										<div class="mui-numbox" data-numbox-min="1" data-numbox-max="5">
+											<button class="mui-btn mui-btn-numbox-minus" type="button" @click="sub(index)">-</button>
+											<input id="test" class="mui-input-numbox" disabled type="number" :value="item.applyNumber" v-model="item.applyNumber" />
+											<button class="mui-btn mui-btn-numbox-plus" type="button" @click="add(index)">+</button>
+										</div>
+									</div>
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<button id="btn" type="button" class="mui-btn mui-btn-green mui-btn-block" @click="update">修改</button>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var dataA;
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				dataA = {
+					"good": self.good,
+					"select": self.list
+				}
+				window.vm.goods = dataA.good;
+				window.vm.select = dataA.select;
+			})
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					goods: [],
+					select: {},
+					toolUseDate:null,
+					predictReturnDate:null
+				},
+				methods: {
+					sub(index) {
+						this.goods[index].applyNumber--;
+						if (this.goods[index].applyNumber < 1) {
+							this.goods[index].applyNumber = 1;
+						}
+					},
+					add(index) {
+						this.goods[index].applyNumber++;
+						if (this.goods[index].applyNumber > this.goods[index].usableNumber) {
+							this.goods[index].applyNumber = this.goods[index].usableNumber;
+						}
+					},
+					update() {
+						var toolBorrowFormEntity = this.select;
+						switch (toolBorrowFormEntity.applyStatus) {
+							case '分拣中':
+								toolBorrowFormEntity.applyStatus = 0;
+								break;
+							case '待领用':
+								toolBorrowFormEntity.applyStatus = 1;
+								break;
+							case '待归还':
+								toolBorrowFormEntity.applyStatus = 2;
+								break;
+							case '已归还':
+								toolBorrowFormEntity.applyStatus = 3;
+								break;
+							default:
+								break;
+						}
+						toolBorrowFormEntity.toolBorrowFormDetailEntities = this.goods;
+						toolBorrowFormEntity.toolUseDate = new Date(this.toolUseDate);
+						toolBorrowFormEntity.predictReturnDate = new Date(this.predictReturnDate);
+						toolBorrowFormEntity.updatePerson = app.getState().user.username;
+						mui.ajax(baseURL + '/app/toolManage/toolBorrow/updateBorrowFormInfo', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token,
+								'Content-Type': 'application/json'
+							},
+							data: JSON.stringify(toolBorrowFormEntity),
+							type: 'POST',
+							success: function(res) {
+								if (res.code == 0) {
+									// console.log(res);
+									mui.openWindow({
+										url: 'lendList.html',
+										id: 'lendList',
+										style: {},
+										createNew: true,
+										show: {
+											autoShow: true,
+											aniShow: 'slide-in-right',
+											duration: 100
+										},
+										waiting: {
+											autoShow: true,
+											title: '正在加载 '
+										}
+									})
+								} else {
+									alert(res.msg)
+								}
+							}
+						});
+					},
+				},
+				created() {
+
+				}
+			})
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+		</script>
+	</body>
+</html>

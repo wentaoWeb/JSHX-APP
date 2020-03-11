@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<!--<link rel="stylesheet" href="../../libs/bootstrap.min.css">-->
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/upload.css" />
+		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css">
+		<link rel="stylesheet" href="../../css/mui.poppicker.css">
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/bootstrap.min.js"></script>
+		<script src="../../libs/layer/layer.js"></script>
+		<script src="../../libs/rem.js"></script>
+
+		<!-- <script src="../../js/main.js"></script> -->
+		<script src="../../js/common.js"></script>
+		<script src="../../js/app.js"></script>
+		<!-- <script src="../../js/safe/people.js"></script> -->
+		<style>
+		html,
+	    body {
+	        width: 100%;
+	        height: 100%;
+			position: relative;
+	    }
+	
+	    * {
+	        margin: 0;
+	        padding: 0;
+	    }
+	
+	    .my-header {
+	        height: 0.88rem;
+	        background-color: #51BFF7;
+	        color: #fff;
+	    }
+	
+	    .my-header .mui-title {
+	        color: #FFF;
+	        font-size: 0.36rem;
+	    }
+	
+	    .my-header a,
+	    .my-header h1 {
+	        line-height: 0.88rem;
+	    }
+	
+	    .mui-bar-nav.mui-bar .mui-icon {
+	        padding: 0;
+	        margin: 0;
+	        color: #fff;
+	    }
+	
+	    .apply {
+	        margin: 0 0.3rem;
+	        border-bottom: 1px solid #ccc;
+	        padding-top: 0.2rem;
+	        padding-bottom: 0.15rem;
+	        box-sizing: border-box;
+	    }
+	
+	    .apply input {
+	        border: none;
+	        outline: none;
+	        color: rgba(51, 51, 51);
+	        font-size: 0.36rem;
+	        margin-top: 0.16rem;
+	        width: 100%;
+	        padding: 0px !important;
+	        margin-bottom: 0px;
+	    }
+	
+	    .apply label {
+	        font-size: 0.24rem;
+	        color: rgb(148, 148, 148);
+	
+	    }
+	
+	    .apply label em {
+	        font-size: 0.24rem;
+	        color: rgb(255, 0, 0);
+	    }
+	
+	    .image-item {
+	        float: left;
+	        position: relative;
+	        margin: 0 10px;
+	
+	    }
+	
+	    img {
+	        width: 100px;
+	        height: 100px;
+	
+	    }
+	
+	    video {
+	        width: 100px;
+	        height: 100px;
+	
+	    }
+	
+	    .image-close {
+	        position: absolute;
+	        display: inline-block;
+	        right: 0px;
+	        top: 0px;
+	        width: 20px;
+	        height: 20px;
+	        text-align: center;
+	        line-height: 20px;
+	        border-radius: 12px;
+	        background-color: #FF5053;
+	        color: #f3f3f3;
+	        border: solid 1px #FF5053;
+	        font-size: 9px;
+	        font-weight: 200;
+	        z-index: 999;
+	    }
+	
+	    .mui-table-view:before {
+	        height: 0px;
+	    }
+	
+	    .mui-table-view:after {
+	        height: 0px;
+	    }
+	
+	    .addData {
+	        width: 25%;
+	        display: inline-block;
+	        background-color: #51BFF7;
+	        padding: 10px;
+	        color: #fff;
+	        text-align: center;
+	        border-radius: 10px;
+	    }
+	
+	    .upload {
+	        position: absolute;
+	        right: 0.20rem;
+	        top: 0.60rem;
+	        background-color: #51BFF7;
+	        padding: 10px;
+	        color: #fff;
+	        text-align: center;
+	        border-radius: 10px;
+	        width: 25%;
+	    }
+		#check{
+			display: flex;
+			align-items: center;
+			width: 100%;
+			flex-wrap: wrap;
+		}
+		#checker{
+			width: 33.333%;
+			height:50px;
+			align-items: center;
+			vertical-align: middle;
+		}
+	</style>
+	</head>
+
+	<body>
+		<!-- 侧滑导航根容器 -->
+		<div id="app">
+			<div class="mui-off-canvas-wrap mui-draggable">
+				<!-- 主页面容器 -->
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav my-header">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">详情</h1>
+					<!-- <a href="javascript:;" class="mui-icon mui-pull-right" style="font-size:14px;" @click="finish">完成</a> -->
+				</header>
+				<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll">
+					
+					<form>
+						<div class="apply" style="display: flex; align-items: center; justify-content: space-between;">
+							<label>
+								<em>*</em>头像</label>
+							<a id="pick" style="margin: 0 10px;">
+								<img id="image" :src="headUrl.replace('D:/js_hx_control/head/', baseURL + '/file/head/')" style="width: 40px;height: 60px;" />
+							</a>
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>姓名</label>
+							<input type="text" placeholder="请输入姓名" readonly="readonly" :value="user.awUserName">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>性别</label>
+							<input type="text" placeholder="请选择性别" readonly="readonly" :value="user.gender">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>年龄</label>
+							<input type="text" placeholder="请输入年龄" readonly="readonly" :value="user.age">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>身份证号码</label>
+							<input type="text" placeholder="请输入身份证号码" readonly="readonly" :value="identityCard">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>联系电话</label>
+							<input type="number" placeholder="请输入电话" readonly="readonly" :value="user.mobile">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>公司名称</label>
+							<input type="text" placeholder="请选择公司" readonly="readonly" :value="user.companyName">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>学历</label>
+							<input type="text" placeholder="请选择学历" readonly="readonly" :value="user.degree">
+						</div>
+
+						<div class="apply">
+							<label>
+								<em>*</em>类别</label>
+							<input type="text" placeholder="请选择类别" readonly="readonly" :value="user.employeeTypeName">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>岗位
+							</label>
+							<input type="text" placeholder="请选择职务" readonly="readonly" :value="user.technicalName">
+						</div>
+						<div class="apply" v-for="item in pic">
+							<label><em>*</em>{{item.quaName}}</label>
+							<a style="display: block;">
+								<img id="image" @click="lookImg(item.attUrl)" :src="item.attUrl.replace('D:\\js_hx_control\\user\\', baseURL + '/file/user/')" style="width:100px;height:100px" />
+							</a>
+						</div>
+					</form>
+				</div>
+				<div class="bigImg" style="position: absolute;width: 100%;height: 100%;z-index: 99999999999999999999; display: none;" @click="close()">
+					<img id="bigImg" src="" style=" width: 100%;height: 100%;">
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script src="../../assets/mui/js/mui.zoom.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../assets/mui/js/mui.previewimage.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/cropper.min.js"></script>
+		<script type="text/javascript">
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				data = {
+					"user": self.user
+				}
+				window.vm.user = data.user;
+				window.vm.headUrl = data.user.headUrl;
+				for (var i=0;i<data.user.qualificationEntityList.length;i++) {
+					data.user.qualificationEntityList[i].attUrl = data.user.qualificationEntityList[i].attUrl;
+					data.user.qualificationEntityList[i].attUrl.replace('\\','/');
+				}
+				window.vm.pic = data.user.qualificationEntityList;
+				window.vm.identityCard = data.user.qualificationEntityList[0].credNumber;				
+			})
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					awUserId: null,
+					user: [],
+					headUrl:'',
+					pic:[],
+					identityCard:''
+				},
+				methods: {
+					close(){
+						$('.bigImg').hide();
+					},
+					lookImg(attUrl){
+						$('.bigImg').show();
+						$('#bigImg').attr("src",attUrl.replace('D:\\js_hx_control\\user\\', baseURL + '/file/user/'));
+					}
+				},
+				mounted() {
+
+				}
+			})
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能  
+			});
+		</script>
+	</body>
+</html>

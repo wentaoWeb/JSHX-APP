@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title></title>
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/app.js"></script>
+		<style type="text/css">
+			html,
+			body,
+				{
+				width: 100%;
+				height: 100%;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			.my-header {
+				height: 0.88rem;
+				background-color: #FFF;
+				color: #fff;
+			}
+
+			.my-header .mui-title {
+				color: #000;
+				font-size: 0.36rem;
+				font-weight: 800;
+			}
+
+			.my-header a,
+			.my-header h1 {
+				line-height: 0.88rem;
+			}
+
+			.mui-bar-nav.mui-bar .mui-icon {
+				padding: 0;
+				margin: 0;
+				color: #000;
+			}
+
+			/* .mui-slider,
+			.mui-slider-group,
+			.mui-slider-item,
+			.mui-slider {
+				margin-top: 49px;
+			} */
+			.img,
+			.img-responsive {
+				width: 80px;
+				height: 80px;
+			}
+
+			.goodsText {
+				padding-left: 10px;
+				word-wrap: break-word;
+				word-break: normal;
+				overflow: hidden;
+			}
+
+			.goodsText p:last-child {
+				margin-bottom: 0px;
+			}
+
+			.goodsText p {
+				display: flex;
+			}
+
+			.goodsText p .title {
+				display: block;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				color: #000000;
+				font-size: 14px;
+				font-weight: bold;
+				/* width: 50px; */
+			}
+
+			.mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item {
+				border-bottom: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 主页面标题 -->
+			<header class="mui-bar mui-bar-nav my-header">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">详情</h1>
+			</header>
+			<div style="position: fixed;bottom: 15%;left: 10px; width: 50px; height: 50px;z-index: 9999999999999;" @click="toCart">
+				<img src="../../images/icon/liebiao.png" style="width: 50px;height: 50px;" >
+			</div>
+			<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll" style="height: 100%;">
+				<div class="mui-scroll">
+					<ul style="padding: 10px;">
+						<li v-for="goods,index in modelNumByToolNameList" style="display: flex;align-items: center;">
+							<div class="img">
+								<img :src="goods.toolPictureUrl.replace('D:/js_hx_control', baseURL + '/file')" class="img-responsive">
+							</div>
+							<div class="goodsText">
+								<p>
+									<span class="title" style="width: 60px;display: inline-block;">{{goods.standardType}}</span>
+									<span class="title after" style="width: 120px;">{{goods.toolModelNumber}}</span>
+								</p>
+								<p style="font-size: 12px;">库存：{{goods.toolCountByToolStandardModel.stockNumber}}</p>
+								<p style="align-items: center;">
+									<span style="font-size: 10px;">可用：</span>
+									<span style="font-size: 18px;color: #FF3737;font-style: italic;">
+										{{goods.toolCountByToolStandardModel.usableNumber}}
+									</span>
+
+								</p>
+							</div>
+							<div class="mui-numbox">
+								<button class="mui-btn mui-btn-numbox-minus" type="button" @click="sub(index)">-</button>
+								<input class="mui-numbox-input" disabled type="number" v-model="goods.toolCountByToolStandardModel.applyNumber" />
+								<button class="mui-btn mui-btn-numbox-plus" type="button" @click="add(index,goods.toolCountByToolStandardModel.toolCode)">+</button>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<!-- <button type="button" class="mui-btn mui-btn-green mui-btn-block" style="position: fixed;bottom: 0;margin-bottom: 0px;"
+				 @click="submit">加入申请列表</button> -->
+			</div>
+		</div>
+		<script type="text/javascript">
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					modelNumByToolNameList: [],
+					goods:[]
+				},
+				methods: {
+					toCart(){
+						localStorage.setItem('lendList', JSON.stringify(vm.goods))
+						mui.openWindow({
+							url: 'cart.html',
+							id: 'cart',
+							style: {},
+							createNew: true,
+							show: {
+								autoShow: true,
+								aniShow: 'slide-in-right',
+								duration: 100
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载 '
+							}
+						})
+					},
+					sub(index) {
+						if (this.modelNumByToolNameList[index].toolCountByToolStandardModel.applyNumber < 1) {
+							this.modelNumByToolNameList[index].toolCountByToolStandardModel.applyNumber = 0;
+						} else {
+							this.modelNumByToolNameList[index].toolCountByToolStandardModel.applyNumber--;
+							var goods = JSON.parse(localStorage.getItem('lendList'));
+							// console.log(goods);
+							if (goods) {
+								goods.forEach( item => {
+									if(item.toolCode == this.modelNumByToolNameList[index].toolCountByToolStandardModel.toolCode){
+										item.applyNumber--;
+									}
+								})
+								vm.goods = goods
+							} 
+						}
+					},
+					add(index,toolCode) {
+						if (this.modelNumByToolNameList[index].toolCountByToolStandardModel.applyNumber >= this.modelNumByToolNameList[
+								index].toolCountByToolStandardModel.usableNumber) {
+							this.modelNumByToolNameList[index].toolCountByToolStandardModel.applyNumber = this.modelNumByToolNameList[
+								index].toolCountByToolStandardModel.usableNumber;
+						} else {
+							this.modelNumByToolNameList[index].toolCountByToolStandardModel.applyNumber++;
+							var goods = JSON.parse(localStorage.getItem('lendList'));
+							console.log(goods);
+							if (goods) {
+								goods.forEach( item => {
+									if(item.toolCode == toolCode){
+										item.applyNumber++;
+									}else {
+										goods.push(this.modelNumByToolNameList[index].toolCountByToolStandardModel);
+									}
+								})
+								vm.goods = goods
+							} else {
+								var goodsList = [];
+								goodsList.push(this.modelNumByToolNameList[index].toolCountByToolStandardModel);
+								vm.goods = goodsList;
+								// localStorage.setItem('lendList', JSON.stringify(goodsList))
+							}
+
+						}
+					},
+				},
+				created() {
+					var dataA;
+					mui.plusReady(function() {
+						var self = plus.webview.currentWebview();
+						dataA = {
+							"modelNumByToolNameList": self.modelNumByToolNameList
+						}
+						for(var i = 0;i<dataA.modelNumByToolNameList.length;i++){
+							dataA.modelNumByToolNameList[i].toolCountByToolStandardModel.applyNumber = 0;
+							dataA.modelNumByToolNameList[i].toolCountByToolStandardModel.imgUrl = dataA.modelNumByToolNameList[i].toolPictureUrl;
+						}
+						window.vm.modelNumByToolNameList = dataA.modelNumByToolNameList;
+						// console.log(dataA.modelNumByToolNameList);
+					})
+				},
+				mounted() {
+
+				}
+			})
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+		</script>
+	</body>
+</html>

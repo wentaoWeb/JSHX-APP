@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<!--<link rel="stylesheet" href="../../libs/bootstrap.min.css">-->
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css">
+		<link rel="stylesheet" href="../../css/mui.poppicker.css">
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/bootstrap.min.js"></script>
+		<script src="../../libs/layer/layer.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<!--<script src="../../js/public.js"></script>-->
+		<script src="../../js/main.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+				background-color: #F8F7FC;
+			}
+			
+			* {
+				margin: 0;
+				padding: 0;
+				touch-action: none;
+			}
+			
+			.my-header {
+				height: 0.88rem;
+				background-color: #fff;
+				color: #000;
+			}
+			
+			.my-header .mui-title {
+				color: #000;
+				font-size: 0.36rem;
+			}
+			
+			.my-header a,
+			.my-header h1 {
+				line-height: 0.88rem;
+			}
+			
+			.mui-bar-nav.mui-bar .mui-icon {
+				padding: 0;
+				margin: 0;
+				color: #000;
+			}
+			
+			.mui-bar-nav~.mui-content {
+				background-color: #f8f7fc;
+			}
+			
+			.mui-table-view:before {
+				height: 0;
+			}
+			
+			.mui-table-view:after {
+				height: 0;
+			}
+			
+			.mui-search {
+				padding: 10px;
+				background: #fff !important;
+			}
+			
+			.mui-search input[type=search] {
+				padding-left: 30px;
+				padding-top: 10px;
+				background: #F3F3F3;
+			}
+			
+			.mui-icon {
+				line-height: 2.5;
+			}
+			
+			.mui-search.mui-active:before {
+				left: 15px;
+			}
+			
+			.detail {
+				background-color: #fff;
+				margin-top: 15px;
+				position: relative;
+			}
+			
+			h1 img {
+				width: 0.5rem;
+				vertical-align: middle;
+			}
+			
+			.detail h1 {
+				border-bottom: 1px solid #eee;
+				padding: 20px;
+				font-size: 0.50rem;
+			}
+			
+			.bottom p {
+				line-height: 0.8rem;
+				font-size: 0.38rem;
+			}
+			
+			.bottom p span {
+				color: #000;
+				margin-left: 8px;
+			}
+			.red{
+				background-color: red;
+				color: white;
+			}
+			.green{
+				background-color: green;
+				color: white;
+			}
+			.success{
+				display: block;
+				width: 142px;
+				height: 142px;
+				position: absolute;
+				right: 0px;
+				top: 25px;
+				z-index: 99999999999;
+			}
+			.searchHis{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			#place{
+				position: absolute;
+				left:40px;
+			}
+			.noList{
+				width: 100%;
+				height: 100%;
+			}
+			.punish{
+				display: block;
+				/* width: 142px;
+				height: 142px; */
+				position: absolute;
+				right: 20px;
+				top: 30px;
+				z-index: 99999999999999999999999;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- 侧滑导航根容器 -->
+		<div id="app">
+			<div class="mui-off-canvas-wrap mui-draggable">
+				<header class="mui-bar mui-bar-nav my-header">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">现场稽查情况</h1>
+				</header>
+				<div class="mui-content mui-scroll-wrapper content" id="offCanvasContentScroll">
+					<div>
+						<!-- 搜索框 -->
+						<div class="mui-input-row mui-search" style="display: flex;justify-content: center;align-items: center;position: relative;">
+							<input type="date" id="selectData" @click="selectData" @input="dataS" style="width: 270px;margin-top: 15px;" />
+							<button class="mui-btn mui-btn-blue" style="height: 40px;margin-left: 20px;" @click="search">搜索</button>
+							<a id="place" style="color: #C0C0C0;z-index: 1;">请选择搜索日期</a>
+						</div>
+						<ul v-if="entityList != ''">
+							<li class="detail" v-for="item in entityList" @click="jichaDetails(item.id)" >
+								<h1><!-- :class="{red:  item.checkRecordNum == '', green:item.checkRecordNum != ''}" -->
+									<img src="../../images/iconMain/icon/cfshsp.png" > {{item.planDate}}
+								</h1>
+								<img v-show="item.checkRecordNum != ''" class="success" src="../../images/yjc.png" >
+								<div class="punish"  v-if="item.ifPunished == 1" style="padding-top: 120px;" v-cloak>
+									<span style="display: flex;justify-content: center;align-items: center; color: red;border: 1px solid red;padding: 5px 7px;">违章已处罚</span>
+								</div>
+								<div style="padding:20px" class="bottom">
+									<p>项目名称
+										<span>{{ item.projectName }}</span>
+									</p>
+									<p>施工队伍
+										<span>{{ item.workUnit }}</span>
+									</p>
+									<p>施工日期
+										<span>{{ item.planDate }}</span>
+									</p>
+									<p>施工地点
+										<span>{{ item.workSite }}</span>
+									</p>
+									<p>稽查结果
+										<span>
+										<em style="color:springgreen">{{ item.checkResultQualified }}</em>项合格</span>
+										<span>
+										<em style="color:red">{{ item.checkResultBreakRules }}</em>项违章</span>
+										<span>
+										<em style="color:orange">{{ item.checkResultNoNormalize }}</em>项不规范</span>
+									</p>
+								</div>
+							</li>
+						</ul>
+						<div class="noList" v-if="entityList.length === 0" style="padding-top: 120px;" v-cloak>
+							<div class=""  style="display: flex;justify-content: center;align-items: center;">
+								<img src="../../images/no.png" style="width: 60%;height: 60%;" >
+							</div>
+							<p style="text-align: center;font-size: 16px;">暂无内容</p>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/vue.min.js"></script>
+		<script>
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					entityList: [],
+					searchVal: ""
+				},
+				methods: {
+					ajax() {
+						// alert(1)						
+						mui.ajax(baseURL+'/app/sceneCheck/allInfoByToday',{
+							headers: {
+								"token": app.getState().token
+							},
+							data:{},
+							dataType:'json',//服务器返回json格式数据
+							type:'get',//HTTP请求类型
+							timeout:5000,//超时时间设置为10秒；
+							success:function(res){
+								// alert(1.1);
+								// console.log(res)
+								if (res.code == 0) {
+									vm.entityList = res.entityList;
+								} else{
+									alert(res.msg);
+								}
+							},							
+						});
+					},
+					search(){
+						if($('#selectData').val() == false){
+							alert('请选择时间!');
+							return false;
+						}						
+						var val = $('#selectData').val().replace(/\//ig,'-');
+						mui.ajax(baseURL+'/app/sceneCheck/allInfoByHistory',{
+							headers: {
+								"token": app.getState().token
+							},
+							data:{
+								"planDate":val
+							},
+							dataType:'json',//服务器返回json格式数据
+							type:'post',//HTTP请求类型
+							timeout:10000,//超时时间设置为10秒；
+							success:function(res){
+								// console.log(JSON.stringify(res))
+								if (res.code == 0) {
+									vm.entityList = res.entityList;
+								} else{
+									alert(res.msg)
+								}
+								
+							},							
+						});
+					},
+					dataS(){
+						var val = $('#selectData').val();
+						if (val == '') {
+							$('#place').show();
+						} else{
+							$('#place').hide();
+						}
+					},
+					selectData(){
+						$('#place').hide();
+					},
+					jichaDetails(id) {
+						// console.log(1)
+						// plus.webview.close("auditDetails.html");
+						mui.openWindow({
+								url: "auditDetails.html",
+								id: "auditDetails.html",
+								// style: {
+								// 	cachemode:"noCache"
+								// },
+								show: {
+									autoShow: true,
+									aniShow: 'slide-in-right',
+									duration: 100,																	
+								},
+								createNew:true,
+								extras: {
+									// technicalId: item.technicalId, //自定义扩展参数，可以用来处理页面间传值  
+									ids: id
+								},
+								waiting: {
+									autoShow: true,
+									title: '正在加载 '
+								}
+						})
+					}
+				},
+				// computed: {
+				// 	list: function() {
+				// 		var arrByZM = []; //声明一个空数组来存放数据
+				// 		// cooperateGroup
+				// 		for(var i = 0; i < this.entityList.length; i++) {
+				// 			//for循环数据中的每一项（根据name值）
+				// 			// console.log(this.entityList[i].cooperateGroup);
+				// 			if(String(this.entityList[i].cooperateGroup).search(this.searchVal) != -1) {
+				// 				//判断输入框中的值是否可以匹配到数据，如果匹配成功
+				// 				arrByZM.push(this.entityList[i]);
+				// 				//向空数组中添加数据
+				// 			}
+				// 		}
+				// 		// console.log(arrByZM);
+				// 		//一定要记得返回筛选后的数据
+				// 		return arrByZM;
+				// 	}
+				// },
+				mounted() {
+					// plus.webview.close("auditDetails.html");
+					// console.log(11)
+					this.ajax();
+				}
+			})
+			
+			mui('#offCanvasSideScroll').scroll();
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			})
+		</script>
+	</body>
+
+</html>

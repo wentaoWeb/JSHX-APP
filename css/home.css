@@ -1,0 +1,35 @@
+.ui-page-login,
+#bodyDiv{
+
+}
+#carouselDiv{/*轮播的div样式*/
+	border-radius: 20px;
+	height:140px;
+	margin:15px 6px;
+}
+#contentDiv{/*内容显示的div样式*/
+
+	height:160px;
+	margin:108px 6px;
+}
+#contentDiv>div{
+	width:70px;
+	height:73px;
+	margin-left:35px ;
+	float: left;
+}
+.mui-icon-extra mui-icon-extra-sweep{
+	font-size:30px;
+}
+#outsourceDiv{
+	text-align: center;
+}
+#planDiv{
+	text-align: center;
+}
+#workTicketDiv{
+	text-align: center;
+}
+#checkDiv{
+	text-align: center;
+}

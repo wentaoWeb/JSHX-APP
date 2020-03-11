@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<!--<link rel="stylesheet" href="../../libs/bootstrap.min.css">-->
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css">
+		<link rel="stylesheet" href="../../css/mui.poppicker.css">
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/bootstrap.min.js"></script>
+		<script src="../../libs/layer/layer.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<!--<script src="../../js/public.js"></script>-->
+		<script src="../../js/main.js"></script>
+		<script src="../../js/safe/people.js"></script>
+		<style>
+			html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .my-header {
+            height: 0.88rem;
+            background-color: #51BFF7;
+            color: #fff;
+        }
+
+        .my-header .mui-title {
+            color: #FFF;
+            font-size: 0.36rem;
+        }
+
+        .my-header a,
+        .my-header h1 {
+            line-height: 0.88rem;
+        }
+
+        .mui-bar-nav.mui-bar .mui-icon {
+            padding: 0;
+            margin: 0;
+            color: #fff;
+        }
+
+        .mui-segmented-control .mui-control-item.mui-active {
+            color: #51BFF7;
+            background-color: transparent;
+            font-size: 0.34rem;
+        }
+
+        .mui-segmented-control {
+            border: none;
+        }
+
+        .mui-segmented-control .mui-control-item {
+            border-left: none;
+            font-size: 0.34rem;
+            color: #666;
+        }
+
+        .apply {
+            margin: 0 0.3rem;
+            border-bottom: 1px solid #ccc;
+            padding-top: 0.2rem;
+            padding-bottom: 0.15rem;
+            box-sizing: border-box;
+        }
+
+        .apply input {
+            border: none;
+            outline: none;
+            color: rgba(51, 51, 51);
+            font-size: 0.36rem;
+            margin-top: 0.16rem;
+            width: 100%;
+            padding: 0px !important;
+            margin-bottom: 0px;
+        }
+
+        .apply label {
+            font-size: 0.24rem;
+            color: rgb(148, 148, 148);
+
+        }
+
+        .apply label em {
+            font-size: 0.24rem;
+            color: rgb(255, 0, 0);
+        }
+
+        .mui-table-view:before {
+            height: 0px;
+        }
+
+        .mui-table-view-cell {
+            padding: 18px 15px;
+        }
+
+        .mui-table-view-cell>a:not(.mui-btn) {
+            color: #666;
+            font-size: 0.32rem;
+        }
+
+        .padd em {
+            position: absolute;
+            right: 25px;
+            font-size: 0.34rem;
+        }
+
+        .padd input {
+            width: auto;
+            height: auto;
+            padding: 0;
+            border: none;
+            position: absolute;
+            right: -150px;
+            font-size: 0.34rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+	</head>
+
+	<body>
+		<!-- 侧滑导航根容器 -->
+		<div id="app" v-cloak>
+			<div class="mui-off-canvas-wrap mui-draggable">
+				<!-- 主页面容器 -->
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav my-header">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">处罚单审核审批</h1>
+					<!-- <a href="javascript:;" class="mui-icon mui-pull-right" style="font-size:14px;">提交</a> -->
+				</header>
+				<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll">
+					<div>
+						<div style="padding: 10px 10px;">
+							<div id="segmentedControl" class="mui-segmented-control">
+								<a class="mui-control-item mui-active" href="#item1">
+									基本信息
+								</a>
+								<a class="mui-control-item" href="#item2">
+									稽查情况
+								</a>
+							</div>
+						</div>
+						<div>
+							<div id="item1" class="mui-control-content mui-active">
+								<div class="apply">
+									<label>
+										<em>*</em>施工地点</label>
+									<input type="text" placeholder="请输入施工地点" value="办公室一楼">
+								</div>
+								<div class="apply">
+									<label>
+										<em>*</em>施工任务</label>
+									<input type="text" placeholder="请输入施工任务" value="灭火器摆放">
+								</div>
+								<div class="apply">
+									<label>
+										<em>*</em>施工日期</label>
+									<input type="text" value="2018-2-13">
+								</div>
+
+								<div class="apply">
+									<label>
+										<em>*</em>稽查员</label>
+									<input type="text" placeholder="请输入稽查员" value="张xx">
+								</div>
+								<div class="apply">
+									<label>
+										<em>*</em>工作内容</label>
+									<input type="text" placeholder="请输入工作内容" value="xxx线路违规">
+								</div>
+								<div class="apply">
+									<label>
+										<em>*</em>计划工作时间</label>
+									<input type="date">
+								</div>
+								<div class="apply">
+									<label>
+										<em>*</em>工作负责人</label>
+									<input type="text" placeholder="请输入工作负责人">
+								</div>
+								<div class="apply">
+									<label>
+										<em>*</em>工作负责人</label>
+									<input type="text" placeholder="请输入工作负责人">
+								</div>
+								<div class="apply">
+									<label>
+										<em>*</em>工作许可人</label>
+									<input type="text" placeholder="请输入工作许可人">
+								</div>
+
+							</div>
+							<div id="item2" class="mui-control-content">
+								<ul class="mui-table-view">
+									<li class="mui-table-view-cell mui-collapse">
+										<a class="mui-navigate-right" href="#">班组承载力、许可开工、安全交底</a>
+										<div class="mui-collapse-content">
+											<ul class="mui-table-view">
+												<li class="mui-table-view-cell padd">
+													1、施工机械、材料合格
+													<input type="text" class="rule" placeholder="选择">
+												</li>
+												<li class="mui-table-view-cell padd">
+													2、个人、安全、施工工器具合格
+													<input type="text" class="rule1" placeholder="选择">
+												</li>
+												<li class="mui-table-view-cell padd">
+													3、开工报告正确
+													<input type="text" class="rule2" placeholder="选择">
+												</li>
+												<li class="mui-table-view-cell padd">
+													4、勘察记录正确
+													<input type="text" class="rule3" placeholder="选择">
+												</li>
+												<li class="mui-table-view-cell padd">
+													5、勘察、施工图正确
+													<input type="text" class="rule4" placeholder="选择">
+												</li>
+												<li class="mui-table-view-cell padd">
+													6、安全交底正确
+													<input type="text" class="rule5" placeholder="选择">
+												</li>
+												<li class="mui-table-view-cell padd">
+													7、安全教育正确
+													<input type="text" class="rule6" placeholder="选择">
+												</li>
+												<li class="mui-table-view-cell padd">
+													8、领导管理人员到岗到位
+													<input type="text" class="rule7" placeholder="选择">
+												</li>
+												<li class="mui-table-view-cell padd">
+													9、接地线交接单正确
+													<!-- <em></em> -->
+													<input type="text" class="rule8" placeholder="选择">
+												</li>
+											</ul>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script>
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					audit: {
+						rule: null,
+						rule1: null,
+						rule2: null,
+						rule3: null,
+						rule4: null,
+						rule5: null,
+						rule6: null,
+						rule7: null,
+						rule8: null,
+						rule9: null,
+					},
+					ruleData: [{
+							value: '0',
+							text: '合格'
+						},
+						{
+							value: '1',
+							text: '不规范'
+						},
+						{
+							value: '2',
+							text: '违规'
+						},
+					],
+				},
+				methods: {
+
+				}
+			});
+			// mui('#offCanvasSideScroll').scroll();
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+		</script>
+	</body>
+
+</html>

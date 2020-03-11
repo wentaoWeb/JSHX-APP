@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<!--<link rel="stylesheet" href="../../libs/bootstrap.min.css">-->
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<link rel="stylesheet" href="../../assets/swiper/css/swiper.min.css">
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../assets/swiper/js/swiper.min.js"></script>
+		<script src="../../libs/bootstrap.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/public.js"></script>
+		<script src="../../js/main.js"></script>
+		<style>
+			.clearfix:after{
+            content: ".";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+        .clearfix{
+            *zoom: 1;
+        }
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background: #f2f2f2;
+        }
+
+        .mui-bar-nav~.mui-content {
+            padding-bottom: 50px;
+            background-color: #f2f2f2;
+        }
+
+        .mui-bar-nav {
+            top: 0;
+            -webkit-box-shadow: 0 1px 6px #f2f2f2;
+            box-shadow: 0 1px 6px #f2f2f2;
+        }
+        .my-header {
+            height: 0.88rem;
+            background-color: #51BFF7;
+            color: #fff;
+        }
+
+        .my-header .mui-title {
+            color: #FFF;
+            font-size: 0.36rem;
+        }
+
+        .my-header a,
+        .my-header h1 {
+            line-height: 0.88rem;
+        }
+
+        .mui-bar-nav.mui-bar .mui-icon {
+            padding: 0;
+            margin: 0;
+            color: #fff;
+        }
+        .mui-table-view {
+            position: relative;
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-left: 0;
+            list-style: none;
+            background-color: #f2f2f2;
+        }
+
+        .topName {
+            margin: 10px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 0.2rem;
+        }
+
+        .detail h1 {
+            font-size: 0.32rem;
+            font-weight: 600;
+            margin-bottom: 0.38rem;
+        }
+
+        .detail img {
+            width: 0.5rem;
+            vertical-align: middle;
+
+        }
+
+        .detail h6 {
+            font-size: 0.28rem;
+            font-weight: 400;
+            margin-bottom: 0.38rem;
+        }
+
+        .all ul li {
+            float: left;
+        }
+
+        .allDetail {
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+
+        .fontSize {
+            width: auto!important;
+            padding: 10px;
+            margin: 0px!important;
+        }
+
+        .active {
+            font-size: 20px;
+            color: #43C1D4;
+        }
+
+        .detailImage {
+            padding: 10px;
+        }
+
+        .detailImage li {
+            background-color: #fff;
+            padding: 10px;
+            width: 49%;
+            float: left;
+            margin-right: 1%;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        /* ul li{
+            width:100%;
+            height:20px;
+            background-color: pink;
+        } */
+    </style>
+	</head>
+
+	<body>
+		<!-- 侧滑导航根容器 -->
+		<div id="app">
+			<!-- 主页面容器 -->
+			<!-- 主页面标题 -->
+			<div class="mui-off-canvas-wrap mui-draggable">
+				<header class="mui-bar mui-bar-nav my-header">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">项目部档案详情</h1>
+				</header>
+				<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll">
+					<div>
+						<div class="topName detail">
+							<h1>
+								<img src="../../images/icon/xmb.png" alt=""> 线路项目五部
+							</h1>
+							<h6>
+								<img src="../../images/icon/ssgs.png" alt=""> 嘉善市创辉电器工程有限公司
+							</h6>
+							<h6 style="margin-bottom:0px;">
+								<img src="../../images/icon/glgs.png" alt=""> 安全质量监察部
+							</h6>
+						</div>
+						<div class="allDetail clearfix">
+							<div class="swiper-container clearfix all">
+								<ul class="swiper-wrapper slider clearfix">
+									<li class="swiper-slide fontSize" :class='{active:index==qwerqwre}' @click="queryDetail(item.name,index)"
+									 v-for="(item,index) in job" :key="index">
+										{{item.name}}
+									</li>
+								</ul>
+							</div>
+						</div>
+						<ul class="detailImage clearfix">
+							<li>
+								<img src="../../images/user-photo.png" alt="">
+								<p>项目部主管</p>
+								<span>方兵</span>
+							</li>
+							<li>
+								<img src="../../images/user-photo.png" alt="">
+								<p>项目部主管</p>
+								<span>方兵</span>
+							</li>
+							<li>
+								<img src="../../images/user-photo.png" alt="">
+								<p>项目部主管</p>
+								<span>方兵</span>
+							</li>
+							<li>
+								<img src="../../images/user-photo.png" alt="">
+								<p>项目部主管</p>
+								<span>方兵</span>
+							</li>
+							<li>
+								<img src="../../images/user-photo.png" alt="">
+								<p>项目部主管</p>
+								<span>方兵</span>
+							</li>
+							<li>
+								<img src="../../images/user-photo.png" alt="">
+								<p>项目部主管</p>
+								<span>方兵</span>
+							</li>
+							<li>
+								<img src="../../images/user-photo.png" alt="">
+								<p>项目部主管</p>
+								<span>方兵</span>
+							</li>
+							<li>
+								<img src="../../images/user-photo.png" alt="">
+								<p>项目部主管</p>
+								<span>方兵</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					job: [{
+							name: '全部'
+						},
+						{
+							name: '项目部主管'
+						},
+						{
+							name: '安全员'
+						},
+						{
+							name: '工作负责人'
+						},
+						{
+							name: '工作票签发人'
+						},
+						{
+							name: '质量监督员'
+						},
+						{
+							name: '资料员'
+						},
+						{
+							name: '材料员'
+						},
+						{
+							name: '技工'
+						},
+					],
+					qwerqwre: "0"
+				},
+				methods: {
+					queryDetail: function(name, index) {
+						console.log(index)
+						this.qwerqwre = index;
+					}
+				}
+			});
+
+			mui('#offCanvasSideScroll').scroll();
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能  
+			});
+			var swiper = new Swiper('.swiper-container', {
+				pagination: '.swiper-pagination',
+				paginationClickable: true, // 分页按钮可点击来切换
+				slidesPerView: "auto", // 开启首页显示多个slider（第一个slider不居中）
+				spaceBetween: 5, // 本质是在slider之间加margin
+			});
+		</script>
+	</body>
+
+</html>

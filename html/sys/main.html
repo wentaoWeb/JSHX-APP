@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<!-- <script src="../../js/public.js"></script> -->
+		<script src="../../js/main.js"></script>
+		<style>
+			.my-header {
+            height: 0.88rem;
+            background-color: #51BFF7;
+            color: #fff;
+        }
+
+        .my-header .mui-title {
+            color: #FFF;
+            font-size: 0.36rem;
+        }
+
+        .my-header a,
+        .my-header h1 {
+            line-height: 0.88rem;
+        }
+
+        .mui-bar-nav.mui-bar .mui-icon {
+            padding: 0;
+            margin: 0;
+            color: #fff;
+        }
+
+        .mui-bar-nav~.mui-content {
+            padding-top: 0px!important;
+            padding-bottom: 50px;
+            background-color: #fff;
+        }
+
+        .bg {
+            width: 100%;
+            height: 2.82rem;
+            background: url("../../images/bg.png") no-repeat center;
+            background-size: 100%;
+            padding-top: 1.0rem;
+            box-sizing: border-box;
+        }
+
+        .loopImg {
+            width: 92%;
+            margin: 0 auto;
+            height: 2.5rem;
+        }
+
+        .loopImg img {
+            width: 100%;
+        }
+
+        .menu {
+            padding-top: 0.7rem;
+            width: 92%;
+            margin: 0 auto;
+            margin-bottom: 2.0rem;
+        }
+
+        .menu ul .bigMenu {
+            padding-top: 0.7rem;
+            box-sizing: border-box;
+            /* margin-bottom:0.7rem; */
+        }
+
+        .menu ul .bigMenu h1 {
+            font-weight: 400;
+            font-size: 0.36rem;
+            color: #333;
+            font-family: "PingFang-SC-Bold";
+        }
+
+        .bigMenu .smallMenu {
+            margin-top: 0.4rem;
+            box-sizing: border-box;
+            float: left;
+            text-align: center;
+            width: 25%;
+        }
+        .smallMenu p{
+            margin-top:0.2rem;
+            font-size: 0.24rem;
+            color: #333;
+            font-family: "PingFang-SC-Bold";
+        }
+        .smallMenu img{
+            width:0.7rem;
+            height:0.7rem;
+        }
+		.num{
+			position: absolute;
+			top: 0px; 
+			width: 18px;
+			height: 18px;
+			background-color: red;
+			z-index: 9999999999999;
+			border-radius: 50%;
+			color: white;
+			font-size: 10px;
+			text-align: center;
+			line-height: 18px;
+		}
+    </style>
+	</head>
+
+	<body>
+		<!-- <div class="mui-content">
+			<nav id="bar" class="mui-bar mui-bar-tab">
+				<a class="mui-tab-item mui-active" href="index.html" data-id="index">
+					<span class="mui-icon mui-icon-home"></span>
+					<span class="mui-tab-label">首页</span>
+				</a>
+				<a class="mui-tab-item" href="message.html" data-id="message">
+					<span class="mui-icon mui-icon-email"></span>
+					<span class="mui-tab-label">通知</span>
+				</a>
+				<a class="mui-tab-item" href="user.html" data-id="user">
+					<span class="mui-icon mui-icon-person"></span>
+					<span class="mui-tab-label">我的</span>
+				</a>
+			</nav>
+		</div> -->
+		<nav id="app" class="mui-bar mui-bar-tab my-footer">
+			<a class="mui-tab-item mui-active" href="index.html">
+				<span class="mui-icon mui-icon-home"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="message.html" style="position: relative;">
+				<span class="mui-icon mui-icon-email"></span>
+				<span class="mui-tab-label">通知</span>
+				<span v-show="num != 0" class="num">{{num}}</span>
+			</a>
+			<a class="mui-tab-item" href="user.html">
+				<span class="mui-icon mui-icon-person"></span>
+				<span class="mui-tab-label">我的</span>
+			</a>
+		</nav>
+		<script src="../../js/app.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			//mui插件初始化
+			mui.init({
+				swipeBack: true //启动右滑关闭功能
+			});
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				self.addEventListener('show', function() {
+					location.reload();
+				});
+				
+				
+				
+				// var info = plus.push.getClientInfo();
+				// console.log(JSON.stringify(info));
+				// /* 5+  push 消息推送 ps:使用:H5+的方式监听，实现推送*/
+				// plus.push.addEventListener("click", function(msg) {
+				// 	console.log("click:" + JSON.stringify(msg));
+				// 	console.log(msg.payload);
+				// 	console.log(JSON.stringify(msg));
+				// 	//这里可以写跳转业务代码
+				// }, false);
+				// // 监听在线消息事件    
+				// plus.push.addEventListener("receive", function(msg) {
+				// 	// plus.ui.alert(2);  
+				// 	//这里可以写跳转业务代码
+				// 	console.log("recevice:" + JSON.stringify(msg))
+				// }, false);
+			});
+			// document.addEventListener('plusready', function(){
+			//     // 页面加载时触发  
+			//     var pinf = plus.push.getClientInfo();  
+			//     var cid = pinf.clientid;//客户端标识 
+			// 	 console.log(cid)
+			// 	// var options = {cover:false};
+			// 	// var str = "欢迎使用Html5 Plus创建本地消息！";
+			// 	// plus.push.createMessage(str, "LocalMSG", options); 
+			// }, false );
+
+			// function getPushInfo(){
+			//   console.log("异步获取客户端推送标识信息");
+			//   plus.push.getClientInfoAsync(function(info){
+			//     console.log('Success');
+			//     console.log(JSON.stringify(info));
+			//   }, function(e){
+			//     console.log('Failed');
+			//     console.log(JSON.stringify(e));
+			//   })
+			// }
+			// getPushInfo();
+			// })
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					entityList: [],
+					num: null
+				},
+				methods: {
+
+					getMsg() {
+						mui.ajax(baseURL + '/appSysBacklog/select', {
+							// dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token
+							},
+							type: 'POST',
+							data: {
+								"userId": app.getState().user.userId //1
+							},
+							success: function(res) {
+								if (res.code == 0) {
+									var list = res.entityList;
+									if (list != undefined) {
+										var entityList = [];
+										for (var i = 0; i < list.length; i++) {
+											if (list[i].backlogStateId == 0) {
+												entityList.push(list[i]);
+											}
+										}
+										vm.entityList = entityList;
+										if (res.backlogCount > 99) {
+											res.backlogCount = '99+'
+										}
+										vm.num = res.backlogCount;
+									} else {
+										vm.num = 0;
+									}
+									// console.log(JSON.stringify(entityList));
+								} else {
+									alert(res.msg);
+								}
+
+							}
+						});
+					}
+				},
+				mounted() {
+					this.getMsg();
+					// this.getPushInfo();
+					//所有选择卡
+					var subpages = ['index.html', 'message.html', 'user.html', 'index.html'];
+					var subpage_style = {
+						top: '0px',
+						bottom: '51px'
+					};
+					//当前显示选择卡
+					var activeTab = subpages[0];
+					// console.log(JSON.stringify(subpages[0]) )
+					//创建子页面，显示首页选择卡，隐藏其余页面
+					mui.plusReady(function() {
+						var self = plus.webview.currentWebview();
+						for (var i = 0; i < subpages.length; i++) {
+							var sub = plus.webview.create(subpages[i], subpages[i], subpage_style);
+							if (i > 0) { //隐藏其他页面
+								sub.hide();
+							}
+							self.append(sub); //加入子页面
+						}
+					});
+					//选择卡点击事件
+					mui('.mui-bar-tab').on('tap', 'a', function(e) {
+						var targetTab = this.getAttribute('href');
+						if (targetTab == activeTab)
+							return;
+						//更换标题
+						// var title = document.getElementById('title');
+						// title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
+						//显示目标选择卡
+						plus.webview.show(targetTab);
+						//隐藏原选择卡
+						plus.webview.hide(activeTab);
+						//更改当前活跃选择卡
+						activeTab = targetTab;
+					});
+				}
+			})
+			// mui.plusReady(function() {
+			// 	var self = plus.webview.currentWebview();
+			// 	var current = '';
+			// 	var styles = {
+			// 		top: '0',
+			// 		bottom: '51px'
+			// 	};
+			// 	var tabsConfig = {
+			// 		index: {
+			// 			url: 'index.html',
+			// 			styles: styles,
+			// 			default: true
+			// 		},
+			// 		message: {
+			// 			url: 'message.html',
+			// 			styles: styles
+			// 		},
+			// 		user: {
+			// 			url: 'user.html',
+			// 			styles: styles
+			// 		}
+			// 	};
+			// 	var tabs = {};
+			// 	for (id in tabsConfig) {
+			// 		tabs[id] = plus.webview.create(tabsConfig[id].url, id, tabsConfig[id].styles);
+			// 		if (tabsConfig[id]['default']) {
+			// 			self.append(tabs[id]);
+			// 			current = id;
+			// 		}
+			// 	}
+			// 	mui('#bar').on('tap', 'a', function(e) {
+			// 		if (current == this.dataset.id) {
+			// 			mui.fire(tabs[current], 'scroll2top');
+			// 			return;
+			// 		}
+			// 		tabs[this.dataset.id].show();
+			// 		tabs[current].hide();
+			// 		current = this.dataset.id;
+			// 	});
+			// });
+		</script>
+	</body>
+
+</html>

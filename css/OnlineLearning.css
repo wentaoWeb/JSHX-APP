@@ -1,0 +1,9 @@
+.mui-bar-nav{
+	background-color: #51BFF7;
+}
+.mui-bar-nav .mui-title,.mui-bar-nav a{
+	color: #fff;
+}
+.mui-content>.mui-table-view:first-child {
+    margin-top: 0px;
+}

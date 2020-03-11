@@ -1,0 +1,23 @@
+.sendVerifyCode{
+	position: absolute;
+	left:285px;
+	top:1px;
+	background-color: #37A6F3;
+	font-size: 16px;
+}
+#header{
+	margin-top:6px ;
+}
+.mui-log {
+	height: 40px;
+	width: 40px;
+	margin-left: 10px;
+	position: absolute;
+	top: 2px;
+	left: 18px;
+}
+.mui-title-span {
+	padding-left: 45px;
+	font-size: 18px;
+	color: red;
+}

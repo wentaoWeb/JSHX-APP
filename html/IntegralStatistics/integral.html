@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<!--<link rel="stylesheet" href="../../libs/bootstrap.min.css">-->
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/Echarts.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/app.js"></script>
+		<style>
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+				background-color: #F8F7FC;
+				position: relative;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			#app {
+				width: 100%;
+				height: 100%;
+			}
+
+			.my-header {
+				height: 0.88rem;
+				background-color: #51BFF7;
+				color: #fff;
+			}
+
+			.my-header .mui-title {
+				color: #FFF;
+				font-size: 0.36rem;
+			}
+
+			.my-header a,
+			.my-header h1 {
+				line-height: 0.88rem;
+			}
+
+			.mui-bar-nav.mui-bar .mui-icon {
+				padding: 0;
+				margin: 0;
+				color: #fff;
+			}
+
+
+			.chart {
+				height: 200px;
+				margin: 0px;
+				padding: 0px;
+			}
+
+			h5 {
+				margin-top: 30px;
+				font-weight: bold;
+			}
+
+			h5:first-child {
+				margin-top: 15px;
+			}
+
+			.sec {
+				/* display: inline-block; */
+				border: 1px solid #000000;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- 侧滑导航根容器 -->
+		<div id="app">
+			<header class="mui-bar mui-bar-nav my-header">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">积分详情</h1>
+			</header>
+			<div class="mui-content">
+				<div class="mui-content-padded">
+					<p style="text-indent: 22px;">
+						<!-- 	这是mui集成百度ECharts的图表示例，ECharts的详细用法及 API 请参考其官方网站: <a id='echarts' data-url='http://echarts.baidu.com'>http://echarts.baidu.com</a> -->
+					</p>
+				</div>
+				<div class="mui-content-padded">
+					<span class="sec">
+						<select v-model="year" @change="getIntegral()">
+							<option v-for="item in years" :value="item">{{item}}年</option>
+						</select>
+					</span>
+
+					<h5>柱图示例</h5>
+					<div class="chart" id="barChart"></div>
+					<!-- <h5>线图示例</h5>
+					<div class="chart" id="lineChart"></div>
+					<h5>饼图示例</h5>
+					<div class="chart" id="pieChart"></div> -->
+				</div>
+			</div>
+		</div>
+
+		<script>
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					year: 2019,
+					years: [2019, 2018, 2017, 2016],
+					myChart: null
+				},
+				methods: {
+					getIntegral() {
+						mui.ajax(baseURL + '/app/integralStatistics/ListIntegral', {
+							headers: {
+								"token": app.getState().token
+							},
+							data: {
+								createTime: this.year
+							},
+							dataType: 'json', //服务器返回json格式数据
+							type: 'post', //HTTP请求类型
+							timeout: 10000, //超时时间设置为10秒；
+							success: function(res) {
+								let listIntegral = res.listIntegral;
+								let department = [];
+								let integral = [];
+								for (let i = 0; i < listIntegral.length; i++) {
+									department.push(listIntegral[i].companyName);
+									integral.push(listIntegral[i].aggregateScore)
+								}
+								// console.log(integral);
+								if (this.myChart != null && this.myChart != "" && this.myChart != undefined) {
+									this.myChart.dispose();
+								}
+								this.myChart = echarts.init(document.getElementById('barChart'));
+								var chartOption = {
+									backgroundColor: '#fff',
+									tooltip: {
+										trigger: 'axis',
+										axisPointer: {
+											type: 'shadow'
+										}
+									},
+									grid: {
+										left: '3%',
+										right: '4%',
+										bottom: '3%',
+										containLabel: true
+									},
+									xAxis: [{
+										type: 'category',
+										data: department,
+										axisLine: {
+											show: true,
+
+											lineStyle: {
+												color: "#999",
+												width: 1,
+												type: "solid"
+											}
+										},
+										axisTick: {
+											show: false,
+										},
+										axisLabel: {
+											show: true,
+											rotate: 45,
+											textStyle: {
+												color: "#333",
+											}
+										},
+									}],
+									yAxis: [{
+										type: 'value',
+										axisLabel: {
+											formatter: '{value} '
+										},
+										axisTick: {
+											show: false,
+										},
+										axisLine: {
+											show: false,
+											lineStyle: {
+												color: "#333",
+												width: 1,
+												type: "solid"
+											},
+										},
+										splitLine: {
+											lineStyle: {
+												color: "#063374",
+											}
+										}
+									}],
+									dataZoom: [{
+										type: 'inside',
+										start: 0,
+										end: 10
+									}, {
+										start: 0,
+										end: 10,
+										handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+										handleSize: '80%',
+										handleStyle: {
+											color: '#fff',
+											shadowBlur: 3,
+											shadowColor: 'rgba(0, 0, 0, 0.6)',
+											shadowOffsetX: 2,
+											shadowOffsetY: 2
+										}
+									}],
+									series: [{
+										name: '区域销量',
+										type: 'bar',
+										label: {
+											normal: {
+												show: true,
+												position: 'top',
+												formatter: '{c}',
+												textStyle: {
+													color: '#333'
+												}
+											}
+										},
+										data: integral,
+										barWidth: '40%', //柱子宽度
+										barGap: 0, //柱子之间间距
+										itemStyle: {
+											color: '#c23531',
+											normal: {
+												color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+													offset: 0,
+													color: '#7aee8e'
+												}, {
+													offset: 1,
+													color: '#43ce5b'
+												}]),
+												opacity: 1,
+											}
+										}
+									}, ]
+								};
+								this.myChart.setOption(chartOption, true);
+							}
+						});
+					}
+				},
+				mounted() {
+
+					this.getIntegral();
+
+				}
+			})
+			// var getOption = function(chartType) {
+
+			// 	return chartOption;
+			// };
+			// var byId = function(id) {
+			// 	return document.getElementById(id);
+			// };
+			// var barChart = echarts.init(byId('barChart'));
+			// barChart.setOption(getOption('bar'));
+
+			// var lineChart = echarts.init(byId('lineChart'));
+			// lineChart.setOption(getOption('line'));
+
+			// var pieChart = echarts.init(byId('pieChart'));
+			// pieChart.setOption(getOption('pie'));
+
+			// byId("echarts").addEventListener('tap', function() {
+			// 	var url = this.getAttribute('data-url');
+			// 	if (window.plus) {
+			// 		plus.runtime.openURL(url);
+			// 	} else {
+			// 		window.open(url);
+			// 	}
+			// }, false);
+		</script>
+	</body>
+</html>

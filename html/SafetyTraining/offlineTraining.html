@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="../../css/mui.min.css" />
+		<!-- <link rel="stylesheet" href="../../css/base.css"> -->
+		<script src="../../js/vue.min.js"></script>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<title>线下培训</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	</head>
+
+	<style type="text/css">
+		.mui-bar-nav {
+			background-color: #51BFF7;
+		}
+
+		.mui-bar-nav a,
+		.mui-bar-nav h1 {
+			color: #fff;
+		}
+
+		.clockIn {
+			width: 2.5rem;
+			height: 2.5rem;
+			border-radius: 50%;
+			background-color: #51BFF7;
+			box-shadow: #51BFF7 1px 2px 8px;
+			margin: 1rem auto;
+		}
+
+		.clockInText {
+			text-align: center;
+			font-size: 0.3rem;
+			color: #fff;
+			padding-top: 0.95rem;
+		}
+
+		#time {
+			color: #EFEFF4;
+			font-size: 0.25rem;
+			padding: 0.1rem;
+		}
+
+		#date {
+			color: #666666;
+			font-size: 0.25rem;
+			position: absolute;
+			right: 0.2rem;
+		}
+
+		.mui-table-view .mui-media,
+		.mui-table-view .mui-media-body {
+			background-color: #F0EFF4;
+		}
+
+		.clockInfoTime {
+			font-size: 0.5rem;
+			line-height: 2rem;
+			text-align: center;
+		}
+	</style>
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">线下培训</h1>
+			</header>
+			<div class="mui-content">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell mui-media">
+						<a href="javascript:;">
+							<img class="mui-media-object mui-pull-left" src="../../images/timg (1).jpg">
+							<div class="mui-media-body">
+								{{userInfo.user.fullname}} <span id="date">{{ currentDate }}</span>
+								<p class='mui-ellipsis'>欢迎来到</p>
+							</div>
+						</a>
+					</li>
+				</ul>
+				<!-- <p class="clockInfoTime">签到时间:{{ currentDate + " " + currentTime }}</p> -->
+				<div class="clockIn" @click="signIn">
+					<div class="clockInText">
+						{{ clockInfo }}
+						<p id="time">{{ currentTime }}</p>
+					</div>
+				</div>
+				<p v-show="isShow" style="text-align: center;"><img :src="qrUrl" alt=""></p>
+			</div>
+		</div>
+		<script src="../../js/app.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function () {
+			    // plus.webview.reload()
+			})
+			window.addEventListener('refresh', function(e){//执行刷新
+					location.reload();
+			});
+			// document.addEventListener("pause", function() {
+			// 	console.log("应用从前台切换到后台");
+			// 	mui.toast('程序在后台运行');
+			// }, false);
+
+			// VUE
+			const vm = new Vue({
+				el: "#app",
+				data: {
+					userInfo: app.getState(), // 用户信息数据
+					isShow: false,
+					clockInfo: "",
+					currentDate: null,
+					currentTime: null,
+					hisId: window.localStorage.getItem("hisId"), // 培训记录编号
+					state: null, // 上课还是未上课
+					courseId: null,
+					detailId: window.localStorage.getItem("detailId"), // 培训记录详情编号
+					qrUrl: window.localStorage.getItem("qrUrl")
+				},
+				methods: {
+					// 点击开始上课
+					signIn() {
+						var _this = this
+						if (this.clockInfo == "开始上课") {
+							app.request("app", "exam/teacherStartCourse", {
+								courseId: this.courseId
+							}, "get", function(data) {
+								console.log(data);
+								// console.log(baseURL + "/file" + data.qrUrl.slice(16).replace(/\\/g, "/"));
+								if (data.code == 0) {
+									window.localStorage.setItem("hisId", data.hisId);
+									mui.alert(_this.clockInfo + "成功", '提示', '确定', function(e) {
+										_this.qrUrl = baseURL + "/file" + data.qrUrl.slice(16).replace(/\\/g, "/")
+										window.localStorage.setItem('qrUrl', _this.qrUrl);
+										vm.isShow = true;
+										_this.clockInfo = "结束下课"
+									}, 'div')
+								} else {
+									mui.alert("发生错误", '提示', '确定', function(e) {}, 'div')
+								}
+								_this.hisId = data.hisId
+							})
+						} else if (this.clockInfo == "结束下课") {
+							app.request("app", "exam/teacherEndCourse", {
+								hisId: _this.hisId,
+								courseId: this.courseId
+							}, "get", function(data) {
+								console.log(data);
+								if (data.code == 0) {
+									mui.alert(_this.clockInfo + "成功", '提示', '确定', function(e) {
+										_this.qrUrl = null
+										window.localStorage.setItem('qrUrl', _this.qrUrl);
+										_this.clockInfo = "开始上课"
+									}, 'div')
+								} else {
+									mui.alert("发生错误", '提示', '确定', function(e) {}, 'div')
+								}
+							})
+						} else if (this.clockInfo == "签到") {
+							mui.openWindow({
+								url: "../sys/qqqq.html",
+								id: "../sys/qqqq.html",
+								createNew: false,
+								style: {},
+								extras: {
+									courseId: _this.courseId //自定义扩展参数，可以用来处理页面间传值 
+								},
+								show: {
+									autoShow: true,
+									aniShow: 'slide-in-right',
+									duration: 100
+								},
+								waiting: {
+									autoShow: true,
+									title: '正在加载 '
+								}
+							})
+							// app.request("app", "exam/studentStartCourse", {
+							// 	courseId: this.courseId
+							// }, "get", function(data) {
+							// 	console.log(data);
+							// 	if (data.code == 0) {
+							// 		window.localStorage.setItem("detailId", data.detailId);
+							// 		mui.alert(_this.clockInfo + "成功", '提示', '确定', function(e) {
+							// 			_this.clockInfo = "签退"
+							// 			location.reload()
+							// 		}, 'div')
+							// 	} else {
+							// 		mui.alert("发生错误", '提示', '确定', function(e) {}, 'div')
+							// 	}
+							// })
+						} else if (this.clockInfo == "签退") {
+							app.request("app", "exam/studentEndCourse", {
+								courseId: this.courseId,
+								detailId: this.detailId
+							}, "get", function(data) {
+								console.log(data);
+								if (data.code == 0 && data.complete == 1) {
+									mui.alert(_this.clockInfo + "成功,请您认真填写这个问卷调查表", '提示', '确定', function(e) {
+										_this.clockInfo = "签到"
+										mui.openWindow({
+											url: "../onlineTest/assessment.html",
+											id: "../onlineTest/assessment.html",
+											createNew: false,
+											style: {},
+											extras: {
+												courseId: _this.courseId //自定义扩展参数，可以用来处理页面间传值 
+											},
+											show: {
+												autoShow: true,
+												aniShow: 'slide-in-right',
+												duration: 100
+											},
+											waiting: {
+												autoShow: true,
+												title: '正在加载 '
+											}
+										})
+									}, 'div')
+								} else if (data.code == 0) {
+									mui.alert(_this.clockInfo + "成功", '提示', '确定', function(e) {
+										_this.clockInfo = "签到"
+									}, 'div')
+								} else {
+									mui.alert("发生错误", '提示', '确定', function(e) {}, 'div')
+								}
+							})
+						} else if (this.clockInfo == "还未上课") {
+							mui.alert("还未上课", '提示', '确定', function(e) {}, 'div')
+						}else if (this.clockInfo == "今日已签退"){
+							alert('今日已签退');
+						}
+					}
+				},
+				created() {
+					var _this = this
+					// 显示日期
+					let date = new Date();
+					let year = date.getFullYear() < 10 ? "0" + date.getFullYear() : date.getFullYear();
+					let month = (date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1);
+					let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+					this.currentDate = `${year}-${month}-${day}`
+					// 显示时间
+					setInterval(() => {
+						let date = new Date();
+						let hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+						let minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+						let second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+						this.currentTime = `${hour}:${minute}:${second}`
+					}, 1000);
+
+					mui.plusReady(function() {
+						var self = plus.webview.currentWebview();
+						var courseId = {
+							courseId: self.courseId
+						}
+						_this.courseId = self.courseId
+						app.request("app", "exam/enterCourse", courseId, "get", function(data) {
+							console.log(data);
+							if (data.role == 1 && data.state == 0) {
+								_this.clockInfo = "开始上课"
+								_this.isShow = false;
+							} else if (data.role == 1 && data.state == 1) {
+								_this.clockInfo = "结束下课"
+								_this.isShow = true;
+							} else if (data.role == 0 && data.state == 0) {
+								_this.clockInfo = "还未上课"
+							} else if (data.role == 0 && data.state == 1 && data.detailState == 1) {
+								_this.clockInfo = "签退"
+							} else if (data.detailState == 0  && data.role == 0 && data.state == 1) {
+								_this.clockInfo = "签到"
+							} else if (data.detailState == 2  && data.role == 0 ){
+								_this.clockInfo = "今日已签退"
+							}
+						})
+					})
+				}
+			})
+		</script>
+	</body>
+</html>

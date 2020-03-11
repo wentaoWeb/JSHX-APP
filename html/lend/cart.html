@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title></title>
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui.poppicker.css" />
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/mui.poppicker.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/app.js"></script>
+		<style type="text/css">
+			html,
+			body,
+				{
+				width: 100%;
+				height: 100%;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			.my-header {
+				height: 0.88rem;
+				background-color: #FFF;
+				color: #fff;
+			}
+
+			.my-header .mui-title {
+				color: #000;
+				font-size: 0.36rem;
+				font-weight: 800;
+			}
+
+			.my-header a,
+			.my-header h1 {
+				line-height: 0.88rem;
+			}
+
+			.mui-bar-nav.mui-bar .mui-icon {
+				padding: 0;
+				margin: 0;
+				color: #000;
+			}
+
+			/* .mui-slider,
+			.mui-slider-group,
+			.mui-slider-item,
+			.mui-slider {
+				margin-top: 49px;
+			} */
+			.img,
+			.img-responsive {
+				width: 80px;
+				height: 80px;
+			}
+
+			.goodsText {
+				padding-left: 10px;
+				word-wrap: break-word;
+				word-break: normal;
+				overflow: hidden;
+			}
+
+			.goodsText p:last-child {
+				margin-bottom: 0px;
+			}
+
+			.goodsText p {
+				display: flex;
+			}
+
+			.goodsText p .title {
+				display: block;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				color: #000000;
+				font-size: 14px;
+				font-weight: bold;
+				/* width: 50px; */
+			}
+
+			.mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item {
+				border-bottom: none;
+			}
+
+			.time {
+				width: 200px;
+				height: 30px;
+				line-height: 30px;
+				margin-left: 15px;
+				display: inline-block;
+				border: 1px solid #D0D0D0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 主页面标题 -->
+			<header class="mui-bar mui-bar-nav my-header">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">详情</h1>
+			</header>
+			<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll" style="height: 100%;">
+				<div class="mui-scroll">
+					<div style="margin: 15px;">
+						<div style="margin: 10px 0;display: flex;align-items: center;">
+							预计使用时间：<span @click="useData" class="time"><span v-if="startTime == false" style="line-height: 30px;padding-left: 10px;color:#E5E5E5;">
+									请选择预计使用时间</span>{{startTime}}</span>
+						</div>
+						<div style="margin: 10px 0;display: flex;align-items: center;">
+							预计归还时间：<span @click="reData" class="time"><span v-if="endTime == false" style="line-height: 30px;padding-left: 10px;color:#E5E5E5 ;">
+									请选择预计归还时间</span>{{endTime}}</span>
+						</div>
+					</div>
+					<ul id="OA_task_1" class="mui-table-view">
+						<li class="mui-table-view-cell" v-for="good,index in goods">
+							<div class="mui-slider-right mui-disabled" @click="del(index)">
+								<a class="mui-btn mui-btn-red">删除</a>
+							</div>
+							<div class="mui-slider-handle">
+								<div style="display: flex;align-items: center;justify-content: flex-start;">
+									<div class="img">
+										<img :src="good.imgUrl.replace('D:/js_hx_control', baseURL + '/file')" class="img-responsive">
+									</div>
+									<div class="goodText" style="margin-left: 20px;">
+										<p>
+											<span class="title" style="width: 60px;display: inline-block;">{{good.standardType}}</span>
+											<span class="title after" style="width: 120px;">{{good.toolModelNumber}}</span>
+										</p>
+										<p style="font-size: 12px;">库存：{{good.stockNumber}}</p>
+										<p style="align-items: center;">
+											<span style="font-size: 10px;">可用：</span>
+											<span style="font-size: 18px;color: #FF3737;font-style: italic;">
+												{{good.usableNumber}}
+											</span>
+										</p>
+									</div>
+									<div class="mui-numbox" style="margin-left: 50px;">
+										<button class="mui-btn mui-btn-numbox-minus" type="button" @click="sub(index,good.toolCode)">-</button>
+										<input class="mui-numbox-input" disabled type="number" v-model="good.applyNumber" />
+										<button class="mui-btn mui-btn-numbox-plus" type="button" @click="add(index,good.toolCode)">+</button>
+									</div>
+								</div>
+							</div>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+			<button type="button" class="mui-btn mui-btn-red mui-btn-block" @click="apply" style="position: fixed;bottom: 0;z-index: 15;margin-bottom: 0;">
+				申请借用
+			</button>
+		</div>
+		<script type="text/javascript">
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					goods: [],
+					startTime: '',
+					endTime: '',
+					applyCode:''
+				},
+				methods: {
+					reData() {
+						var date = new Date();
+						var year = date.getFullYear();
+						var month = date.getMonth();
+						var day = date.getDay();
+						var dtpicker = new mui.DtPicker({
+							type: "datetime", //设置日历初始视图模式 
+							beginDate: new Date(year, month, day), //设置开始日期 
+							endDate: new Date(2030, 12, 30), //设置结束日期 
+							labels: ['年', '月', '日', '时', '分'], //设置默认标签区域提示语 
+						})
+						dtpicker.show(function(e) {
+							vm.endTime = e.value;
+						})
+					},
+					useData() {
+						var date = new Date();
+						var year = date.getFullYear();
+						var month = date.getMonth();
+						var day = date.getDay();
+						var dtpicker = new mui.DtPicker({
+							type: "datetime", //设置日历初始视图模式 
+							beginDate: new Date(year, month, day), //设置开始日期 
+							endDate: new Date(2030, 12, 30), //设置结束日期 
+							labels: ['年', '月', '日', '时', '分'], //设置默认标签区域提示语 
+						})
+						dtpicker.show(function(e) {
+							vm.startTime = e.value;
+						})
+					},
+					apply() {
+						if(vm.startTime == undefined){
+							alert('请选择预计使用时间！');
+							return false;
+						}
+						if(vm.endTime == undefined){
+							alert('请选择预计使用时间！');
+							return false;
+						}
+						vm.goods.forEach(item => {
+							item.applyCode = vm.applyCode
+						});
+						var toolBorrowFormEntity = {
+							"applyCode": vm.applyCode,
+							"setupPerson": app.getState().user.username,
+							"toolUseDate": new Date(vm.startTime),
+							// "applyStatus":0,
+							"predictReturnDate": new Date(vm.endTime),
+							"applyDeptId": app.getState().user.awDeptId,
+							// "applyDept": app.getState().user.deptName,
+							"toolBorrowFormDetailEntities": vm.goods
+						};
+						mui.ajax(baseURL + '/app/toolManage/toolBorrow/saveBorrowFormInfo', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token,
+								'Content-Type': 'application/json'
+							},
+							data: JSON.stringify(toolBorrowFormEntity),
+							type: 'POST',
+							success: function(res) {
+								if (res.code == 0) {
+									localStorage.removeItem("lendList");
+									mui.openWindow({
+										url: '../returnTool/returntool.html',
+										id: 'returnTool',
+										style: {},
+										createNew: true,
+										show: {
+											autoShow: true,
+											aniShow: 'slide-in-right',
+											duration: 100
+										},
+										waiting: {
+											autoShow: true,
+											title: '正在加载 '
+										}
+									})
+								} else {
+									alert(res.msg)
+								}
+							}
+						});
+					},
+					del(index) {
+						this.goods.splice(index, 1);
+					},
+					sub(index, toolCode) {
+						if (this.goods[index].applyNumber < 1) {
+							this.goods[index].applyNumber = 0;
+						} else {
+							this.goods[index].applyNumber--;
+							var goods = JSON.parse(localStorage.getItem('lendList'));
+							// console.log(goods);
+							if (goods) {
+								goods.forEach(item => {
+									if (item.toolCode == toolCode) {
+										item.applyNumber--;
+									}
+								})
+								localStorage.setItem('lendList', JSON.stringify(goods))
+							}
+						}
+					},
+					add(index, toolCode) {
+						if (this.goods[index].applyNumber >= this.goods[index].usableNumber) {
+							this.goods[index].applyNumber = this.goods[index].usableNumber;
+						} else {
+							this.goods[index].applyNumber++;
+							var goods = JSON.parse(localStorage.getItem('lendList'));
+							// console.log(goods);
+							if (goods) {
+								for (var i = 0; i < goods.length; i++) {
+									if (goods[i].toolCode == toolCode) {
+										goods[i].applyNumber++;
+									}
+								}
+								localStorage.setItem('lendList', JSON.stringify(goods))
+							}
+							// else {
+							// 	var goodsList = [];
+							// 	goodsList.push(this.goods[index]);
+							// 	localStorage.setItem('goodsList', JSON.stringify(goodsList))
+							// }
+
+						}
+					},
+					getCode(){
+						mui.ajax(baseURL + '/app/toolManage/toolBorrow/getMaxApplyCode', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token
+							},
+							type: 'get',
+							success: function(res) {
+								if (res.code == 0) {
+									// console.log(res);
+									vm.applyCode = res.applyCode;
+								} else {
+									alert(res.msg)
+								}
+							}
+						});
+					}
+				},
+				created() {
+					this.goods = JSON.parse(localStorage.getItem('lendList'));
+					this.getCode()
+				},
+				mounted() {
+
+				}
+			})
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+		</script>
+	</body>
+</html>

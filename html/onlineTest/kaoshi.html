@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="../../css/mui.min.css" />
+		<link rel="stylesheet" href="../../css/base.css">
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/vue.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<title>在线学习</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	</head>
+
+	<style type="text/css">
+		[v-cloak] {
+			display: none;
+		}
+
+		h3 {
+			font-size: 0.5rem;
+		}
+
+		#app {
+			padding: 0.625rem;
+		}
+
+		#countdown {
+			position: absolute;
+			text-align: center;
+			width: 100%;
+			text-shadow: 5px 5px 5px black, 0px 0px 2px black;
+			color: red;
+			top: 1rem;
+			font-size: 0.4rem;
+		}
+
+		li p {
+			color: #000000;
+			font-size: 0.3rem;
+		}
+
+		.my-header {
+			height: 0.88rem;
+			background-color: #51BFF7;
+			color: #fff;
+		}
+
+		.my-header .mui-title {
+			color: #FFF;
+			font-size: 0.36rem;
+		}
+
+		.my-header a,
+		.my-header h1 {
+			line-height: 0.88rem;
+		}
+	</style>
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav my-header">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">在线考试</h1>
+				<p id="countdown"></p>
+			</header>
+			<div class="mui-content">
+				<h4 style="text-align: center;font-weight: bold;font-size: 24px;padding: 20px 0px;">{{exampapername}}
+				</h4>
+				<!-- {{resultMap}} -->
+				<p v-show="resultMap.xz" class="paperTitle">选择题</p>
+				<div v-show="resultMap.xz" v-for="(item,index) in resultMap.xz">
+					<div>
+						<div class="paperQu">{{index+1}}.{{item.title}} <img v-show="item.titleImg != undefined" :src="item.titleImg"></div>
+						<div id="op">
+							<div v-for="(val, key) in item.choiceList" style="margin: 15px;">
+								<label> <input type="radio" :value="key" v-model="item.answer" />{{key}}:{{val}}</label>
+
+								<img v-show="item.choiceImgList == ''" :src="item[key]"></div>
+
+						</div>
+					</div>
+				</div>
+				<p v-show="resultMap.dx" class="paperTitle">多选题</p>
+				<div v-show="resultMap.dx" v-for="(item,index) in resultMap.dx">
+					<div>
+						<div class="paperQu">{{index+1}}.{{item.title}} <img v-show="item.titleImg != undefined" :src="item.titleImg">
+						</div>
+						<div id="op">
+							<span v-for="(val, key) in item.choiceList" style="margin: 15px;">{{key}}:{{val}}<img v-show="item.choiceImgList == ''"
+								 :src="item[key]"> </span>
+						</div>
+					</div>
+				</div>
+				<p v-show="resultMap.pd" class="paperTitle">判断题</p>
+				<div v-show="resultMap.pd" v-for="(item,index) in resultMap.pd" style="margin-top: 20px;">
+					<div>
+						<div class="paperQu">
+							{{index+1}}.{{item.title}}<img v-show="item.titleImg != undefined" :src="item.titleImg">
+							<div class="" style="margin-top: 10px;">
+								<label> <input type="radio" value="T" v-model="item.answer" />对</label>
+							</div>
+							<div class="" style="margin-top: 10px;">
+								<label> <input type="radio" value="F" v-model="item.answer" />错</label>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<p v-if="resultMap.tk != undefined" class="paperTitle">填空题</p>
+				<div v-if="resultMap.tk != undefined" v-for="(item,index) in resultMap.tk">
+					<div>
+						<div class="paperQu">{{index+1}}.{{item.title}}<img v-if="item.titleImg != undefined" :src="item.titleImg">
+
+						</div>
+					</div>
+				</div>
+				<p v-if="resultMap.jd != undefined" class="paperTitle">简答题</p>
+				<div v-if="resultMap.jd != undefined" v-for="(item,index) in resultMap.jd">
+					<div>
+						<div class="paperQu">{{index+1}}.{{item.title}}<img v-if="item.titleImg != undefined" :src="item.titleImg">
+
+						</div>
+						<div style="height: 300px;">
+
+						</div>
+					</div>
+				</div>
+				<p v-if="resultMap.ls != undefined" class="paperTitle">论述题</p>
+				<div v-if="resultMap.ls != undefined" v-for="(item,index) in resultMap.ls">
+					<div>
+						<div class="paperQu">{{index+1}}.{{item.title}}<img v-if="item.titleImg != undefined" :src="item.titleImg">
+
+						</div>
+						<div style="height: 400px;">
+
+						</div>
+					</div>
+				</div>
+				<p v-if="resultMap.fx != undefined" class="paperTitle">分析题</p>
+				<div v-if="resultMap.fx != undefined" v-for="(item,index) in resultMap.fx">
+					<div>
+						<div class="paperQu">{{index+1}}.{{item.title}}<img v-if="item.titleImg != undefined" :src="item.titleImg">
+
+						</div>
+						<div style="height: 500px;">
+
+						</div>
+					</div>
+				</div>
+				<button type="button" class="mui-btn mui-btn-block" @click="tijiao">提交</button>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var dataA
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				dataA = {
+					// technicalId: self.technicalId,
+					examPaperId: self.examPaperId,
+					duration: self.duration
+				}
+				console.log(dataA);
+			})
+
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					radioTitle: [],
+					multiTitle: [],
+					judgeTitle: [],
+					radioAnswer: [],
+					multiAnswer: [],
+					judgeAnswer: [],
+					inpAnswer: [],
+					hisId: null,
+					resultMap: {
+						xz: [],
+						dx: [],
+						pd: [],
+						tk: [],
+						jd: [],
+						ls: [],
+						fx: []
+					},
+					exampapername: '试卷名'
+				},
+				methods: {
+					tijiao() {
+						var _this = this
+						mui.confirm('提交后不可更改,请仔细检查', '是否提交', ['取消', '确认'], function(e) {
+							if (e.index == 1) {
+								var questionList = [];
+								for (var i = 0; i < vm.resultMap.xz.length; i++) {
+									var obj = {};
+									obj.questionId = vm.resultMap.xz[i].questionId;
+									obj.answer = vm.resultMap.xz[i].answer
+									questionList.push(obj);
+									// _this.multiAnswer[i].answer = _this.multiAnswer[i].answer.join("")
+								}
+								for (var i = 0; i < vm.resultMap.pd.length; i++) {
+									var obj = {};
+									obj.questionId = vm.resultMap.pd[i].questionId;
+									obj.answer = vm.resultMap.pd[i].answer
+									questionList.push(obj);
+								}
+								// _this.inpAnswer = _this.inpAnswer.concat(_this.radioAnswer).concat(_this.multiAnswer).concat(_this.judgeAnswer)
+								// console.log(_this.inpAnswer);
+								app.request1("app", "exam/submitPaper", JSON.stringify({
+									"examPaperId": dataA.examPaperId,
+									"questionList": questionList
+								}), "post", function(data) {
+									console.log(data);
+									var state;
+									if (data.state == 1) {
+										state = "成绩合格"
+									} else {
+										state = "成绩不合格"
+									}
+									mui.alert(`您当前分数为${data.pointGet}`, state, '确认', function(e) {
+										plus.webview.currentWebview().close()
+									}, 'div')
+								})
+							} else {
+
+							}
+						}, 'div')
+					}
+				},
+				mounted() {
+					var _this = this
+					mui.plusReady(function() {
+						app.request("app", "exam/queryParperDetail", dataA, "get", function(data) {
+							if (data.msg != '上传成功') {
+								mui.alert(data.msg, '提示', '确定', function() {
+									plus.webview.currentWebview().close()
+								}, 'div')
+							}
+							console.log(data);
+							var xz = data.resultMap.xz.forEach(item => {
+								item.answer = ''
+							})
+							var pd = data.resultMap.pd.forEach(item => {
+								item.answer = ''
+							})
+							_this.resultMap = data.resultMap;
+							_this.exampapername = data.exampapername;
+							var countdown = document.getElementById("countdown");
+							var time = dataA.duration * 60; //30分钟换算成1800秒
+							setInterval(function() {
+								time = time - 1;
+								var minute = parseInt(time / 60);
+								var second = parseInt(time % 60);
+								countdown.innerHTML = '还剩' + minute + '分' + second + '秒';
+								if (time <= 0) {
+									_this.tijiao()
+								}
+							}, 1000);
+							// for (var i = 0; i < questionList.length; i++) {
+							// 	if (questionList[i].questionTypeId == 1) {
+							// 		_this.radioTitle.push(questionList[i])
+							// 		_this.radioAnswer.push({
+							// 			questionId: questionList[i].questionId,
+							// 			answer: null
+							// 		})
+							// 	} else if (questionList[i].questionTypeId == 2) {
+							// 		_this.multiTitle.push(questionList[i])
+							// 		_this.multiAnswer.push({
+							// 			questionId: questionList[i].questionId,
+							// 			answer: []
+							// 		})
+							// 	} else if (questionList[i].questionTypeId == 3) {
+							// 		_this.judgeTitle.push(questionList[i])
+							// 		_this.judgeAnswer.push({
+							// 			questionId: questionList[i].questionId,
+							// 			answer: null
+							// 		})
+							// 	}
+							// }
+
+						})
+					})
+				}
+			})
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+		</script>
+	</body>
+</html>

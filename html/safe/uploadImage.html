@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<!--<link rel="stylesheet" href="../../libs/bootstrap.min.css">-->
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<!--<link rel="stylesheet" href="../../css/app.css">-->
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/upload.css" />
+		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css">
+		<link rel="stylesheet" href="../../css/mui.poppicker.css">
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/bootstrap.min.js"></script>
+		<script src="../../libs/layer/layer.js"></script>
+		<script src="../../libs/rem.js"></script>
+
+		<!-- <script src="../../js/main.js"></script> -->
+		<script src="../../js/common.js"></script>
+		<script src="../../js/app.js"></script>
+		<!-- <script src="../../js/safe/people.js"></script> -->
+		<style>
+			html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .my-header {
+            height: 0.88rem;
+            background-color: #51BFF7;
+            color: #fff;
+        }
+
+        .my-header .mui-title {
+            color: #FFF;
+            font-size: 0.36rem;
+        }
+
+        .my-header a,
+        .my-header h1 {
+            line-height: 0.88rem;
+        }
+
+        .mui-bar-nav.mui-bar .mui-icon {
+            padding: 0;
+            margin: 0;
+            color: #fff;
+        }
+
+        .apply {
+            margin: 0 0.3rem;
+            border-bottom: 1px solid #ccc;
+            padding-top: 0.2rem;
+            padding-bottom: 0.15rem;
+            box-sizing: border-box;
+        }
+
+        .apply input {
+            border: none;
+            outline: none;
+            color: rgba(51, 51, 51);
+            font-size: 0.36rem;
+            margin-top: 0.16rem;
+            width: 100%;
+            padding: 0px !important;
+            margin-bottom: 0px;
+        }
+
+        .apply label {
+            font-size: 0.24rem;
+            color: rgb(148, 148, 148);
+
+        }
+
+        .apply label em {
+            font-size: 0.24rem;
+            color: rgb(255, 0, 0);
+        }
+
+        .image-item {
+            float: left;
+            position: relative;
+            margin: 0 10px;
+
+        }
+
+        img {
+            width: 100px;
+            height: 100px;
+
+        }
+
+        video {
+            width: 100px;
+            height: 100px;
+
+        }
+
+        .image-close {
+            position: absolute;
+            display: inline-block;
+            right: 0px;
+            top: 0px;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            border-radius: 12px;
+            background-color: #FF5053;
+            color: #f3f3f3;
+            border: solid 1px #FF5053;
+            font-size: 9px;
+            font-weight: 200;
+            z-index: 999;
+        }
+
+        
+
+        .mui-table-view:before {
+            height: 0px;
+        }
+
+        .mui-table-view:after {
+            height: 0px;
+        }
+
+        .addData {
+            width: 25%;
+            display: inline-block;
+            background-color: #51BFF7;
+            padding: 10px;
+            color: #fff;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .upload {
+            position: absolute;
+            right: 0.20rem;
+            top: 0.60rem;
+            background-color: #51BFF7;
+            padding: 10px;
+            color: #fff;
+            text-align: center;
+            border-radius: 10px;
+            width: 25%;
+        }
+
+        #finish {
+            position: absoulte;
+            z-index: 999999999;
+        }
+    </style>
+	</head>
+
+	<body>
+		<!-- 侧滑导航根容器 -->
+
+		<div id="app">
+			<div class="mui-off-canvas-wrap mui-draggable">
+				<!-- 主页面容器 -->
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav my-header">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">证件上传</h1>
+					<a href="javascript:;" class="mui-icon mui-pull-right" style="font-size:14px;" @click="save">保存</a>
+
+
+					<!--<a href="javascript:;" class="mui-icon mui-pull-right" style="font-size:14px;">提交</a>-->
+
+				</header>
+				<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll">
+
+					<form>
+						<div class="apply">
+							<label>
+								<em>*</em>证件名称</label>
+							<input type="text" placeholder="请输入证件名称" v-model="quaName">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>证件生效日期</label>
+							<input type="text" placeholder="请输入证件生效日期" v-model="issueDate">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>证件截止日期</label>
+							<input type="text" placeholder="请输入证件截止日期" v-model="invalidDate">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>签发单位</label>
+							<input type="text" placeholder="请输入签发单位" v-model="issue">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>证件编号</label>
+							<input type="text" placeholder="请输入证件编号" v-model="identityCard">
+						</div>
+						<div class="apply">
+
+							<label><em>*</em>选择照片</label>
+							<ul id="photos">
+								<li id="picker">
+									<a id="pick" href="#cropper-sheet" style="margin: 0 10px;">
+										<img id="image" src="../../img/+@2x.png" />
+									</a>
+								</li>
+							</ul>
+							<div id="video"></div>
+							<!-- <a id="pick" href="#cropper-sheet">
+                            <img id="image" src="../../img/+@2x.png" style="width:100px;height:100px" />
+                        </a> -->
+						</div>
+						<!-- <input type="file" @change="save()" multiple id="upgteimg"/>
+                    <a href="javascript:;" style="font-size:28px;" id="finish">保存</a> -->
+					</form>
+				</div>
+			</div>
+
+			<!--选择照片-->
+			<div id="cropper-sheet" class="mui-popover mui-popover-bottom mui-popover-action">
+				<!-- 可选择菜单 -->
+				<ul class="mui-table-view margin">
+					<li class="mui-table-view-cell">
+						<a id="paizhao" data-type="camera">拍照</a>
+					</li>
+					<!-- <li class="mui-table-view-cell">
+                    <a id="luxiang" data-type="video">录像</a>
+                </li> -->
+					<li class="mui-table-view-cell">
+						<a id="xiangce" data-type="gallery">选取照片</a>
+					</li>
+					<!-- <li class="mui-table-view-cell">
+                    <a id="shipin" data-type="galleryVideos">选取视频</a>
+                </li> -->
+				</ul>
+			</div>
+
+		</div>
+
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script src="../../assets/mui/js/mui.zoom.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../assets/mui/js/mui.previewimage.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/cropper.min.js"></script>
+		<script type="text/javascript" src="../../js/getImgs.js"></script>
+
+		<script>
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				self.addEventListener('show', function() {
+					location.reload();
+				});
+				data = {
+					"uuidDept": self.uuidDept,
+					"issueDate": self.issueDate,
+					"invalidDate": self.invalidDate,
+					"quaName": self.quaName,
+					"issue": self.issue,
+					"identityCard": self.identityCard
+				}
+				var name = data.quaName;
+				if (name == '身份证') {
+					console.log(1)
+					window.vm.quaName = data.quaName;
+					window.vm.issueDate = data.issueDate;
+					window.vm.invalidDate = data.invalidDate;
+					window.vm.uuidDept = data.uuidDept;
+					window.vm.issue = data.issue;
+					window.vm.identityCard = data.identityCard;					
+				} else {					
+					window.vm.quaName = data.quaName;
+					window.vm.uuidDept = data.uuidDept;
+				}
+				
+
+			})
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					issueDate: null,
+					invalidDate: null,
+					uuidDept: null,
+					quaName: null,
+					issue: null,
+					uuidQua: null,
+					identityCard: null
+				},
+				methods: {
+					save() {
+						if (vm.quaName == null) {
+							alert('请输入证件名称！');
+							return false;
+						}
+						if (vm.issueDate == null) {
+							alert('请输入生效日期！');
+							return false;
+						}
+						if (vm.invalidDate == null) {
+							alert('请输入截止日期！');
+							return false;
+						}
+						if (vm.issue == null) {
+							alert('请输入签发单位！');
+							return false;
+						}
+						if (vm.identityCard == null) {
+							alert('请输入证件编号！');
+							return false;
+						}
+						if (photos.length == 0) {
+							alert('请选择证件照片！');
+							return false;
+						}
+						// task = plus.uploader.createUpload('http://10.0.0.195:8080/js_hx_control/app/sample/identityCard', {
+						// task = plus.uploader.createUpload('http://192.168.43.137:8080/js_hx_control/app/foreign/uploadFiles', {
+							task = plus.uploader.createUpload(baseURL + '/app/foreign/uploadFiles', {
+								method: 'POST'
+							},
+							function(r) {
+								var list = JSON.parse(r.responseText);
+								if (list.code == 0) {
+									var info = list.attachmentUrl;
+									var obj = {};
+									obj.attName = vm.quaName;
+									obj.attUrl = info[0];
+									obj.uuidQua = vm.uuidQua;
+									obj.moduleName = 'users';
+									mui.ajax(baseURL + '/app/foreign/saveAttachment', {
+										headers: {
+											"token": app.getState().token,
+											'Content-Type': 'application/json'
+										},
+										data: obj,
+										dataType: 'json', //服务器返回json格式数据
+										type: 'post', //HTTP请求类型
+										timeout: 5000, //超时时间设置为5秒；
+										success: function(res) {
+											console.log(JSON.stringify(res));
+											if (res.code == 0) {
+												mui.ajax(baseURL + '/app/foreign/saveQualication', {
+													headers: {
+														"token": app.getState().token,
+														'Content-Type': 'application/json'
+													},
+													data: {
+														"attUrl": info[0],
+														// "quaCode":identityCard,
+														"quaName": vm.quaName,
+														"uuidDept": vm.uuidDept,
+														"uuidQua": vm.uuidQua,
+														"startTime": vm.issueDate,
+														"endTime": vm.invalidDate,
+														"issueDept": vm.issue,
+														"credNumber": vm.identityCard
+													},
+													dataType: 'json', //服务器返回json格式数据
+													type: 'post', //HTTP请求类型
+													timeout: 5000, //超时时间设置为5秒；
+													success: function(res) {
+														if (res.code == 0) {
+															plus.webview.close(plus.webview.currentWebview());//关闭本页面
+															mui.openWindow({
+																url: "people.html",
+																id: "people.html",
+																show: {
+																	autoShow: true,
+																	aniShow: 'slide-in-right',
+																	duration: 100
+																},
+																waiting: {
+																	autoShow: true,
+																	title: '正在加载 '
+																},
+															})
+														} else {
+															alert(res.msg)
+														}
+													}
+												});
+											} else {
+												alert(res.msg)
+											}
+										}
+									});
+
+								} else {
+									alert(list.msg);
+								}
+							});
+						var len = photos.length;
+						task.addData("token", "" + app.getState().token + "");
+						task.addData('moduleName', 'users');
+
+						for (var i = 0; i < len; i++) {
+							var j = i + 1;
+							var temp = 'phone' + j;
+							task.addFile(photos[i].path, {
+								key: "file" + temp
+							});
+						}
+						task.start();
+					},
+					getUuidQua() {
+						mui.ajax(baseURL + '/app/foreign/getUuid', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token
+							},
+							type: 'GET',
+							data: {
+								// "checkRecordNum": checkRecordNum
+							},
+							success: function(res) {
+								console.log(JSON.stringify(res));
+								if (res.code == 0) {
+									vm.uuidQua = res.uuid;
+								} else {
+									alert(res.msg)
+								}
+
+							},
+						})
+					}
+				},
+				mounted() {
+					this.getUuidQua();
+				}
+
+			})
+			mui('#offCanvasSideScroll').scroll();
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能  
+			});
+			mui.init();
+			var address;
+			mui.previewImage();
+			mui.plusReady(function() {
+				//上传图片
+				// createUploader();
+			});
+			mui('#cropper-sheet').on('tap', '.mui-table-view-cell > a', function() {
+				var type = this.getAttribute('data-type');
+				mui("#cropper-sheet").popover('hide');
+				switch (type) {
+					case 'camera':
+						clickCamera();
+						break;
+					case 'gallery':
+						clickGallery();
+						break;
+					case 'video':
+						clickVideo();
+						break;
+					case 'galleryVideos':
+						galleryVideo();
+					default:
+						break;
+				}
+			})
+		</script>
+	</body>
+
+</html>

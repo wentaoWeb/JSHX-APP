@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="../../css/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/OnlineLearning.css" />
+		<script src="../../js/vue.min.js"></script>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/app.js"></script>
+		<script type="text/javascript">
+			
+		</script>
+		<title>线下课程</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">线下课程</h1>
+		</header>
+		<div class="mui-content" id="app">
+			<ul class="mui-table-view mui-grid-view">
+				<li class="mui-table-view-cell mui-media mui-col-xs-6" v-for="(item, index) in video" @click="openVideo(index)">
+					<a href="javascript:;">
+						<img src="../../images/HXDL.png" v-show="item.courseImgUrl == appBaseURL">
+						<img class="mui-media-object" :src="item.courseImgUrl" v-show="item.courseImgUrl != appBaseURL">
+						<div class="mui-media-body">{{ item.courseName }}</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			mui.init({})
+			const vm = new Vue({
+				el: '#app',
+				data: {
+					video: [],
+					appBaseURL: baseURL +"/file"
+				},
+				methods:{
+					openVideo(index){
+						var courseId  = this.video[index].courseId
+						mui.openWindow({
+							url: 'offlineTraining.html',
+							id: 'offlineTraining.html',
+							style: {},
+							extras: {  
+								courseId : courseId//自定义扩展参数，可以用来处理页面间传值  
+							},
+							show: {
+								autoShow: true,
+								aniShow: 'slide-in-right',
+								duration: 100
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载 '
+							}
+						})
+					}
+				},
+				created() {
+					_this = this
+					mui.plusReady(function () {
+						app.request("app", "exam/courseList", {courseType: 2} , "get", function(data){
+							console.log(data);
+							for (var i=0;i<data.courseList.length;i++) {
+								data.courseList[i].courseImgUrl = baseURL+"/file"+data.courseList[i].courseImgUrl.slice(16).replace(/\\/g, "/")
+								console.log(data.courseList[i].courseImgUrl);
+							}
+							_this.video = data.courseList
+						})
+					})
+				}
+			})
+		</script>
+	</body>
+</html>

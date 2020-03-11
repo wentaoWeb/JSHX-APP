@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/mui.poppicker.css">
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css" />
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../libs/layer/layer.js"></script>
+		<script src="../../libs/bootstrap.min.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/main.js"></script>
+		<script src="../../js/app.js"></script>
+		<style>
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			.my-header {
+				height: 0.88rem;
+				background-color: #FFF;
+				color: #fff;
+			}
+
+			.my-header .mui-title {
+				color: #000;
+				font-size: 0.36rem;
+				font-weight: 800;
+			}
+
+			.my-header a,
+			.my-header h1 {
+				line-height: 0.88rem;
+			}
+
+			.mui-bar-nav.mui-bar .mui-icon {
+				padding: 0;
+				margin: 0;
+				color: #000;
+			}
+
+			.mui-segmented-control .mui-control-item.mui-active {
+				color: #51BFF7;
+				background-color: transparent;
+				font-size: 0.4rem;
+				font-weight: 800;
+			}
+
+			.mui-segmented-control {
+				border: none;
+			}
+
+			.mui-segmented-control .mui-control-item {
+				border-left: none;
+				font-size: 0.34rem;
+				color: #666;
+			}
+
+			.apply {
+				margin: 0 0.3rem;
+				border-bottom: 1px solid #ccc;
+				padding-top: 0.2rem;
+				padding-bottom: 0.15rem;
+				box-sizing: border-box;
+			}
+
+			.apply input {
+				border: none;
+				outline: none;
+				color: rgba(51, 51, 51);
+				font-size: 0.36rem;
+				margin-top: 0.16rem;
+				width: 100%;
+				padding: 0px !important;
+				margin-bottom: 0px;
+			}
+
+			.apply label {
+				font-size: 0.24rem;
+				color: rgb(148, 148, 148);
+			}
+
+			.apply p {
+				font-size: 20px;
+				margin-top: 0;
+				margin-top: 20px;
+				color: #000;
+			}
+
+			.mui-table-view:before {
+				height: 0px;
+			}
+
+			.mui-table-view-cell {
+				padding: 18px 15px;
+			}
+
+			.mui-table-view-cell>a:not(.mui-btn) {
+				font-size: 0.32rem;
+			}
+
+			.padd em {
+				position: absolute;
+				right: 25px;
+				font-size: 0.34rem;
+			}
+
+			.padd input {
+				width: auto;
+				height: auto;
+				padding: 0;
+				border: none;
+				position: absolute;
+				right: -150px;
+				font-size: 0.34rem;
+			}
+
+			.box p {
+				height: 50px;
+				background-color: #F8F7FC;
+				font-size: 0.4rem;
+				line-height: 56px;
+				text-indent: 20px;
+				color: #666666;
+			}
+
+			/* .mui-table-view-cell span {
+				position: absolute;
+				right: 1rem;
+			} */
+
+			.hege {
+				color: #33CC66;
+			}
+
+			.weigui {
+				color: #FF0000;
+			}
+
+			.buguifan {
+				color: #FF9900;
+			}
+
+			/* #rule1{
+				float: right;
+				padding-right: 20px;
+			} */
+			.mui-poppicker-btn-ok {
+				background-color: green;
+			}
+
+			.mui-poppicker-btn-cancel {
+				background-color: red;
+				color: white;
+			}
+
+			.result {
+				display: flex;
+				justify-content: flex-end;
+				align-items: center;
+			}
+
+			.green {
+				color: springgreen;
+			}
+
+			.yellow {
+				color: orange;
+			}
+
+			.red {
+				color: red;
+			}
+
+			.apply img {
+				width: 126px;
+				height: 36px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="mui-off-canvas-wrap mui-draggable">
+				<!-- 主页面容器 -->
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav my-header">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">稽查详情</h1>
+					<a class="mui-icon mui-pull-right" style="font-size:18px;font-weight: 600;color: #51BFF7;"
+					 @click="edit(entityList.id)" v-show="showEdit">编辑</a>
+				</header>
+				<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll">
+					<div>
+						<div style="padding: 10px 10px;">
+							<div id="segmentedControl" class="mui-segmented-control">
+								<a id="one" class="mui-control-item mui-active" href="#item1">
+									项目信息
+								</a>
+								<a id="two" class="mui-control-item " href="#item2">
+									稽查结果
+								</a>
+							</div>
+						</div>
+						<div class="detail">
+							<div id="item1" class="mui-control-content mui-active">
+								<div class="apply">
+									<label>施工编号</label>
+									<p>{{entityList.projectNum}}</p>
+								</div>
+								<div class="apply">
+									<label>项目名称</label>
+									<p>{{entityList.projectName}}</p>
+								</div>
+								<!-- <div class="apply">
+									<label>施工地点</label>
+									<p>{{entityList.workSite}}</p>
+								</div> -->
+
+								<div class="apply">
+									<label>施工队伍</label>
+									<p>{{entityList.workUnit}}</p>
+								</div>
+								<div class="apply">
+									<label>施工日期</label>
+									<p>{{ entityList.workStartTime }}</p>
+								</div>
+								<div class="apply">
+									<label>计划工作时间</label>
+									<p>{{entityList.planDate}}</p>
+								</div>
+								<div class="apply">
+									<label style="display:block;">工作负责人</label>
+									<img v-if="entityList.workPrincipal != ''" :src="entityList.workPrincipal" />
+									<p v-if="entityList.workPrincipal == ''">{{entityList.workPrincipal}}</p>
+								</div>
+								<div class="apply">
+									<label style="display:block;">工作票签发人</label>
+									<img v-if="entityList.workTicketSigner != ''" :src="entityList.workTicketSigner" />
+									<p v-if="entityList.workTicketSigner == ''">{{entityList.workTicketSigner}}</p>
+								</div>
+								<div class="apply">
+									<label style="display:block;">工作许可人</label>
+									<img v-if="entityList.workPermission != ''" :src="entityList.workPermission" />
+									<p v-if="entityList.workPermission == ''">{{entityList.workPermission}}</p>
+								</div>
+								<div class="apply">
+									<label>稽查员</label>
+									<p>{{entityList.projectNum}}</p>
+								</div>
+								<div class="apply">
+									<label>工作内容</label>
+									<p>{{entityList.workContent}}</p>
+								</div>
+							</div>
+							<div id="item2" class="mui-control-content">
+								<div v-show="selected == true" style="width: 50px;height: 50px;z-index: 15;position: fixed;right: 10px;" @click="toSelect">
+									<img src="../../images/icon/dui.png" style="width: 40px;height: 40px;">
+								</div>
+								<div class="box" v-for="item in List">
+									<p>{{item.checkContent}}</p>
+									<ul class="mui-table-view">
+										<li v-show="selected == true" class="mui-table-view-cell mui-media" v-for="(cont,index) in item.contentEntities"
+										 style="padding-top: 25px;display: flex;justify-content: space-between;" @click="rule(cont.menuId,cont.checkResultTypeId,cont.checkContent)"
+										 :key="cont.index">
+											<span class="text" style="position: relative; width: 80%;">{{cont.checkContent}}</span>
+											<span class="result">
+												<i id="rule" :class="{ red: cont.checkResultTypeId == '违章', green:cont.checkResultTypeId == '合格',yellow:cont.checkResultTypeId == '不规范'}"
+												 style="padding-right: 5px;">{{cont.checkResultTypeId}}</i>
+												<span v-show="cont.checkResultTypeId == 0" class="mui-icon mui-icon-arrowright"></span>
+											</span>
+										</li>
+										<li v-show="selected == false" class="mui-table-view-cell mui-media" v-for="(cont,index) in item.contentEntities"
+										 style="padding-top: 25px;display: flex;justify-content: space-between;" @click="rule1(cont.menuId,cont.checkResultTypeId,cont.checkContent)"
+										 :key="cont.index">
+											<span class="text" style="position: relative; width: 80%;">{{cont.checkContent}}</span>
+											<span class="result">
+												<i id="rule" v-if="cont.checkResultTypeId != '' " :class="{ red: cont.checkResultTypeId == '违章', green:cont.checkResultTypeId == '合格',yellow:cont.checkResultTypeId == '不规范'}"
+												 style="padding-right: 5px;">{{cont.checkResultTypeId}}</i>
+												<span v-show="cont.checkResultTypeId == 0" class="mui-icon mui-icon-arrowright"></span>
+											</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script>
+			var dataA;
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				self.addEventListener('show', function() {				
+					window.vm.getTitle();
+				});
+
+				dataA = {
+					id: self.ids,
+				}
+			})
+
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					entityList: [],
+					green: false,
+					yellow: false,
+					red: false,
+					ruleData: [{
+						value: '1',
+						text: '合格'
+					}, {
+						value: '2',
+						text: '不规范'
+					}, {
+						value: '3',
+						text: '违章'
+					}, ],
+					showEdit: true,
+					List: [],
+					selected: true
+				},
+				methods: {
+					toSelect() {
+						// console.log(1)
+						var checkRecordNum = localStorage.getItem("checkRecordNum");
+						for (var i = 0; i < vm.List.length; i++) {
+							for (var j = 0; j < vm.List[i].contentEntities.length; j++) {
+								if (vm.List[i].contentEntities[j].checkResultTypeId == '') {
+									vm.List[i].contentEntities[j].checkResultTypeId = '合格';
+									mui.ajax(baseURL + '/app/sceneCheck/insertCheckRecordContent', {
+										dataType: 'json',
+										timeout: 5000,
+										headers: {
+											"token": app.getState().token,
+											'Content-Type': 'application/json'
+										},
+										type: 'POST',
+										data: {
+											"checkRecordNum": checkRecordNum,
+											"checkResultTypeId": 1,
+											"menuId": vm.List[i].contentEntities[j].menuId
+										},
+										success: function(res) {
+											// console.log(JSON.stringify(res));
+											if (res.code == 0) {
+												vm.getTitle();
+											} else {
+												alert(res.msg)
+											}
+
+										}
+									});
+								}
+
+							}
+						}
+					},
+					back() {
+						mui.openWindow({
+							url: "auditOne.html",
+							id: "auditOne.html",
+							// style: {
+							// 	cachemode:"noCache"
+							// },
+							show: {
+								autoShow: true,
+								aniShow: 'slide-in-right',
+								duration: 100,
+							},
+							createNew: true,
+							styles: {
+							    cachemode:"noCache",													 
+							},							
+							waiting: {
+								autoShow: true,
+								title: '正在加载 '
+							}
+						})
+					},
+					rule1(id, checkResultTypeId, checkContent) {
+						console.log(1)
+						var checkResultTypeId = checkResultTypeId;
+						var checkContent = checkContent;
+						var checkRecordNum = localStorage.getItem("checkRecordNum");
+						var menuId = id;
+						// console.log(checkResultTypeId);
+						if (checkResultTypeId == '合格') {
+							alert('已被稽查，无法修改！');
+						} else {
+							if (checkResultTypeId == '不规范') {
+								checkResultTypeId = 2
+							}
+							if (checkResultTypeId == '违章') {
+								checkResultTypeId = 3
+							}
+							mui.openWindow({
+								url: "projectDetails.html",
+								id: "projectDetails.html",
+								extras: {
+									menuId: menuId, //自定义扩展参数，可以用来处理页面间传值  
+									checkRecordNum: checkRecordNum,
+									checkResultTypeId: checkResultTypeId,
+									checkContent: checkContent
+								},
+								waiting: {
+									autoShow: true,
+									title: '正在加载 '
+								}
+							})
+						}
+					},
+					rule(id, checkResultTypeId, checkContent) {
+						console.log(2)
+						var that = this;
+						var checkResultTypeId = checkResultTypeId;
+						var checkContent = checkContent;
+						// console.log(checkContent)
+						var checkRecordNum = localStorage.getItem("checkRecordNum");
+						var menuId = id;
+						localStorage.setItem('menuId', menuId)
+						var userPicker = new mui.PopPicker();
+						userPicker.setData(this.ruleData);
+						userPicker.show(function(items) {
+							let TypeId = items[0].value;
+							if (TypeId == 1) {
+								mui.ajax(baseURL + '/app/sceneCheck/insertCheckRecordContent', {
+									dataType: 'json',
+									timeout: 5000,
+									headers: {
+										"token": app.getState().token,
+										'Content-Type': 'application/json'
+									},
+									type: 'POST',
+									data: {
+										"checkRecordNum": checkRecordNum,
+										"checkResultTypeId": TypeId,
+										"menuId": menuId
+									},
+									success: function(res) {
+										console.log(JSON.stringify(res));
+										if (res.code == 0) {
+											vm.getTitle();
+										} else {
+											alert(res.msg)
+										}
+
+									}
+								});
+							} //
+							if (TypeId == 2 || TypeId == 3) {
+								mui.ajax(baseURL + '/app/sceneCheck/insertCheckRecordContent', {
+									dataType: 'json',
+									timeout: 5000,
+									headers: {
+										"token": app.getState().token,
+										'Content-Type': 'application/json'
+									},
+									type: 'POST',
+									data: JSON.stringify({
+										"checkRecordNum": checkRecordNum,
+										"checkResultTypeId": TypeId,
+										"menuId": menuId
+									}),
+									success: function(res) {
+										// console.log(JSON.stringify(res));
+										vm.getTitle();
+										if (res.code == 0) {
+											mui.ajax(baseURL + '/app/sceneCheck/selectCheckContent', {
+												// dataType: 'json',
+												timeout: 5000,
+												headers: {
+													"token": app.getState().token
+												},
+												type: 'POST',
+												data: {
+													"checkRecordNum": checkRecordNum,
+													"menuId": menuId
+												},
+												success: function(res) {
+													if (res.code == 0) {
+														// vm.ajax();
+														// console.log(JSON.stringify(res))
+														if (res.pictureEntities == '') {
+															mui.openWindow({
+																url: "auditEdit.html",
+																id: "auditEdit.html",
+																extras: {
+																	menuId: menuId, //自定义扩展参数，可以用来处理页面间传值  
+																	checkRecordNum: checkRecordNum,
+																	checkResultTypeId: TypeId,
+																	title: checkContent,
+																	Content: items[0].text
+																},
+																waiting: {
+																	autoShow: true,
+																	title: '正在加载 '
+																}
+															})
+														} else {
+															if (res.checkRecordContentEntities[0].checkResultTypeId == 2) {
+																mui.openWindow({
+																	url: "projectDetails.html",
+																	id: "projectDetails.html",
+																	extras: {
+																		menuId: menuId, //自定义扩展参数，可以用来处理页面间传值  
+																		checkRecordNum: checkRecordNum,
+																		checkResultTypeId: TypeId,
+																		checkContent: checkContent
+																	},
+																	waiting: {
+																		autoShow: true,
+																		title: '正在加载 '
+																	}
+																})
+															} else {
+																mui.openWindow({
+																	url: "projectDetails.html",
+																	id: "projectDetails.html",
+																	extras: {
+																		menuId: menuId, //自定义扩展参数，可以用来处理页面间传值  
+																		checkRecordNum: checkRecordNum,
+																		checkResultTypeId: TypeId,
+																		checkContent: checkContent
+																	},
+																	waiting: {
+																		autoShow: true,
+																		title: '正在加载 '
+																	}
+																})
+															}
+														}
+													} else {
+														alert(res.msg)
+													}
+												}
+											});
+										} else {
+											alert(res.msg)
+										}
+									}
+								});
+							}
+						});
+					},
+					ajax() {
+						//_this = this;
+						console.log(JSON.stringify(dataA))
+						mui.plusReady(function() {
+							mui.ajax(baseURL + '/app/sceneCheck/infoById', {
+								dataType: 'json',
+								timeout: 5000,
+								headers: {
+									"token": app.getState().token
+								},
+								type: 'get',
+								data: dataA,
+								success: function(res) {
+									// console.log(JSON.stringify(res))
+									if (res.code == 0) {
+										var entityList = res.map.entityList[0];
+										if (entityList.workPrincipal != '') {
+											entityList.workPrincipal = entityList.workPrincipal.replace('D:/js_hx_control/', baseURL + '/file/');
+										}
+										if (entityList.workTicketSigner != '') {
+											entityList.workTicketSigner = entityList.workTicketSigner.replace('D:/js_hx_control/', baseURL +
+												'/file/');
+										}
+										if (entityList.workPermission != '') {
+											entityList.workPermission = entityList.workPermission.replace('D:/js_hx_control/', baseURL + '/file/');
+										}
+										if (entityList.checkRecordNum == '') {
+											localStorage.setItem("checkRecordNum", res.map.checkRecordNum);
+											vm.getTitle()
+										} else {
+											// console.log(entityList.checkRecordNum);
+											localStorage.setItem("checkRecordNum", entityList.checkRecordNum);
+											vm.getTitle()
+										}
+										vm.entityList = entityList;
+										
+										if (vm.entityList.workPrincipal == '' || vm.entityList.workPermission == '' || vm.entityList.workTicketSigner ==
+											'') {
+											vm.showEdit = true;
+										} else {
+											vm.showEdit = false;
+										}
+									} else {
+										alert(res.msg);
+									}
+								},
+							})
+							// app.request("app", "sceneCheck/infoById", dataA, "get", function(data) {
+							// 	// console.log(JSON.stringify(data));
+
+							// 	var entityList = data.map.entityList[0];
+							// 	if (entityList.workPrincipal != '') {
+							// 		entityList.workPrincipal = entityList.workPrincipal.replace('D:/js_hx_control/', baseURL + '/file/');
+							// 	}
+							// 	if (entityList.workTicketSigner != '') {
+							// 		entityList.workTicketSigner = entityList.workTicketSigner.replace('D:/js_hx_control/', baseURL +
+							// 			'/file/');
+							// 	}
+							// 	if (entityList.workPermission != '') {
+							// 		entityList.workPermission = entityList.workPermission.replace('D:/js_hx_control/', baseURL + '/file/');
+							// 	}
+							// 	if (entityList.checkRecordNum == '') {
+							// 		console.log(data.map.checkRecordNum);
+							// 		localStorage.setItem("checkRecordNum", data.map.checkRecordNum);
+							// 		vm.List = [];
+							// 	} else {
+							// 		console.log(entityList.checkRecordNum);
+							// 		localStorage.setItem("checkRecordNum", entityList.checkRecordNum);
+							// 	}
+							// 	vm.entityList = entityList;
+
+							// 	if (vm.entityList.workPrincipal == '' || vm.entityList.workPermission == '' || vm.entityList.workTicketSigner ==
+							// 		'') {
+							// 		vm.showEdit = true;
+							// 	} else {
+							// 		vm.showEdit = false;
+							// 	}
+
+							// 	// console.log(JSON.stringify(vm.entityList))
+							// })
+						})
+					},
+					editOrNo() {
+						var checkRecordNum = localStorage.getItem('checkRecordNum');
+
+						mui.ajax(baseURL + '/app/sceneCheck/checkContent/editorialJudgment', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token
+							},
+							type: 'POST',
+							data: {
+								"checkRecordNum": checkRecordNum
+							},
+							success: function(res) {
+								// console.log(JSON.stringify(res))
+								if (res.code == 0) {
+									if (res.status == 0) {
+										this.showEdit = true;
+										vm.selected = true;
+									} else {
+										this.showEdit = false;
+										vm.selected = false;
+									}
+								} else {
+									alert(res.msg);
+								}
+							},
+						})
+					},
+					getTitle() {
+						mui.plusReady(function() {
+							var checkRecordNum = localStorage.getItem("checkRecordNum");
+							mui.ajax(baseURL + '/app/sceneCheck/checkContent/allInfoAndStatus', {
+								dataType: 'json',
+								timeout: 5000,
+								headers: {
+									"token": app.getState().token
+								},
+								data: {
+									"checkRecordNum": checkRecordNum
+								},
+								type: 'POST',
+								success: function(res) {
+									// console.log(JSON.stringify(res));
+									if (res.code == 0) {
+										vm.List = [];
+										var list = res.entityList;
+										list.forEach(item => {
+											vm.List.push(item);
+										})
+										for (var i = 0; i < vm.List.length; i++) {
+											// vm.List[i].contentEntities = [];
+											for (var j = 0; j < vm.List[i].contentEntities.length; j++) {
+												// console.log(vm.List[i].contentEntities[j].checkResultTypeId);
+												if (vm.List[i].contentEntities[j].checkResultTypeId == '0') {
+													vm.List[i].contentEntities[j].checkResultTypeId = ''
+												}
+												if (vm.List[i].contentEntities[j].checkResultTypeId == '1') {
+													vm.List[i].contentEntities[j].checkResultTypeId = '合格';
+												}
+												if (vm.List[i].contentEntities[j].checkResultTypeId == '2') {
+													vm.List[i].contentEntities[j].checkResultTypeId = '不规范';
+												}
+												if (vm.List[i].contentEntities[j].checkResultTypeId == 3) {
+													vm.List[i].contentEntities[j].checkResultTypeId = '违章';
+												}
+											}
+										}
+										// console.log(JSON.stringify(res.entityList));
+									} else if (res.code == 401) {
+										alert('请重新登录！')
+									}
+
+								}
+							});
+						})
+
+					},
+
+					edit(id) {
+						//sessionStorage.setItem('id', JSON.stringify(id));
+						mui.openWindow({
+							url: "auditDetails2.html",
+							id: "auditDetails2.html",
+							style: {},
+							show: {
+								autoShow: true,
+								aniShow: 'slide-in-right',
+								duration: 100
+							},
+							extras: {
+								// technicalId: item.technicalId, //自定义扩展参数，可以用来处理页面间传值  
+								ids: id
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载 '
+							}
+						})
+					},
+				},
+				created() {
+					this.ajax();
+					this.editOrNo();					
+				},
+				mounted() {
+					// this.getTitle();
+				}
+			});
+
+			mui('#offCanvasSideScroll').scroll();
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true, //启用右滑关闭功能
+				
+			});
+		</script>
+	</body>
+
+</html>

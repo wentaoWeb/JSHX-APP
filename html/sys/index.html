@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+
+		<script src="../../js/main.js"></script>
+		<style>
+			.my-header {
+            height: 0.88rem;
+            background-color: #51BFF7;
+            color: #fff;
+        }
+
+        .my-header .mui-title {
+            color: #FFF;
+            font-size: 0.36rem;
+        }
+
+        .my-header a,
+        .my-header h1 {
+            line-height: 0.88rem;
+        }
+
+        .mui-bar-nav.mui-bar .mui-icon {
+            padding: 0;
+            margin: 0;
+            color: #fff;
+        }
+
+        .mui-bar-nav~.mui-content {
+            padding-top: 0px !important;
+            padding-bottom: 50px;
+            background-color: #fff;
+        }
+
+        .bg {
+            width: 100%;
+            height: 2.82rem;
+            background: url("../../images/bg.png") no-repeat center;
+            background-size: 100%;
+            padding-top: 1.0rem;
+            box-sizing: border-box;
+        }
+
+        .loopImg {
+            width: 92%;
+            margin: 0 auto;
+            height: 2.5rem;
+        }
+
+        .loopImg img {
+            width: 100%;
+        }
+
+        .menu {
+			padding-top: 50px;
+            /* padding-top: 0.7rem; */
+            width: 92%;
+            margin: 0 auto;
+            margin-bottom: 0.2rem;
+        }
+
+        .menu ul .bigMenu {
+            /* padding-top: 0.7rem; */
+            box-sizing: border-box;
+            /* margin-bottom:0.7rem; */
+        }
+
+        .menu ul .bigMenu h1 {
+            font-weight: 400;
+            font-size: 0.36rem;
+            color: #333;
+            font-family: "PingFang-SC-Bold";
+        }
+
+        .bigMenu .smallMenu {
+            margin-top: 0.2rem;
+            box-sizing: border-box;
+            float: left;
+            text-align: center;
+            width: 25%;
+        }
+
+        .smallMenu p {
+            margin-top: 0.1rem;
+            font-size: 0.24rem;
+            color: #333;
+            font-family: "PingFang-SC-Bold";
+        }
+
+        .smallMenu img {
+            width: 0.7rem;
+            height: 0.7rem;
+        }
+		.news{
+			width: 92%;
+			margin: 0 auto;
+		}
+		.newsText{
+			
+		}
+		.newsDetail{
+			font-size: 14px;
+			padding-top: 5px;
+			color: #ADADAD;
+			height: 32px;
+			text-overflow: -o-ellipsis-lastline;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+		}
+		.newsPic{
+			border-radius: 5px;
+		}
+		.line{
+			width: 100%;
+			height: 10px;
+			background-color: #E5E5E5;
+		}
+		.newsList li{
+			border-bottom: 1px solid #D4D4D4;
+		}
+    </style>
+	</head>
+
+	<body>
+		<div id="app">
+			<!-- 主页面标题 -->
+			<header class="mui-bar mui-bar-nav my-header">
+				<h1 class="mui-title">嘉善恒兴综合生产指挥系统</h1>
+				<a class="mui-icon-extra mui-icon-extra-sweep mui-icon-right-nav mui-pull-right" style="color: white;" id="toScan"></a>
+			</header>
+			<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll">
+				<div class="mui-scroll">
+					<div class="bg">
+						<div class="mui-slider loopImg" id="slider">
+							<div class="mui-slider-group mui-slider-loop">
+								<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+								<div class="mui-slider-item mui-slider-item-duplicate">
+									<a href="#">
+										<img src="../../images/bg2.jpg">
+									</a>
+								</div>
+								<!-- 第一张 -->
+								<div class="mui-slider-item">
+									<a href="#">
+										<img src="../../images/bg3.jpg">
+									</a>
+								</div>
+								<!-- 第二张 -->
+								<div class="mui-slider-item">
+									<a href="#">
+										<img src="../../images/bg4.jpg">
+									</a>
+								</div>
+								<!-- 第三张 -->
+								<div class="mui-slider-item">
+									<a href="#">
+										<img src="../../images/bg5.jpg">
+									</a>
+								</div>
+								<!-- 第四张 -->
+								<div class="mui-slider-item">
+									<a href="#">
+										<img src="../../images/bg2.jpg">
+									</a>
+								</div>
+								<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+								<div class="mui-slider-item mui-slider-item-duplicate">
+									<a href="#">
+										<img src="../../images/bg4.jpg">
+									</a>
+								</div>
+							</div>
+							<div class="mui-slider-indicator">
+								<div class="mui-indicator mui-active"></div>
+								<div class="mui-indicator"></div>
+								<div class="mui-indicator"></div>
+								<div class="mui-indicator"></div>
+							</div>
+						</div>
+					</div>
+					<div class="menu">
+						<ul>
+							<li class="bigMenu">
+								<ul class="clearfix">
+									<li class="smallMenu">
+										<a href="../jicha/auditOne.html">
+											<img src="../../images/iconMain/icon/xcjcqk.png" alt="">
+											<p>现场稽查</p>
+										</a>
+									</li>
+									<li class="smallMenu">
+										<a href="../informationSearch/informationSearch.html">
+											<img src="../../images/search.png" alt="">
+											<p>外协信息查询</p>
+										</a>
+									</li>
+									<li class="smallMenu">
+										<a href="../prospectingReport/prospectingReport.html">
+											<img src="../../images/icon/Record.png" alt="">
+											<p>现场勘查记录</p>
+										</a>
+									</li>
+									<li class="smallMenu">
+										<a href="../safe/peopleApply.html">
+											<img src="../../images/iconMain/icon/rysqgl.png" alt="">
+											<p>人员申报</p>
+										</a>
+									</li>
+									<!-- <li class="smallMenu">
+										<a href="../jicha/map.html">
+											<img src="../../images/iconMain/icon/wzyt.png" alt="">
+											<p>违章统计</p>
+										</a>
+									</li> -->
+									<!-- <li class="smallMenu">
+										<a href="">
+											<img src="../../images/iconMain/icon/bagao.png" style="border-radius: 50%;" alt="">
+											<p>稽查报告</p>
+										</a>
+									</li> -->
+									<!-- <li class="smallMenu">../safe/peopleApply.html
+										<a href="../IntegralStatistics/integral.html">
+											<img src="../../images/jf.png" alt="">
+											<p>积分统计</p>
+										</a>
+									</li> -->
+								</ul>
+							</li>
+							<li class="bigMenu">
+								<ul class="clearfix">
+									<li class="smallMenu">
+										<a href="../../html/SafetyTraining/OnlineLearning.html">
+											<img src="../../images/iconMain/icon/zlzxxx.png" alt="">
+											<p>资料在线学习</p>
+										</a>
+									</li>
+									<li class="smallMenu">
+										<a href="../../html/onlineTest/kaoshiList.html">
+											<img src="../../images/iconMain/icon/zxks.png" alt="">
+											<p>在线考试</p>
+										</a>
+									</li>
+									<li class="smallMenu">
+										<a href="../../html/ToolsAndTools/choice.html">
+											<img src="../../images/icon/gqj.png" alt="">
+											<p>领用管理</p>
+										</a>
+									</li>
+									<!-- <li class="smallMenu">
+										<a href="">
+											<img src="../../images/iconMain/icon/jihua.png" alt="">
+											<p>稽查计划</p>
+										</a>
+									</li>
+									<li class="smallMenu">
+										<a href="">
+											<img src="../../images/iconMain/icon/zhcx.png" alt="">
+											<p>综合查询</p>
+										</a>
+									</li> -->
+									<!-- <li class="smallMenu">
+										<a href="">
+											<img src="../../images/iconMain/icon/gcjd.png" alt="">
+											<p>工程进度</p>
+										</a>
+									</li> -->
+									<li class="smallMenu">
+										<a href="menu.html">
+											<img src="../../images/all.png" alt="">
+											<p>全部</p>
+										</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<div class="line">
+
+					</div>
+					<div class="news">
+						<h4 style="margin-top: 15px;">通知</h4>
+						<ul class="newsList">
+							<li style="height: 106px;display: flex;align-items: center;justify-content: space-around;line-height: 1; ">
+								<span class="newsText" style="width: 208px;">
+									<i style="display: block; height: 36px; font-size: 16px;font-weight: bold;">台风“玲玲”致杭州道路、电力设施损毁</i>
+									<i class="newsDetail">当日,受今年第13号台风“玲玲”影响,浙江杭州余杭鸬鸟镇、百丈镇等地突降... </i>
+								</span>
+								<span><img src="../../images/bg3.jpg" style="width: 115px;height: 78px;border-radius: 5px;"></span>
+							</li>
+							<li style="height: 106px;display: flex;align-items: center;justify-content: space-around;line-height: 1;">
+								<span class="newsText" style="width: 208px;">
+									<i style="display: block; height: 36px; font-size: 16px;font-weight: bold;">全面建设泛在电力物联网</i>
+									<i class="newsDetail">通过“加工”实现数据“增值”,是互联网时代对数据的“赋能”,更是泛在电力...</i>
+								</span>
+								<span><img src="../../images/bg3.jpg" style="width: 115px;height: 78px;border-radius: 5px;"></span>
+							</li>
+							<li style="height: 106px;  display: flex;align-items: center;justify-content: space-around;line-height: 1;">
+								<span class="newsText" style="width: 208px;">
+									<i style="display: block; height: 36px; font-size: 16px;font-weight: bold;">助力城市品质提升!嘉兴电力攻坚克难改造中山路</i>
+									<i class="newsDetail">助力城市品质提升!嘉兴电力攻坚克难改造中山路 浙江新闻 发布时间:09-...</i>
+								</span>
+								<span class="newsPic"><img src="../../images/bg3.jpg" style="width: 115px;height: 78px; border-radius: 5px;"></span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../js/app.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			mui.plusReady(function() {
+				if (app.getState().token == false) {
+					mui.alert('身份已失效,请重新登陆', '提示', '确定', function() {}, 'div')
+				}
+			})
+
+			mui('#offCanvasSideScroll').scroll();
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				// swipeBack: true //启用右滑关闭功能  
+			});
+			var slider = mui("#slider");
+			slider.slider({
+				interval: 2000 //自动轮播周期，若为0则不自动播放，默认为0；  
+			});
+
+			var first = null
+			mui.back = function() {
+				if (!first) {
+					first = new Date().getTime()
+					mui.toast('再按一次退出应用')
+					setTimeout(function() {
+						first = null
+					}, 1000)
+				} else {
+					if (new Date().getTime() - first < 1000)
+						plus.runtime.quit()
+				}
+			}
+
+			$('#toScan').on('tap', function() {
+				// console.log('111')
+				mui.openWindow({
+					url: 'qqqq.html',
+					id: 'qqqq.html',
+					style: {},
+					show: {
+						autoShow: true,
+						aniShow: 'slide-in-right',
+						duration: 100
+					},
+					waiting: {
+						autoShow: true,
+						title: '正在加载 '
+					}
+				})
+			})
+
+			mui('.smallMenu').on('tap', 'a', function() {
+				var _this = this
+				var userID = {
+					userId: app.getState().user.userId
+				}
+				app.request("app", "selectUserInfo", userID, "get", function(data) {
+					if (data.code === 401) {
+						mui.alert('身份已失效,请重新登陆', '提示', '确定', function() {}, 'div')
+					} else {
+						var tagPage = _this.getAttribute('href')
+						// console.log(tagPage);
+						mui.openWindow({
+							url: tagPage,
+							id: tagPage,
+							style: {},
+							show: {
+								autoShow: true,
+								aniShow: 'slide-in-right',
+								duration: 100
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载 '
+							}
+						})
+					}
+				})
+			})
+		</script>
+	</body>
+
+</html>

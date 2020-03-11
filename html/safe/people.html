@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<!--<link rel="stylesheet" href="../../libs/bootstrap.min.css">-->
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/upload.css" />
+		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css">
+		<link rel="stylesheet" href="../../css/mui.poppicker.css">
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/bootstrap.min.js"></script>
+		<script src="../../libs/layer/layer.js"></script>
+		<script src="../../libs/rem.js"></script>
+
+		<!-- <script src="../../js/main.js"></script> -->
+		<script src="../../js/common.js"></script>
+		<script src="../../js/app.js"></script>
+		<!-- <script src="../../js/safe/people.js"></script> -->
+		<style>
+			html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .my-header {
+            height: 0.88rem;
+            background-color: #51BFF7;
+            color: #fff;
+        }
+
+        .my-header .mui-title {
+            color: #FFF;
+            font-size: 0.36rem;
+        }
+
+        .my-header a,
+        .my-header h1 {
+            line-height: 0.88rem;
+        }
+
+        .mui-bar-nav.mui-bar .mui-icon {
+            padding: 0;
+            margin: 0;
+            color: #fff;
+        }
+
+        .apply {
+            margin: 0 0.3rem;
+            border-bottom: 1px solid #ccc;
+            padding-top: 0.2rem;
+            padding-bottom: 0.15rem;
+            box-sizing: border-box;
+        }
+
+        .apply input {
+            border: none;
+            outline: none;
+            color: rgba(51, 51, 51);
+            font-size: 0.36rem;
+            margin-top: 0.16rem;
+            width: 100%;
+            padding: 0px !important;
+            margin-bottom: 0px;
+        }
+
+        .apply label {
+            font-size: 0.24rem;
+            color: rgb(148, 148, 148);
+
+        }
+
+        .apply label em {
+            font-size: 0.24rem;
+            color: rgb(255, 0, 0);
+        }
+
+        .image-item {
+            float: left;
+            position: relative;
+            margin: 0 10px;
+
+        }
+
+        img {
+            width: 100px;
+            height: 100px;
+
+        }
+
+        video {
+            width: 100px;
+            height: 100px;
+
+        }
+
+        .image-close {
+            position: absolute;
+            display: inline-block;
+            right: 0px;
+            top: 0px;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            border-radius: 12px;
+            background-color: #FF5053;
+            color: #f3f3f3;
+            border: solid 1px #FF5053;
+            font-size: 9px;
+            font-weight: 200;
+            z-index: 999;
+        }
+
+        .mui-table-view:before {
+            height: 0px;
+        }
+
+        .mui-table-view:after {
+            height: 0px;
+        }
+
+        .addData {
+            width: 25%;
+            display: inline-block;
+            background-color: #51BFF7;
+            padding: 10px;
+            color: #fff;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .upload {
+            position: absolute;
+            right: 0.20rem;
+            top: 0.60rem;
+            background-color: #51BFF7;
+            padding: 10px;
+            color: #fff;
+            text-align: center;
+            border-radius: 10px;
+            width: 25%;
+        }
+		#check{
+			display: flex;
+			align-items: center;
+			width: 100%;
+			flex-wrap: wrap;
+		}
+		#checker{
+			width: 33.333%;
+			height:50px;
+			align-items: center;
+			vertical-align: middle;
+		}
+    </style>
+	</head>
+
+	<body>
+		<!-- 侧滑导航根容器 -->
+		<div id="app">
+			<div class="mui-off-canvas-wrap mui-draggable">
+				<!-- 主页面容器 -->
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav my-header">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">人员申请</h1>
+					<a href="javascript:;" class="mui-icon mui-pull-right" style="font-size:14px;" @click="finish">完成</a>
+				</header>
+				<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll">
+					<form>
+						<div class="apply" style="display: flex; align-items: center; justify-content: space-between;">
+							<label>
+								<em>*</em>头像上传</label>
+							<a id="pick" href="#cropper-sheet" style="margin: 0 10px;">
+								<img v-if="picUrl == null" id="image" src="../../img/+@2x.png" style="width: 40px;height: 40px;" />
+								<img v-if="picUrl != null" id="images" :src="picUrl.replace('D:\\js_hx_control\\head\\', baseURL + '/file/head/')"
+								 style="width: 40px;height: 40px;" />
+							</a>
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>姓名</label>
+							<input type="text" placeholder="请输入姓名" v-model="people.name">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>性别</label>
+							<input type="text" placeholder="请选择性别" readonly="readonly" @click="sex" v-model="people.sex">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>年龄</label>
+							<input type="text" placeholder="请输入年龄" v-model="people.age">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>身份证号码</label>
+							<input type="text" placeholder="请输入身份证号码" v-model="people.identityCard">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>联系电话</label>
+							<input type="number" placeholder="请输入电话" v-model="people.phoneNum">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>公司名称</label>
+							<input type="text" placeholder="请选择公司" readonly="readonly" @click="deptName" v-model="people.deptName">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>学历</label>
+							<input type="text" placeholder="请选择学历" readonly="readonly" @click="degree" v-model="people.degree">
+						</div>
+
+						<div class="apply">
+							<label>
+								<em>*</em>类别</label>
+							<input type="text" placeholder="请选择类别" readonly="readonly" @click="category" v-model="people.category">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>职务</label>
+							<input type="text" placeholder="请选择职务" readonly="readonly" @click="job" v-model="people.job">
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>岗位{{people.position}}
+							</label>
+							<!-- <input type="text" placeholder="请选择岗位" readonly="readonly" @click="position"
+						    v-model="people.position"> -->
+							<div id="check">
+								<div class="mui-input-row mui-checkbox mui-left" v-for="item in position" id="checker">
+									<label>{{item.text}}</label>
+									<input name="checkbox" :value="item.value" type="checkbox" v-model="people.position" style="font-size: 22px;">
+								</div>
+							</div>
+
+
+						</div>
+						<div class="apply">
+							<label>
+								<em>*</em>证件管理</label>
+							<div>
+								<input type="text" placeholder="请输入证件名称" style="width:70%" v-model="newName">
+								<div @click="addData" class="addData">添加</div>
+							</div>
+						</div>
+						<!-- {{list}} -->
+						<div class="apply" style="border-bottom:none;">
+							<ul id="OA_task_1" class="mui-table-view">
+								<li class="mui-table-view-cell" v-for="(item, index) in list" :key="index">
+									<div class="mui-slider-right mui-disabled">
+										<a class="mui-btn mui-btn-red" @click="delImage(index)">删除</a>
+									</div>
+									<div class="mui-slider-handle">
+										<!-- {{item.name}} -->
+										<input type="text" class="quaName" v-model="item.quaName" placeholder="请填写附件名称" style="outline:none;border:0px;">
+										<p>上传证件照，补充信息</p>
+										<span class="upload" @click="uploadImage(item.quaName)">未上传</span>
+									</div>
+
+								</li>
+							</ul>
+						</div>
+						<!-- <div class="apply">
+                        <label><em>*</em>身份证</label>
+                        <ul id="photos"></ul>
+                        <div id="video"></div>
+                        <a id="pick" href="#cropper-sheet">
+                            <img id="image" src="../../img/+@2x.png" style="width:100px;height:100px" />
+                        </a>
+                    </div>
+                    <div class="apply">
+                        <label><em>*</em>驾驶证</label>
+                        <ul id="photos"></ul>
+                        <div id="video"></div>
+                        <a id="pick" href="#cropper-sheet">
+                            <img id="image" src="../../img/+@2x.png" style="width:100px;height:100px" />
+                        </a>
+                    </div> -->
+					</form>
+					
+				</div>
+			</div>
+			<!--选择照片-->
+			<div id="cropper-sheet" class="mui-popover mui-popover-bottom mui-popover-action">
+				<!-- 可选择菜单 -->
+				<ul class="mui-table-view margin">
+					<!-- <li class="mui-table-view-cell" @click="camera">
+                    <a id="paizhao" >拍照</a>
+                </li> -->
+					<li class="mui-table-view-cell" @click="gallery">
+						<a id="xiangce">选取照片</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script src="../../assets/mui/js/mui.zoom.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../assets/mui/js/mui.previewimage.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/cropper.min.js"></script>
+		<!-- <script type="text/javascript" src="../../js/getImgs.js"></script> -->
+
+		<script>
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				data = {
+					"name": self.name,
+					"sex": self.sex,
+					"identityCard": self.identityCard,
+					"age": self.age,
+					"uuid": self.uuid,
+					"uuidQua": self.uuidQua,
+					"address": self.address,
+					"issueDate":self.issueDate,
+					"invalidDate":self.invalidDate,
+					"issue":self.issue
+				}
+				window.vm.people.name = data.name;
+				window.vm.people.sex = data.sex;
+				window.vm.people.identityCard = data.identityCard;
+				window.vm.people.age = data.age;
+				window.vm.uuid = data.uuid;
+				window.vm.uuidQua = data.uuidQua;
+				window.vm.issueDate = data.issueDate;
+				window.vm.invalidDate = data.invalidDate;
+				window.vm.issue = data.issue;
+				window.vm.address = data.address;
+				
+				
+				// console.log(window.vm.address);
+			})
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					photos: [],
+					camera_photos: [],
+					uuid: null,
+					uuidQua: null,
+					address: null,
+					picUrl: null,
+					issueDate:null,
+					invalidDate:null,
+					issue:null,
+					companyId:null,
+					people: {
+						name: null,
+						phoneNum: null,
+						age: null,
+						identityCard: null,
+						sex: null,
+						deptName: null,
+						degree: null,
+						position: [],
+						category: null,
+						job: null,
+					},
+					sexData: [{
+							value: 'a',
+							text: '男'
+						},
+						{
+							value: 'b',
+							text: '女'
+						},
+					],
+					deptData: [],
+					degreeData: [{
+							value: 'a',
+							text: '博士'
+						},
+						{
+							value: 'b',
+							text: '研究生'
+						},
+						{
+							value: 'c',
+							text: '本科'
+						},
+						{
+							value: 'd',
+							text: '大专'
+						},
+						{
+							value: 'e',
+							text: '中专'
+						},
+					],
+					positionData: [{
+							value: 'a',
+							text: '岗位1'
+						},
+						{
+							value: 'b',
+							text: '岗位2'
+						},
+						{
+							value: 'c',
+							text: '岗位3'
+						},
+						{
+							value: 'd',
+							text: '岗位4'
+						},
+					],
+					categoryData: [{
+							value: '1',
+							text: '外协人员'
+						},
+						{
+							value: '3',
+							text: '临时用工'
+						},
+					],
+					jobData: [{
+							value: 'a',
+							text: '职务1'
+						},
+						{
+							value: 'b',
+							text: '职务2'
+						},
+					],
+					newName: '',
+					list: [],
+					position: []
+				},
+				methods: {
+					finish(){
+						// plus.webview.close(plus.webview.currentWebview());//关闭本页面
+						mui.openWindow({
+							url: "peopleApply.html",
+							id: "peopleApply.html",
+							show: {
+								autoShow: true,
+								aniShow: 'slide-in-right',
+								duration: 100
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载 '
+							},
+						})
+					},
+					getInfo(){
+						mui.ajax(baseURL + '/app/foreign/selectDetailByUserId', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token,
+								// 'Content-Type': 'application/json'
+							},
+							type: 'POST',
+							data: {
+								"userId":userId
+							},
+							success: function(res) {
+								console.log(JSON.stringify(res));
+								
+							}
+						});
+					},
+					// camera(){
+					// 	var c = plus.camera.getCamera();
+					// 	c.captureImage(function(e) {
+					// 		plus.gallery.save(e);
+					// 		plus.io.resolveLocalFileSystemURL(e, function(entry) {
+					// 			var path = entry.toLocalURL();
+					// 			console.log(path)
+					// 			var name = path.substr(e.lastIndexOf('/') + 1);
+					// 			// insertPhoto(path);
+					// 			//压缩图片到内存
+					// 			plus.zip.compressImage({
+					// 				src: path,
+					// 				dst: '_doc/' + path,
+					// 				quality: 20,
+					// 				overwrite: true
+					// 			}, function(zip) {
+					// 				console.log(zip)
+					// 				vm.camera_photos.push({
+					// 					path: zip.target
+					// 				});
+					// 				vm.photos.push({
+					// 					path: zip.target
+					// 				});
+					// 				
+					// 			}, function(error) {
+					// 				console.log("压缩error");
+					// 			});
+					// 	
+					// 		}, function(e) {
+					// 			mui.toast("读取拍照文件错误" + e.message);
+					// 		});
+					// 	})
+					// },
+					compressImg(files, file_index) {
+						var path = files;
+						plus.zip.compressImage({
+							src: path,
+							dst: '_doc/' + path,
+							quality: 20,
+							overwrite: true
+						}, function(zip) {
+							vm.addPhoto(zip.target, file_index);
+						})
+					},
+					addPhoto(imgPath, index) {
+
+						vm.photos.push({
+							path: imgPath
+						});
+						vm.createUploader();
+
+					},
+					insertPhoto(galleryFiles) {
+						var image = document.getElementById('image');
+						image.src = galleryFiles;
+						// plus.nativeUI.closeWaiting();
+					},
+					gallery() {
+						var galleryFiles;
+						var galleryPhotoNum = 1;
+						plus.gallery.pick(function(path) {
+								galleryFiles = path;
+								console.log(path)
+								plus.nativeUI.showWaiting();
+								vm.compressImg(galleryFiles, 0);
+
+							},
+							function(e) {
+								console.log("获取照片失败");
+								alert("获取照片失败")
+							}, {
+								filter: "image",
+								multiple: false,
+								maximum: galleryPhotoNum,
+								system: false,
+								onmaxed: function() {
+									mui.toast('最多选' + galleryPhotoNum + '个');
+								},
+								popover: true,
+								selected: galleryFiles
+							});
+					},
+					createUploader() {
+						task = plus.uploader.createUpload( baseURL + '/app/foreign/uploadFiles', {
+						// task = plus.uploader.createUpload('http://192.168.43.137:8080/js_hx_control/app/foreign/uploadFiles', {
+							// task = plus.uploader.createUpload('http://10.0.0.195:8080/js_hx_control/app/foreign/uploadFiles', {
+							method: 'POST'
+						}, function(r) {
+							var info = JSON.parse(r.responseText);
+							console.log(JSON.stringify(info));
+							if (info.code == 0) {
+								plus.nativeUI.closeWaiting();
+								vm.picUrl = info.attachmentUrl[0];
+								// $('#cropper-sheet').hide();
+								mui('#cropper-sheet').popover('toggle');
+
+								// $('#images').show();
+							}
+						});
+						task.addData("token", "" + app.getState().token + "");
+						// task.addData('uuidDept', '123456789')
+						// task.addData('uuidQua', '1111111111')
+						task.addData('moduleName', 'head')
+						var files;
+						var len = vm.photos.length;
+						for (var i = 0; i < len; i++) {
+							var j = i + 1;
+							var temp = 'phone' + j;
+							task.addFile(vm.photos[i].path, {
+								key: "file" + temp
+							});
+						}
+						// console.log(task.addData)
+						// console.log(task.addFile)
+						task.start();
+
+					},
+					// 							getDeptName: function() {
+					// 								$.ajax({
+					// 									type: "get",
+					// 									url: baseURL + "app/foreign/deptStafftypeTechnical",
+					// 									// data: {
+					// 									//     page: 1,
+					// 									//     limit: 999999
+					// 									// },
+					// 									// dataType: 'jsonp',
+					// 									// crossDomain: true,
+					// 									success: function(r) {
+					// 										console.log(r.pageUtils.list);
+					// 
+					// 									}
+					// 								});
+					// 							},
+					//性别
+					sex() {
+						let sex = new mui.PopPicker({ //通过new mui.PopPicker()初始化popPicker组件
+							layer: 1 //显示列数
+						});
+						sex.setData(this.sexData); //setData() 支持数据格式为: 数组
+						sex.show(function(e) { //e 就是总数据的数组 显示picker
+							vm.people.sex = e[0].text
+						})
+					},
+					deptName() {
+						// vm.getDeptName();
+						let deptName = new mui.PopPicker({ //通过new mui.PopPicker()初始化popPicker组件
+							layer: 1 //显示列数
+						});
+						deptName.setData(this.deptData); //setData() 支持数据格式为: 数组
+						deptName.show(function(e) { //e 就是总数据的数组 显示picker
+							// console.log(e)
+							vm.people.deptName = e[0].text;
+							vm.companyId = e[0].value
+						})
+					},
+					degree() {
+						let degree = new mui.PopPicker({ //通过new mui.PopPicker()初始化popPicker组件
+							layer: 1 //显示列数
+						});
+						degree.setData(this.degreeData); //setData() 支持数据格式为: 数组
+						degree.show(function(e) { //e 就是总数据的数组 显示picker
+							// console.log(e)
+							vm.people.degree = e[0].text
+						})
+					},
+					position() {
+						// let position = new mui.PopPicker({ //通过new mui.PopPicker()初始化popPicker组件
+						// 	layer: 1 //显示列数
+						// });
+						// position.setData(this.positionData); //setData() 支持数据格式为: 数组
+						// position.show(function(e) { //e 就是总数据的数组 显示picker
+						// 	vm.people.position = e[0].text
+						// })
+					},
+					category() {
+						let category = new mui.PopPicker({ //通过new mui.PopPicker()初始化popPicker组件
+							layer: 1 //显示列数
+						});
+						category.setData(this.categoryData); //setData() 支持数据格式为: 数组
+						category.show(function(e) { //e 就是总数据的数组 显示picker
+							vm.people.category = e[0].text
+						})
+					},
+					job() {
+						let job = new mui.PopPicker({ //通过new mui.PopPicker()初始化popPicker组件
+							layer: 1 //显示列数
+						});
+						job.setData(this.jobData); //setData() 支持数据格式为: 数组
+						job.show(function(e) { //e 就是总数据的数组 显示picker
+							vm.people.job = e[0].text
+						})
+					},
+					addData() {
+						this.list.push({
+							quaName: this.newName,
+							quaCode: 1,
+						})
+						if(this.list.length == 1){
+							this.list[0].quaName = '身份证'
+						}
+						if(this.list.length == 2){
+							this.list[1].quaName = '特种作业证'
+						}
+					},
+					delImage(idx) {
+						this.list.splice(idx, 1)
+						// alert('123')
+					},
+					uploadImage(quaName) {
+						// console.log(quaName)
+						if (vm.picUrl == null) {
+							alert('请上传头像！');
+							return false;
+						}
+						if (vm.people.name == null) {
+							alert('请填写名字！');
+							return false;
+						}
+						if (vm.people.sex == null) {
+							alert('请选择性别！');
+							return false;
+						}
+						if (vm.people.phoneNum == null) {
+							alert('请输入手机号码！');
+							return false;
+						}
+						if (vm.people.age == null) {
+							alert('请输入年龄！');
+							return false;
+						}
+						if (vm.people.identityCard == null) {
+							alert('请输入身份证号码！');
+							return false;
+						}
+						if (vm.people.deptName == null) {
+							alert('请选择公司！');
+							return false;
+						}
+						if (vm.people.degree == null) {
+							alert('请选择学历！');
+							return false;
+						}
+						if (vm.people.position == null) {
+							alert('请选择岗位！');
+							return false;
+						}
+						if (vm.people.category == null) {
+							alert('请选择类别！');
+							return false;
+						}
+						var categoryId = vm.people.category;
+						if(categoryId == '外协人员'){categoryId = '1'}
+						if(categoryId == '临时用工'){categoryId = '3'}
+						if (vm.people.job == null) {
+							alert('请选择职务！');
+							return false;
+						}
+						var uuidDept = vm.uuid;
+						var uuidQua = vm.uuidQua;
+						var headUrl = vm.picUrl.replace(/\\/ig, '/');
+						var address = vm.address;
+						mui.ajax(baseURL + '/app/foreign/appApply', {
+							headers: {
+								"token": app.getState().token,
+								'Content-Type': 'application/json'
+							},
+							data: {
+								"awUserName": vm.people.name, //用户姓名
+								"headUrl": headUrl, //头像路径
+								"age": vm.people.age, //年龄
+								"degree": vm.people.degree, //学历
+								"gender": vm.people.sex, //性别
+								"mobile": vm.people.phoneNum, //手机号码
+								"employeeTypeId": categoryId, //类别id
+								"positionIdList": vm.people.position, //岗位---数组
+								"address": address, //地址
+								"uuidDept": uuidDept, //用户证件信息标识符
+								"createUserId": app.getState().user.userId, //创建人id
+								"setupPerson": app.getState().user.username,
+								"companyId":vm.companyId,
+								"status": 1
+								// "setupDate":
+							},
+							dataType: 'json', //服务器返回json格式数据
+							type: 'post', //HTTP请求类型
+							timeout: 10000, //超时时间设置为10秒；
+							success: function(res) {
+								console.log(JSON.stringify(res));
+								if (res.code == 0) {
+									mui.openWindow({
+										url: "uploadImage.html",
+										id: "uploadImage.html",
+										show: {
+											autoShow: true,
+											aniShow: 'slide-in-right',
+											duration: 100
+										},
+										extras: {
+											"uuidDept": uuidDept,
+											"uuidQua": uuidQua,
+											"issueDate":vm.issueDate,
+											"invalidDate":vm.invalidDate,
+											"quaName":quaName,
+											"issue":vm.issue,
+											"identityCard":vm.people.identityCard
+										},
+										waiting: {
+											autoShow: true,
+											title: '正在加载 '
+										}
+									})
+								} else {
+									alert(res.msg)
+								}
+
+							}
+						});
+
+						// window.location.href = "uploadImage.html" + "?quaCode=" + id
+						// window.localStorage.name = "?quaCode=" + id
+					},
+					getCompany(){
+						mui.ajax(baseURL + '/app/foreign/getCompany',{
+							headers:{
+								"token":app.getState().token
+							},
+							data:{
+								
+							},
+							dataType:'json',//服务器返回json格式数据
+							type:'post',//HTTP请求类型
+							timeout:10000,//超时时间设置为10秒；
+							success:function(res){
+								// console.log(JSON.stringify(res));
+								var companyEntities = res.companyEntities;
+								var companyList = [];
+								for (var i = 0; i < companyEntities.length; i++) {
+									companyList.push({
+										"value": companyEntities[i].companyId,
+										"text": companyEntities[i].companyName
+									})
+								}
+								vm.deptData = companyList;
+								
+							},
+							
+						});
+					},
+					getPosition() {
+						mui.ajax(baseURL + '/app/foreign/deptStafftypeTechnical', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token
+							},
+							type: 'GET',
+							data: {},
+							success: function(res) {
+								// console.log(JSON.stringify(res))
+								if (res.code == 0) {
+									var data = res.deptStaffTypeTechnical.technical;
+									var list = [];
+									for (var i = 0; i < data.length; i++) {
+										list.push({
+											"value": data[i].technicalId,
+											"text": data[i].technicalName
+										})
+									}
+									// var dept = res.deptStaffTypeTechnical.dept;
+									// var deptList = [];
+									// for (var i = 0; i < dept.length; i++) {
+									// 	deptList.push({
+									// 		"value": dept[i].deptId.toString(),
+									// 		"text": dept[i].deptName
+									// 	})
+									// }
+									var employeeType = res.deptStaffTypeTechnical.employeeType;
+									var employeeTypeList = [];
+									for (var i = 0; i < employeeType.length; i++) {
+										employeeTypeList.push({
+											"value": employeeType[i].deptId,
+											"text": employeeType[i].deptName
+										})
+									}
+									vm.position = list;
+									// vm.deptData = deptList;
+									vm.people.categoryData = employeeTypeList;
+								} else {
+									alert(res.msg);
+								}
+							},
+						})
+					}
+				},
+				mounted() {
+					this.getPosition();
+					this.getCompany();
+				}
+			});
+
+			// mui('#offCanvasSideScroll').scroll();
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能  
+			});
+			mui.init();
+			var address;
+			mui.previewImage()
+			mui.plusReady(function() {
+				//上传图片
+				// createUploader();
+			})
+			// mui('#cropper-sheet').on('tap', '.mui-table-view-cell > a', function() {
+			// 	var type = this.getAttribute('data-type');
+			// 	mui("#cropper-sheet").popover('hide');
+			// 	switch (type) {
+			// 		case 'camera':
+			// 			clickCamera();
+			// 			break;
+			// 		case 'gallery':
+			// 			clickGallery();
+			// 			break;
+			// 		case 'video':
+			// 			clickVideo();
+			// 			break;
+			// 		case 'galleryVideos':
+			// 			galleryVideo();
+			// 		default:
+			// 			break;
+			// 	}
+			// })
+
+			// mui.init();
+			// (function ($) {
+			//     $('#OA_task_1').on('tap', '.mui-btn', function (event) {
+			//         var elem = this;
+			//         var li = elem.parentNode.parentNode;
+			//         mui.confirm('确认删除该条记录？', function (e) {
+			//             if (e.index == 0) {
+			//                 li.parentNode.removeChild(li);
+			//             } else {
+			//                 setTimeout(function () {
+			//                     $.swipeoutClose(li);
+			//                 }, 0);
+			//             }
+			//         });
+			//     });
+			// })(mui);
+		</script>
+	</body>
+
+</html>

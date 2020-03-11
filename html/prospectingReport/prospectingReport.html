@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/mui.poppicker.css">
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css" />
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../libs/layer/layer.js"></script>
+		<script src="../../libs/bootstrap.min.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/main.js"></script>
+		<script src="../../js/app.js"></script>
+		<style>
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			.my-header {
+				height: 0.88rem;
+				background-color: #FFF;
+				color: #fff;
+			}
+
+			.my-header .mui-title {
+				color: #000;
+				font-size: 0.36rem;
+				font-weight: 800;
+			}
+
+			.my-header a,
+			.my-header h1 {
+				line-height: 0.88rem;
+			}
+
+			.mui-bar-nav.mui-bar .mui-icon {
+				padding: 0;
+				margin: 0;
+				color: #000;
+			}
+
+			.mui-segmented-control .mui-control-item.mui-active {
+				color: #51BFF7;
+				background-color: transparent;
+				font-size: 0.4rem;
+				font-weight: 800;
+			}
+
+			.mui-segmented-control {
+				border: none;
+			}
+
+			.mui-segmented-control .mui-control-item {
+				border-left: none;
+				font-size: 0.34rem;
+				color: #666;
+			}
+
+			.mui-table-view:before {
+				height: 0px;
+			}
+
+			.mui-table-view-cell {
+				padding: 10px 15px;
+			}
+
+			.mui-table-view-cell>a:not(.mui-btn) {
+				font-size: 0.32rem;
+			}
+			p{
+				margin: 10px;
+			}
+			.mui-table-view-cell.mui-collapse .mui-collapse-content {
+				    margin: 0px -15px 0px;
+			}
+			.mui-btn-block{
+				margin-bottom: 0px;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<div class="mui-off-canvas-wrap mui-draggable">
+				<!-- 主页面容器 -->
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav my-header">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">勘查报告</h1>
+				</header>
+				<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll">
+					<p>勘查单位：嘉善恒兴电力建设有限公司</p>
+					<p>部门（或班组）：{{app.getState().user.deptName}}</p>
+					<p>勘察负责人:{{app.getState().user.awUserName}}</p>
+					<!-- <p>编号：<input type="text" placeholder="编号" value="" v-model="number" /></p> -->
+					<p>作业现场的条件、环境及其他危险点:</p>
+					<div class="mui-card">
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell mui-collapse" v-for="item in List">
+								<a class="mui-navigate-right" href="#">{{item.contentName}}</a>
+								<div class="mui-collapse-content">
+									<ul>
+										<li v-for="record in item.childs">
+											<label ><input type="checkbox" @click="searchRe($event)" v-model="selectRe"
+												 :value="record.menuId" />{{record.contentName}}</label>
+											<!-- <div v-for="th in record.childs">v-if="record.childs.length == 0"
+												<a class="mui-navigate-right" href="#">{{th.contentName}}</a>
+												<div class="mui-collapse-content">
+													<label><input type="checkbox" @click="searchRe($event)" v-model="selectRe" :value="th.menuId" />{{th.contentName}}</label>
+												</div>
+											</div> -->
+										</li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<!-- <input style="margin-left: 10px;" id="file" type="file" @change="upload" webkitdirectory /> -->
+					<button type="button" style="position: fixed;bottom: 0px;" class="mui-btn mui-btn-blue mui-btn-block" @click="submit">确定</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			var dataA;
+			mui.plusReady(function() {
+				
+			})
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					List: [],
+					selectRe: [],
+					entities: [],
+					number: ''
+				},
+				methods: {
+					submit() {
+						var date = new Date();
+						var warning = '';
+						var safeControl = '';
+						for (var i = 0; i < vm.entities.length; i++) {
+							warning += vm.entities[i].warning;
+							safeControl += vm.entities[i].safeControl;
+						}
+						var info = {
+							"unit": '嘉善恒兴电力建设有限公司',
+								"dept": app.getState().user.deptName,
+								"leader": app.getState().user.awUserName,
+								"shortDept": '教',
+								"date": date.toLocaleDateString().replace(/\//g, '-'),
+								"warning": warning,
+								"safeControl": safeControl
+						}
+						mui.ajax(baseURL + '/app/investigateTable/insertInvestigateTable', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token,
+								"Content-type": "application/json"
+							},
+							data: JSON.stringify(info),
+							type: 'POST',
+							success: function(res) {
+								if (res.code == 0) {
+									console.log(res);
+									mui.openWindow({
+										url: "printing.html",
+										id: "printing.html",
+										createNew: true,
+										extras: {
+											info: info,
+											number:res.number
+										},
+										waiting: {
+											autoShow: true,
+											title: '正在加载 '
+										}
+									})
+
+								} else {
+									alert(res.msg)
+								}
+							}
+						});
+					},
+					searchRe(e) {
+						// console.log(e)
+						if (e.target.checked == true) {
+							mui.ajax(baseURL + '/app/investigateTable/queryInvestigateTableParam', {
+								dataType: 'json',
+								timeout: 5000,
+								headers: {
+									"token": app.getState().token,
+									"Content-type": "application/json"
+								},
+								data: JSON.stringify(vm.selectRe),
+								type: 'POST',
+								success: function(res) {
+									if (res.code == 0) {
+										console.log(res);
+										vm.entities = res.entities;
+									} else {
+										alert(res.msg)
+									}
+								}
+							});
+						}
+					},
+					getData() {
+						mui.ajax(baseURL + '/app/investigateTable/querySafeContro', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token
+							},
+							type: 'get',
+							success: function(res) {
+								if (res.code == 0) {
+									// console.log(res);
+									vm.List = res.parents;
+								} else {
+									alert(res.msg)
+								}
+							}
+						});
+					}
+				},
+				created() {
+					this.getData();
+				}
+			});
+
+			mui('#offCanvasSideScroll').scroll();
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true, //启用右滑关闭功能
+
+			});
+			$('#scroll').scroll({
+			    indicators: true //是否显示滚动条
+			});
+		</script>
+	</body>
+
+</html>

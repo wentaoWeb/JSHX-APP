@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/public.js"></script>
+		<script src="../../js/main.js"></script>
+		<script src="../../js/vue.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		<style>
+			.my-header {
+			height: 0.88rem;
+			background-color: #51BFF7;
+			color: #fff;
+		}
+
+		.my-header .mui-title {
+			color: #FFF;
+			font-size: 0.36rem;
+		}
+
+		.my-header a,
+		.my-header h1 {
+			line-height: 0.88rem;
+		}
+
+		.mui-bar-nav.mui-bar .mui-icon {
+			padding: 0;
+			margin: 0;
+			color: #fff;
+		}
+
+		.mui-bar-nav~.mui-content {
+			padding-top: 0px !important;
+			padding-bottom: 50px;
+			background-color: #fff;
+		}
+
+		.bg {
+			width: 100%;
+			height: 2.82rem;
+			background: url("../../images/bg.png") no-repeat center;
+			background-size: 100%;
+			padding-top: 1.0rem;
+			box-sizing: border-box;
+		}	
+		.mui-table-view-cell{
+			line-height: 35px;
+		}
+		.mui-table-view-cell i{
+			position: absolute;
+			right: 10px;
+			color: #c9c9c9;
+			font-size: 14px;
+		}
+		.mui-table-view-cell span{
+			padding: 0px 0.2rem
+		}
+		.mui-table-view-cell .mui-icon,.mui-icon-extra{
+			color: red;
+		}
+		.mui-bar-tab .mui-tab-item.mui-active {
+			color: #ACACAC!important;
+		}
+		.yincang{
+			display: none;
+		}
+	</style>
+	</head>
+
+	<body>
+		<!-- 侧滑导航根容器 -->
+		<div class="mui-off-canvas-wrap mui-draggable" id="app">
+			<!-- 主页面容器 -->
+			<div class="mui-inner-wrap">
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav my-header">
+					<h1 class="mui-title">我</h1>
+				</header>
+				<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll" style="background-color: #F5F6F8;">
+					<div class="mui-scroll">
+						<div class="bg">
+							<ul class="mui-table-view">
+								<li class="mui-table-view-cell mui-media" style="padding-top: 25px">
+									<span class="mui-icon mui-icon-camera"></span>头像
+									<img class="mui-media-object mui-pull-right" :src="headUrl.replace('D:/js_hx_control/head/', baseURL + '/file/head/')" >
+								</li>
+								<li class="mui-table-view-cell">
+									<span class="mui-icon mui-icon-person"></span>姓名 <i>{{ userMsg.fullname }}</i>
+								</li>
+								<li class="mui-table-view-cell">
+									<span class="mui-icon-extra mui-icon-extra-hotel"></span>所属公司<i>{{companyName}}</i>
+								</li>
+								<li class="mui-table-view-cell">
+									<span class="mui-icon-extra mui-icon-extra-xiaoshuo"></span>职位<i>安全员</i>
+								</li>
+								<li class="mui-table-view-cell">
+									<span class="mui-icon mui-icon-email"></span>内网号 <i>123456</i>
+								</li>
+								<li class="mui-table-view-cell">
+									<span class="mui-icon mui-icon-phone"></span>手机号码 <i>{{ userMsg.mobile }}</i>
+								</li>
+								<!-- <li class="mui-table-view-cell">
+									<a class="mui-navigate-right"><span class="mui-icon mui-icon-locked"></span>密码<i>忘记密码</i></a>
+								</li> -->
+							</ul>
+							<button id="tuichu" class="mui-btn mui-btn-block" style="margin-top: 0.3rem" v-show="code==0">退出登录</button>
+							<button id="chongxin" class="mui-btn mui-btn-block" style="margin-top: 0.3rem" v-show="code!=0">重新登录</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../js/app.js"></script>
+
+		<script type="text/javascript" charset="utf-8">
+			// console.log(mui('#tuichu')[0].innerHTML);
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				self.addEventListener('show', function() {
+					window.vm.ajax();
+				});
+			})
+
+			var userID;
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					userMsg: {},
+					code: null,
+					companyName:null,
+					headUrl:null
+				},
+				methods: {
+					ajax() {
+						var _this = this
+						mui.plusReady(function() {
+							userID = {
+								userId: app.getState().user.userId
+							}
+							// console.log(userID);
+							app.request("app", "selectUserInfo", userID, "get", function(data) {
+								// console.log(JSON.stringify(data));
+								if (data.code === 401) {
+									mui.alert('身份已失效,请重新登陆', '提示', '确定', function() {
+										console.log(data);
+										_this.userMsg = data;
+										app.clearToken();
+										// localStorage.removeItem($state);
+										mui.openWindow({
+											url: '/login.html', //String类型,要打开的界面的地址
+											id: 'login', //String类型,要打开的界面的id
+										})
+									}, 'div')
+								}else{
+									_this.userMsg = data.appUserEntity
+									_this.code = data.code;
+								}
+								
+							})
+						})
+					}
+				},
+				created() {
+					this.ajax();
+					this.companyName = app.getState().user.companyName;
+					this.employeeTypeName = app.getState().user.employeeTypeName;
+					this.headUrl = app.getState().user.headUrl
+				}
+			});
+			mui.plusReady(function() {
+				var tuichu = document.getElementById("tuichu")
+				tuichu.addEventListener('tap', function() {
+					mui.confirm("您确定退出吗", "提示", ['是', '否'], function(e) {
+						if (e.index == 0) {
+							app.request("app", "logout", userID, "post", function(res) {
+								alert(res.msg)
+								app.clearToken();
+																
+								location.reload();
+							})
+						}
+					}, "div")
+				});
+				var chongxin = document.getElementById("chongxin")
+				chongxin.addEventListener('tap', function() {
+					mui.openWindow({
+						url: '../../login.html',
+						id: '../../login.html',
+						createNew: false,
+						style: {},
+						show: {
+							autoShow: true,
+							aniShow: 'slide-in-right',
+							duration: 100
+						},
+						waiting: {
+							autoShow: true,
+							title: '正在加载 '
+						}
+					})
+				});
+			})
+			// 双击退出
+			var first = null
+			mui.back = function() {
+				if (!first) {
+					first = new Date().getTime()
+					mui.toast('再按一次退出应用')
+					setTimeout(function() {
+						first = null
+					}, 1000)
+				} else {
+					if (new Date().getTime() - first < 1000)
+						plus.runtime.quit()
+				}
+			}
+		</script>
+	</body>
+
+</html>

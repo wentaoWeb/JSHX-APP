@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/toface.css" rel="stylesheet" />
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/bootstrap.min.js"></script>
+		<script src="../../libs/layer/layer.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/jquery-1.11.2.min.js"></script>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<style type="text/css">
+			.view {
+				height: 600px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav my-header">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">身份证扫描</h1>
+		</header>
+
+		<div class="mui-content">
+			<div class="view" style="">
+				<video id="video" style="width: 100%;height: 100%;"></video>
+				<canvas id='canvas' style="width: 100%;height: 100%;display: none;"></canvas>
+				
+			</div>
+		</div>
+		
+		<script>
+			(function($, doc) {
+				console.log(1)
+				$.init();
+				//$.plusReady(function() {
+			
+				v = doc.getElementById('video'),
+				canvas = doc.getElementById('canvas'),
+				vendorUrl = window.URL || window.webkitURL;
+			
+				if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia) {
+					//调用用户媒体设备, 访问摄像头
+					navigator.mediaDevices.getUserMedia({
+							audio: false,
+							video: {
+								facingMode: {
+									exact: "environment"
+								}
+							}
+						})
+						.then(function(stream) {
+							/* 使用这个stream stream */
+							// console.log(stream)
+							//plus.camera.getCamera();
+							v.srcObject = stream;
+							v.play();
+						})
+						.catch(function(err) {
+							/* 处理error */
+						});
+				} else {
+					alert('不支持访问用户媒体');
+				}
+				// getface();
+				var interval = setInterval(getface, 3000);
+				// setTimeout(getface(),2000);			
+			}(mui, document));
+			
+			var time = 0;			
+			//自动拍照
+			function getface() {
+				console.log(2)
+				time++;
+				//绘制canvas图形
+				
+				canvas.getContext('2d').drawImage(v,0,0,300,230);
+				//把canvas图像转为img图片
+				var bdata = canvas.toDataURL("image/png");
+				// var base64 = bdata.split(',')[1]; //照片压缩成base位数据
+				// console.log(base64)
+				var imgFile = dataURLtoFile(bdata);//base64转图片文件
+				console.log(imgFile);
+				var fd = new FormData();
+				fd.append("frontFile", imgFile);
+				$.ajax({
+				    url: baseURL + '/app/sample/identityCard',
+				    type: "POST",
+					headers: {
+						"token": app.getState().token
+					},
+				    processData: false,
+				    contentType: false,
+				    data: fd,
+				    success: function (res) {
+						console.log(4)
+				        console.log(JSON.stringify(res));
+				    }
+				});
+				
+				//提交至接口匹配人脸库
+				// $.post(baseURL + '/app/faceLogin', {
+				// 	"face": base64
+				// }, function(res) {
+				// 	console.log(JSON.stringify(res));
+				// 	clearInterval(interval); //清除定时器
+				// let code = JSON.stringify(res.code);
+				// let errcode = JSON.stringify(res.error_code);
+				//人脸识别成功直接跳转至主页
+				// if (code == "0") {
+				// 	// localStorage.setItem('user', JSON.stringify(res.user));
+				// 	// let faceToken = JSON.stringify(res.token);
+				// 	// localStorage.setItem('$state', faceToken);
+				// 	clearInterval(interval); //清除定时器
+				// 	mui.toast('验证成功');
+				// } else {
+				// 	clearInterval(interval); //清除定时器 
+				// 	time = 0; //重新计时
+
+				// }
+				// }, 'json');
+			}
+			// console.log(base64);
+
+			function dataURLtoFile(dataurl, filename = 'frontFile') {
+				console.log(3)
+				let arr = dataurl.split(',')
+				  let mime = arr[0].match(/:(.*?);/)[1]
+				  let suffix = mime.split('/')[1]
+				  let bstr = atob(arr[1])
+				  let n = bstr.length
+				  let u8arr = new Uint8Array(n)
+				  while (n--) {
+				    u8arr[n] = bstr.charCodeAt(n)
+				  }
+				  return new File([u8arr], `${filename}.${suffix}`, {
+				    type: mime
+				  })
+			}
+			// function dataURLtoFile(dataurl, filename = 'backFile') {
+			// 	// console.log(3)
+			// 	let arr = dataurl.split(',');
+			// 	let mime = arr[0].match(/:(.*?);/);
+			// 	let suffix = mime.split('/');
+			// 	let bstr = atob(arr);
+			// 	let n = bstr.length;
+			// 	let u8arr = new Uint8Array(n);
+			// 	while (n--) {
+			// 		u8arr[n] = bstr.charCodeAt(n)
+			// 	}
+			// 	return new File([u8arr], `${filename}.${suffix}`, {
+			// 		type: mime
+			// 	})
+			// }
+			
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!--<link rel="stylesheet" href="../../libs/bootstrap.min.css">-->
+    <link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+    <link rel="stylesheet" href="../../css/base.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/mui.picker.min.css">
+    <link rel="stylesheet" href="../../css/mui.poppicker.css">
+    <link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+    <script src="../../libs/jquery.min.js"></script>
+    <script src="../../assets/mui/js/mui.min.js"></script>
+    <script src="../../libs/vue.min.js"></script>
+    <script src="../../libs/bootstrap.min.js"></script>
+    <script src="../../libs/layer/layer.js"></script>
+    <script src="../../libs/rem.js"></script>
+    <script src="../../js/public.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/safe/people.js"></script>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .apply {
+            margin: 0 0.3rem;
+            border-bottom: 1px solid #ccc;
+            padding-top: 0.2rem;
+            padding-bottom: 0.15rem;
+            box-sizing: border-box;
+        }
+
+        .my-header {
+            height: 0.88rem;
+            background-color: #51BFF7;
+            color: #fff;
+        }
+
+        .my-header .mui-title {
+            color: #FFF;
+            font-size: 0.36rem;
+        }
+
+        .my-header a,
+        .my-header h1 {
+            line-height: 0.88rem;
+        }
+
+        .mui-bar-nav.mui-bar .mui-icon {
+            padding: 0;
+            margin: 0;
+            color: #fff;
+        }
+
+        .apply input {
+            border: none;
+            outline: none;
+            color: rgba(51, 51, 51);
+            font-size: 0.36rem;
+            margin-top: 0.16rem;
+            width: 100%;
+            padding: 0px !important;
+            margin-bottom: 0px;
+        }
+
+        .apply label {
+            font-size: 0.24rem;
+            color: rgb(148, 148, 148);
+
+        }
+
+        .apply label em {
+            font-size: 0.24rem;
+            color: rgb(255, 0, 0);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 侧滑导航根容器 -->
+    <div id="app">
+        <div class="mui-off-canvas-wrap mui-draggable">
+            <!-- 主页面容器 -->
+            <!-- 主页面标题 -->
+            <header class="mui-bar mui-bar-nav my-header">
+                <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+                <h1 class="mui-title">积分奖励申请</h1>
+                <a href="javascript:;" class="mui-icon mui-pull-right" style="font-size:14px;">提交</a>
+            </header>
+            <div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll">
+                <form>
+                    <div class="apply">
+                        <label><em>*</em>申请单编号</label>
+                        <input type="text" placeholder="请输入编号">
+                    </div>
+                    <div class="apply">
+                        <label><em>*</em>项目部门名称</label>
+                        <input type="text" placeholder="请选择部门" readonly="readonly" @click="deptName"
+                            v-model="people.deptName">
+                    </div>
+                    <div class="apply">
+                        <label><em>*</em>积分奖励</label>
+                        <input type="text" placeholder="请输入积分奖励">
+                    </div>
+                    <div class="apply">
+                        <label><em>*</em>工程名称</label>
+                        <input type="number" placeholder="请输入工程名称">
+                    </div>
+                    <div class="apply">
+                        <label><em>*</em>项目负责人</label>
+                        <input type="number" placeholder="请输入项目负责人">
+                    </div>
+
+
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <script src="../../js/mui.picker.min.js"></script>
+    <script src="../../js/mui.poppicker.js"></script>
+    <!-- <script type="text/javascript"> 
+
+mui('#offCanvasSideScroll').scroll();
+mui('#offCanvasContentScroll').scroll();
+mui.init({
+    swipeBack: true //启用右滑关闭功能  
+});
+</script> -->
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                people: {
+                    sex: null,
+                    deptName: null,
+                    degree: null,
+                    position: null,
+                    category: null,
+                    job: null,
+                },
+                setData: [
+                    { value: 'a', text: '男' },
+                    { value: 'b', text: '女' },
+                ],
+                deptData: [
+                    { value: 'a', text: '线路项目七部' },
+                    { value: 'b', text: '线路项目六部' },
+                    { value: 'c', text: '线路项目五部' },
+                    { value: 'd', text: '线路项目四部' },
+                ],
+                degreeData: [
+                    { value: 'a', text: '博士' },
+                    { value: 'b', text: '研究生' },
+                    { value: 'c', text: '本科' },
+                    { value: 'd', text: '大专' },
+                    { value: 'e', text: '中专' },
+                ],
+                positionData: [
+                    { value: 'a', text: '岗位1' },
+                    { value: 'b', text: '岗位2' },
+                    { value: 'c', text: '岗位3' },
+                    { value: 'd', text: '岗位4' },
+                ],
+                categoryData: [
+                    { value: 'a', text: '内部人员' },
+                    { value: 'b', text: '外协人员' },
+                ],
+                jobData: [
+                    { value: 'a', text: '职务1' },
+                    { value: 'b', text: '职务2' },
+                ]
+            },
+            methods: {
+                //性别
+                sex() {
+                    let sex = new mui.PopPicker({//通过new mui.PopPicker()初始化popPicker组件
+                        layer: 1   //显示列数
+                    });
+                    sex.setData(this.setData);  //setData() 支持数据格式为: 数组
+                    sex.show(function (e) {   //e 就是总数据的数组 显示picker
+                        vm.people.sex = e[0].text
+                        //  console.log(self.goIng)
+                    })
+                },
+                deptName() {
+                    // let self = this;
+                    let deptName = new mui.PopPicker({//通过new mui.PopPicker()初始化popPicker组件
+                        layer: 1   //显示列数
+                    });
+                    deptName.setData(this.deptData);  //setData() 支持数据格式为: 数组
+                    deptName.show(function (e) {   //e 就是总数据的数组 显示picker
+                        console.log(e)
+                        vm.people.deptName = e[0].text
+                        //  console.log(self.goIng)
+                    })
+                },
+                degree() {
+                    let degree = new mui.PopPicker({//通过new mui.PopPicker()初始化popPicker组件
+                        layer: 1   //显示列数
+                    });
+                    degree.setData(this.degreeData);  //setData() 支持数据格式为: 数组
+                    degree.show(function (e) {   //e 就是总数据的数组 显示picker
+                        console.log(e)
+                        vm.people.degree = e[0].text
+                        //  console.log(self.goIng)
+                    })
+                },
+                position() {
+                    let position = new mui.PopPicker({//通过new mui.PopPicker()初始化popPicker组件
+                        layer: 1   //显示列数
+                    });
+                    position.setData(this.positionData);  //setData() 支持数据格式为: 数组
+                    position.show(function (e) {   //e 就是总数据的数组 显示picker
+                        vm.people.position = e[0].text
+                        //  console.log(self.goIng)
+                    })
+                },
+                category() {
+                    let category = new mui.PopPicker({//通过new mui.PopPicker()初始化popPicker组件
+                        layer: 1   //显示列数
+                    });
+                    category.setData(this.categoryData);  //setData() 支持数据格式为: 数组
+                    category.show(function (e) {   //e 就是总数据的数组 显示picker
+                        vm.people.category = e[0].text
+                        //  console.log(self.goIng)
+                    })
+                },
+                job() {
+                    let job = new mui.PopPicker({//通过new mui.PopPicker()初始化popPicker组件
+                        layer: 1   //显示列数
+                    });
+                    job.setData(this.jobData);  //setData() 支持数据格式为: 数组
+                    job.show(function (e) {   //e 就是总数据的数组 显示picker
+                        vm.people.job = e[0].text
+                        //  console.log(self.goIng)
+                    })
+                },
+
+            }
+        });
+
+        mui('#offCanvasSideScroll').scroll();
+        mui('#offCanvasContentScroll').scroll();
+        mui.init({
+            swipeBack: true //启用右滑关闭功能  
+        });
+    </script>
+</body>
+
+</html>

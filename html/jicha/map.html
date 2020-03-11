@@ -1,0 +1,297 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>Map Example</title>
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/bootstrap.min.js"></script>
+		<script src="../../libs/layer/layer.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/main.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+
+		<style type="text/css">
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+				background-color: #F8F7FC;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+				touch-action: none;
+			}
+
+			.my-header {
+				height: 0.88rem;
+				background-color: #fff;
+				color: #000;
+			}
+
+			.my-header .mui-title {
+				color: #000;
+				font-size: 0.36rem;
+			}
+
+			.my-header a,
+			.my-header h1 {
+				line-height: 0.88rem;
+			}
+
+			.mui-bar-nav.mui-bar .mui-icon {
+				padding: 0;
+				margin: 0;
+				color: #000;
+			}
+
+			.mui-bar-nav~.mui-content {
+				background-color: #f8f7fc;
+			}
+
+			.mui-table-view:before {
+				height: 0;
+			}
+
+			.mui-table-view:after {
+				height: 0;
+			}
+
+			#map {
+				width: 100%;
+				/*height: 100%;*/
+				overflow: hidden;
+				margin: 0;
+				font-family: "微软雅黑";
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<div class="mui-off-canvas-wrap mui-draggable">
+				<header class="mui-bar mui-bar-nav my-header">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">现场位置</h1>
+				</header>
+				<div class="mui-content mui-scroll-wrapper content" id="offCanvasContentScroll" style="position: relative;">
+					<div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+					<div class="" style="position: fixed;left: 35%;bottom: 20px;z-index: 999999999;">
+						<button type="button" class="mui-btn mui-btn-primary" @click="toMap">前往导航</button>
+					</div>
+					<div id="map"></div>
+					<div id="h5map" style="display: none;height: 200px;margin-top: 46px;"></div>
+					<div id="r-result"></div>
+
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=lvA1pLEsgDi5LbY9pTzNS8qRdTxUiumy"></script>
+		<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true //启用右滑关闭功能  
+			});
+			mui.plusReady(function() {
+				document.addEventListener('pause', function() {
+					console.log('后台运行...');
+				});
+				// 监听前台运行
+				document.addEventListener('resume', function() {
+					// 	var geolocation = new BMap.Geolocation();
+					// 	geolocation.getCurrentPosition(function(r) {
+					// 		if (this.getStatus() == 0) {
+					// 			MyPoi = r.point;
+					// 			// marker.setPosition(MyPoi);
+					// 			console.log(r.point)
+					// 			if (r.point.lng) {
+					// 				plus.nativeUI.closeWaiting();
+					// 			};
+					// 			//  map.panTo(MyPoi);
+					// 		} else {
+					// 			console.log('failed' + this.getStatus());
+					// 		}
+					// 		//定时再获取位置
+					// 		// setTimeout(function() {
+					// 		// 	getMyPosition();
+					// 		// }, 3000);
+					// 	}, {
+					// 		enableHighAccuracy: true
+					// 	})
+					// });
+					// 获取当前经纬度和地址详细信息
+					function xuwei2() {
+						plus.geolocation.getCurrentPosition(MapPoint, function(e) {
+							mui.toast("error:" + e.message);
+						})
+					}
+					xuwei2();
+					function MapPoint(position) {
+						// var Lon = position.coords.longitude; //获取经度
+						// var Lat = position.coords.latitude; //获取纬度
+						// var address = "当前地址：" + position.address.province + "," + position.address.city + "," + position.address.district +
+						// 	"," + position.address.street + "," + position.address.streetNum;
+						console.log(position);
+						// console.log("经度：" + Lon + "," + "纬度：" + Lat + ";" + "地址信息：" + address);
+					}
+				})
+			})
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					userLocation: {
+						lng: 103.958552,
+						lat: 30.782023
+					}
+				},
+				mounted() {
+					this.$nextTick(function() {
+						//        console.log("初始化")
+						var _this = this;
+						mui.plusReady(function() {
+							_this.InitMain();
+						})
+					})
+				},
+				methods: {
+					toMap() {
+						// 设置目标位置坐标点和其实位置坐标点
+						var dst = new plus.maps.Point(116.39131928, 39.90793074); // 天安门 
+						var src = new plus.maps.Point(116.335, 39.966); // 大钟寺
+						// 调用系统地图显示 
+						plus.maps.openSysMap(dst, "施工地点", src);
+					},
+					InitMain() {
+						var _this = this;
+						var winWidth = document.documentElement.clientWidth;
+						var winHeight = document.documentElement.clientHeight;
+						document.getElementById('map').style.height = (winHeight) + 'px';
+
+						var map = new BMap.Map("map"); // 创建Map实例
+						//等待状态
+						//缩放比例控件
+						var opts = {
+							offset: new BMap.Size(winWidth - 80, 10)
+						}
+						map.addControl(new BMap.ScaleControl(opts));
+						//plus.nativeUI.showWaiting();
+						var MyPoi = new BMap.Point(_this.userLocation.lng, _this.userLocation.lat);
+						var OldMyPoi = new BMap.Point(_this.userLocation.lng, _this.userLocation.lat);
+						map.centerAndZoom(MyPoi, 17); // 初始化地图,设置中心点坐标和地图级别
+						map.enableScrollWheelZoom();
+						//添加一个marker对象
+						var marker = new BMap.Marker(MyPoi);
+						map.addOverlay(marker); // 将标注添加到地图中 
+						marker.getIcon().setImageUrl("../../images/direction.png");
+						marker.getIcon().setSize(new BMap.Size(33, 33));
+						marker.getShadow().setSize(new BMap.Size(0, 0));
+						marker.disableMassClear();
+
+						function moveToMyPoi(scale) {
+							map.setZoom(scale);
+							map.panTo(MyPoi);
+						};
+						var geolocation = new BMap.Geolocation();
+						geolocation.getCurrentPosition(function(r) {
+							// console.log(this.getStatus());
+							if (this.getStatus() == 0) {
+								MyPoi = r.point;
+								// console.log(r.point);
+								// console.log(JSON.stringify(r.point))
+								marker.setPosition(MyPoi);
+								moveToMyPoi(17);
+							} else {
+								console.log('failed' + this.getStatus());
+							}
+						}, {
+							enableHighAccuracy: true
+						})
+
+						var geolocation2 = new BMap.Geolocation();
+						//获取定位
+						function getMyPosition() {
+							geolocation2.getCurrentPosition(function(r) {
+								if (this.getStatus() == 0) {
+									MyPoi = r.point;
+									marker.setPosition(MyPoi);
+									//                  console.log(JSON.stringify(r.point))
+									if (r.point.lng) {
+										plus.nativeUI.closeWaiting();
+									};
+									//  map.panTo(MyPoi);
+								} else {
+									console.log('failed' + this.getStatus());
+								}
+								//                  mui.toast(MyPoi.lng + "," + MyPoi.lat);
+								//                  console.log("定位完成");
+								//定时再获取位置
+								setTimeout(function() {
+									getMyPosition();
+								}, 3000);
+							}, {
+								enableHighAccuracy: true
+							})
+						};
+						getMyPosition();
+
+						//预防断网等导致定位中断，如果位置长时间未更新，再次调用getMyPosition()
+						function checkGeo() {
+
+							if (MyPoi.lng - OldMyPoi.lng < 0.0000001) {
+								console.log("位置没变");
+								getMyPosition();
+							} else {
+								console.log("位置变了");
+							}
+							OldMyPoi.lng = MyPoi.lng;
+
+							setTimeout(function() {
+								checkGeo();
+							}, 5000);
+						};
+						//箭头指向
+						plus.orientation.watchOrientation(function(o) {
+							marker.setRotation(o.alpha);
+						}, function(e) {
+							alert("Orientation error: " + e.message);
+						}, {
+							frequency: 100
+						});
+
+						function MyLoControl(posIndex, left, top) {
+							var position = [BMAP_ANCHOR_TOP_LEFT, BMAP_ANCHOR_TOP_RIGHT, BMAP_ANCHOR_BOTTOM_LEFT,
+								BMAP_ANCHOR_BOTTOM_RIGHT
+							];
+							this.defaultAnchor = position[posIndex];
+							this.defaultOffset = new BMap.Size(left, top);
+						}
+						MyLoControl.prototype = new BMap.Control();
+						// MyLoControl.prototype.initialize = function(map) {
+						// 	var div = document.createElement("div");
+						// 	$(div).css({
+						// 		color: "#999"
+						// 	});
+						// 	$(div).html(
+						// 		"<div style='display: inline-block;background: #fff;padding: 4px;padding-top: 8px;border-radius: 2px;box-shadow: 0 0 2px #ccc;'><i class='iconfont icon-msnui-foresight' style='font-size: 26px;'></i></div>"
+						// 	);
+
+						// 	$(div).click(function() {
+						// 		moveToMyPoi(17);
+						// 	});
+						// 	map.getContainer().appendChild(div);
+						// 	return div;
+						// }		
+					}
+				},
+			})
+		</script>
+	</body>
+</html>

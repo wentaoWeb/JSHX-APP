@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<!--<link rel="stylesheet" href="../../libs/bootstrap.min.css">-->
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css">
+		<link rel="stylesheet" href="../../css/mui.poppicker.css">
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/bootstrap.min.js"></script>
+		<script src="../../libs/layer/layer.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<!--<script src="../../js/public.js"></script>-->
+		<script src="../../js/main.js"></script>
+		<script src="../../js/app.js"></script>
+		<style>
+			html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #F8F7FC;
+			
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+		#app{
+			width: 100%;
+			height: 100%;
+			position: relative;
+		}
+        .my-header {
+            height: 0.88rem;
+            background-color: #51BFF7;
+            color: #fff;
+        }
+
+        .my-header .mui-title {
+            color: #FFF;
+            font-size: 0.36rem;
+        }
+
+        .my-header a,
+        .my-header h1 {
+            line-height: 0.88rem;
+        }
+
+        .mui-bar-nav.mui-bar .mui-icon {
+            padding: 0;
+            margin: 0;
+            color: #fff;
+        }
+
+        .mui-bar-nav~.mui-content {
+            background-color: #f8f7fc
+        }
+
+        .mui-table-view:before {
+            height: 0;
+        }
+
+        .mui-table-view:after {
+            height: 0;
+        }
+
+        .detail p {
+            line-height: 40px;
+            font-size: 0.36rem;
+            color: #999999;
+        }
+
+        .detail p span {
+            margin-left: 10px;
+            color: #000;
+        }
+
+        .detail p em {
+            margin-left: 10px;
+            color: #000;
+        }
+
+        .detail p input {
+            margin-left: 10px;
+            color: #000;
+        }
+		.mui-content>.mui-table-view:first-child{
+			margin: 0;
+		}
+		.mui-bar-nav~.mui-content{
+			padding-bottom: 0;
+		}
+        .top {
+            background-color: #fff;
+            padding: 11px 15px;
+        }
+
+        .bottom {
+            /* margin-top: 20px; */
+            padding: 11px 15px;
+            background-color: #fff;
+
+        }
+
+        .bottom textarea {
+            border: none;
+            outline: none;
+        }
+		
+        .content .mui-table-view {
+            background-color: transparent;
+			width: 100%;
+			height: 100%;
+        }
+
+        .content .mui-table-view-cell {
+            padding: 0;
+        }
+		.mui-table-view-cell.detail {
+			width: 100%;
+			height: 100%;
+		}
+        .image-item {
+            float: left;
+            position: relative;
+            margin: 0 10px;
+
+        }
+
+        img {
+            width: 100px;
+            height: 100px;
+
+        }
+
+        video {
+            width: 100px;
+            height: 100px;
+
+        }
+
+        .image-close {
+            position: absolute;
+            display: inline-block;
+            right: 0px;
+            top: 0px;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            border-radius: 12px;
+            background-color: #FF5053;
+            color: #f3f3f3;
+            border: solid 1px #FF5053;
+            font-size: 9px;
+            font-weight: 200;
+            z-index: 999;
+        }
+
+        .video-close {
+            position: absolute;
+            display: inline-block;
+            right: 0px;
+            top: 0px;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            border-radius: 12px;
+            background-color: #FF5053;
+            color: #f3f3f3;
+            border: solid 1px #FF5053;
+            font-size: 9px;
+            font-weight: 200;
+            z-index: 999;
+        }
+
+        .video-item {
+            float: left;
+            position: relative;
+            margin: 0 10px;
+        }
+		#pick{
+			margin: 0 10px;
+		}
+		.line{
+			background-color: #EEEEEE;
+		}
+		.machinePic{
+			z-index: 99999999999999999999999999999999999999;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			display: none;
+			width: 100vw;
+			height: 100vh;
+			background: rgba(0,0,0, 0.8);
+		}
+		.machine{
+			width: 90%;
+			margin: 0 auto;
+			border-radius: 3px;
+		}
+		.machine ul{
+			display: flex;
+			height: 230px;
+			flex-wrap: wrap;
+			justify-content: flex-start;
+			margin-left: 5px;
+			margin-top: 5px;
+			overflow: hidden;
+			overflow-y: scroll;
+		}
+		.machine ul li{
+			padding:5px;
+			width: 33.3333%;
+			/* height: 100px; */
+		}
+		.chooseImg.active img{
+			outline: #5BC0DE 2px solid;
+		}
+		.delPic{
+			position: absolute;
+			top: 0;
+			right: 0;
+			background-color: red;
+			border-radius: 50%;
+			color: white;
+			width: 20px;
+			height: 20px;
+			text-align: center;
+		}
+		.blue{
+			background-color: #43C1D4;
+			color: #FFFFFF;
+		}
+		.machineTitle{
+			line-height: 50px;
+			text-align: center;
+			background-color: #43C1D4;
+			color: #FFFFFF;
+		}
+    </style>
+	</head>
+
+	<body>
+		<!-- 侧滑导航根容器 -->
+		<div id="app">
+			<div class="mui-off-canvas-wrap mui-draggable">
+				<div class="mui-bar mui-bar-nav my-header">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">项目详情</h1>
+					<a href="javascript:;" id="finish" class="mui-icon mui-pull-right" style="font-size:14px;" @click="submit()">提交</a>
+				</div>
+				<div class="mui-content mui-scroll-wrapper content" id="offCanvasContentScroll">
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell detail">
+							<div class="top">
+								<p>项目名称
+									<span>{{title}}</span>
+								</p>
+								<p>稽查结果
+									<em>{{Content}}</em>
+								</p>
+								<p style="display: inline-block;">整改类型
+									<label><input name="radio" type="radio" value="1">现场整改</label>
+									<label><input name="radio" type="radio" value="2">后期整改</label>
+								</p>
+							</div>
+							<!-- <div class="line" style="width: 100%;height: 20px;">
+
+							</div> -->
+							<div class="bottom">
+								<input type="text" id="remark" placeholder="请填写备注"></input>
+								<div class="apply">
+									<label style="color:#999">
+										选择视频或照片</label>
+									<ul id="photos">
+										<li v-if="choise == true" class="image-item space" v-for="item,index in chooseImg" style="position: relative;">
+											<img :src="item.replace('D:\\GPS_DOWNLOAD' , baseURL+'/facilityFile/')" />
+											<a class="delPic" @click="delPic(index)" style="">X</a>
+										</li>
+										<li id="picker">
+											<a id="pick" href="#cropper-sheet" style="margin: 0 10px;">
+												<img id="image" src="../../img/+@2x.png" style="width:100px;height:100px" />
+											</a>
+										</li>
+									</ul>
+									<div id="video"></div>
+									<!-- <a id="pick" href="#cropper-sheet">
+										<img id="image" src="../../img/+@2x.png" style="width:100px;height:100px" />
+									</a> -->
+								</div>
+								<div class="addPic" style="position: fixed;bottom: -10px;left: 0; width: 100%;padding: 0;margin: 0;">
+									<button type="button" class="mui-btn mui-btn-block blue" @click="getMachinePic">添加执法仪照片</button>
+									<!-- <button type="button" class="mui-btn mui-btn-red mui-btn-block" @click="del">删除下载任务</button> -->
+								</div>
+								<div class="machinePic" style="width: 100%;height: 100%;padding-top: 50px;">
+									<div class="machine" style="background-color: white;">
+										<div class="machineTitle">
+											<span>已选择{{chooseImg.length}}张</span>
+											<span style="float: right;font-size: 22px;padding-right: 20px;" @click="canle">X</span>
+										</div>
+										<ul>
+											<li class="chooseImg" v-for="imgs,index in stringList" @click="choose(imgs,index)">
+												<img :src="imgs.replace('D:\\GPS_DOWNLOAD' , baseURL+'/facilityFile/')" />
+											</li>
+										</ul>
+										<div class="">
+											<button type="button" class="mui-btn mui-btn-block blue" @click="define">确认</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!--选择照片-->
+			<div id="cropper-sheet" class="mui-popover mui-popover-bottom mui-popover-action">
+				<!-- 可选择菜单 -->
+				<ul class="mui-table-view margin">
+					<li class="mui-table-view-cell">
+						<a id="paizhao" @click="getImg($event)" data-type="camera">拍照</a>
+					</li>
+					<!-- <li class="mui-table-view-cell">
+						<a id="luxiang" @click="getImg($event)" data-type="video">录像</a>
+					</li> -->
+					<li class="mui-table-view-cell">
+						<a id="xiangce" @click="getImg($event)" data-type="gallery">选取照片</a>
+					</li>
+					<!-- <li class="mui-table-view-cell">
+						<a id="shipin" @click="getImg($event)" data-type="galleryVideos">选取视频</a>
+					</li> -->
+				</ul>
+			</div>
+		</div>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script type="text/javascript" src="../../js/cropper.min.js"></script>
+		<script type="text/javascript" src="../../js/getImgs.js"></script>
+		<script>
+			
+			mui.plusReady(function() {
+				// createUploader();
+				var self = plus.webview.currentWebview();
+				self.addEventListener('show', function() {
+					location.reload();
+				});
+				data = {
+					menuId: self.menuId,
+					checkRecordNum: self.checkRecordNum,
+					checkResultTypeId: self.checkResultTypeId,
+					title: self.title,
+					Content: self.Content
+				}
+				window.vm.title = data.title;
+				window.vm.menuId = data.menuId;
+				window.vm.checkRecordNum = data.checkRecordNum;
+				window.vm.checkResultTypeId = data.checkResultTypeId;
+				window.vm.Content = data.Content;
+				// console.log(data.title)
+			})
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					title: '违章',
+					Content: '1.施工机械、材料合格',
+					menuId: '',
+					checkRecordNum: '',
+					checkResultTypeId: '',
+					stringList: [],
+					chooseImg: [],
+					choise: false,
+					sub:true
+				},
+				methods: {
+					canle(){
+						vm.chooseImg = [];
+						$('.machinePic').hide();
+						vm.sub = true;	
+					},
+					delPic(num) {
+						vm.chooseImg.splice(num, 1);
+					},
+					define() {
+						vm.choise = true;
+						$('.machinePic').hide();
+						vm.sub = true;
+					},
+					choose(imgs, num) {
+						var chooseImg = mui('.chooseImg')[num].classList;
+						if (chooseImg.length == 1) {
+							mui('.chooseImg')[num].classList.add('active');
+							vm.chooseImg.push(imgs);
+						} else {
+							mui('.chooseImg')[num].classList.remove('active');
+							vm.chooseImg.pop();
+						}
+					},
+					getMachinePic() {
+						mui.ajax(baseURL + '/app/readFacilitySaveLocalFile/list', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token
+							},
+							type: 'POST',
+							data: {
+								"facilityNo": '90005392'
+							},
+							success: function(res) {
+								if (res.code == 0) {
+									vm.stringList = res.stringList;
+									$('.machinePic').show();
+									vm.sub = false;
+									// console.log(JSON.stringify(res.stringList))
+								} else {
+									alert(res.msg)
+								}
+							}
+						});
+					},
+					saveMachinePic() {
+						//获取整改类型编号
+						var checkRecordNum = localStorage.getItem("checkRecordNum");
+						var rectification = $("input[name='radio']:checked").val();
+						var remark = $("#remark").val();
+						let data = [];
+						for (let i = 0; i < vm.chooseImg.length; i++) {
+							var obj = {}
+							obj.checkRecordNum = checkRecordNum;
+							obj.checkResultTypeId = vm.checkResultTypeId;
+							obj.menuId = vm.menuId;
+							obj.checkPictureName = vm.chooseImg[i].substring(-14);
+							obj.url = vm.chooseImg[i];
+							data.push(obj);
+						}
+						console.log(data)
+						mui.ajax(baseURL + '/app/sceneCheck/insertCheckContentPictureInfo', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token,
+								'Content-Type': 'application/json'
+							},
+							type: 'POST',
+							data: JSON.stringify({
+								"checkRecordNum": checkRecordNum,
+								"menuId": vm.menuId,
+								"checkResultTypeId": vm.checkResultTypeId,
+								"typesOfRectification": rectification,
+								"exitProblem": remark,
+								"pictureEntities": data
+							}),
+							success: function(res) {
+								console.log(JSON.stringify(res))
+								if (res.code == 0) {
+									mui.toast('保存成功');
+									mui.openWindow({
+										url: "auditDetails.html",
+										id: "auditDetails.html",
+										waiting: {
+											autoShow: true,
+											title: '正在加载 '
+										}
+									})
+								} else {
+									alert(res.msg)
+								}
+							}
+						});
+					},
+					getImg: function(e) {
+						document.activeElement.blur(); //收起虚拟键盘
+						var address;
+						// mui.previewImage()
+						mui.plusReady(function() {
+							//上传图片
+							createUploader();
+						});
+						var type = e.target.getAttribute('data-type');
+						// console.log(e.target.getAttribute('data-type'));
+						mui("#cropper-sheet").popover('hide');
+						switch (type) {
+							case 'camera':
+								clickCamera();
+								break;
+							case 'gallery':
+								clickGallery();
+								// $('#demo').hidden;
+								break;
+							case 'video':
+								clickVideo();
+								break;
+							case 'galleryVideos':
+								galleryVideo();
+							default:
+								break;
+						}
+					},
+					submit() {
+						var rectification = $("input[name='radio']:checked").val();
+						var remark = $("#remark").val();
+						// console.log(photos.length)
+						if (remark.length == 0) {
+							alert('请输入描述！');
+							return false;
+						}
+						if (!rectification) {
+							alert('请选择整改类型！');
+							return false;
+						}
+						if (photos.length < 0 && vm.chooseImg.length == 0) {
+							alert('请选择视频或照片！');
+							return false;
+						}
+						vm.upload();
+					},
+					upload() {
+						var token = app.getState().token;
+						var checkRecordNum = localStorage.getItem("checkRecordNum");
+						//获取整改类型编号
+						var rectification = $("input[name='radio']:checked").val();
+						var remark = $("#remark").val();
+						if (photos.length > 0 && vm.chooseImg.length > 0) {
+							task = plus.uploader.createUpload(baseURL + '/app/sceneCheck/uploadPicture', {
+									// task = plus.uploader.createUpload('http://10.0.0.195:8080/js_hx_control/app/sceneCheck/uploadPicture', {
+									method: 'POST'
+								},
+								// task = plus.uploader.createUpload('http://192.168.43.137:8080/js_hx_control/app/sceneCheck/uploadPicture', {
+								// 		method: 'POST'
+								// 	},
+								function(r, status) {
+									var msg = r.responseText;
+									// console.log(msg);
+									var data = JSON.parse(msg);
+									let checkPictur = data.listMap;
+									var name = [];
+									var url = [];
+									var data = []
+									for (var i = 0; i < checkPictur.length; i++) {
+										var list = checkPictur[i].split('+');
+										url.push(list[0]);
+										name.push(list[1]);
+									}
+									// console.log(name)
+									for (var j = 0; j < url.length; j++) {
+										var obj = {}
+										obj.checkRecordNum = checkRecordNum;
+										obj.checkResultTypeId = vm.checkResultTypeId;
+										obj.menuId = vm.menuId;
+										obj.checkPictureName = name[j];
+										obj.url = url[j];
+										data.push(obj);
+									}
+									for (let i = 0; i < vm.chooseImg.length; i++) {
+										var obj = {}
+										obj.checkRecordNum = checkRecordNum;
+										obj.checkResultTypeId = vm.checkResultTypeId;
+										obj.menuId = vm.menuId;
+										obj.checkPictureName = vm.chooseImg[i].substring(-14);
+										obj.url = vm.chooseImg[i];
+										data.push(obj);
+									}
+									if (status == 200) {
+										console.log(1);
+										mui.ajax(baseURL + '/app/sceneCheck/insertCheckContentPictureInfo', {
+											dataType: 'json',
+											timeout: 5000,
+											headers: {
+												"token": app.getState().token,
+												'Content-Type': 'application/json'
+											},
+											type: 'POST',
+											data: JSON.stringify({
+												"checkRecordNum": checkRecordNum,
+												"menuId": vm.menuId,
+												"checkResultTypeId": vm.checkResultTypeId,
+												"typesOfRectification": rectification,
+												"exitProblem": remark,
+												"pictureEntities": data
+											}),
+											success: function(res) {
+												// alert(JSON.stringify(res));
+												if (res.code == 0) {
+													mui.toast('保存成功');
+													mui.openWindow({
+														url: "auditDetails.html",
+														id: "auditDetails.html",
+														waiting: {
+															autoShow: true,
+															title: '正在加载 '
+														}
+													})
+												} else if (res.code == 401) {
+													alert('请重新登录！')
+												} else {
+													alert(res.msg)
+												}
+											}
+										});
+									}
+								})
+							var len = photos.length;
+							task.addData('token', token);
+							for (var i = 0; i < len; i++) {
+								var j = i + 1;
+								var temp = 'phone' + j;
+								task.addFile(photos[i].path, {
+									key: "file" + temp
+								});
+							}
+							task.start();
+						} else if (photos.length > 0 && vm.chooseImg.length == 0) {
+							// console.log(2)
+							task = plus.uploader.createUpload(baseURL + '/app/sceneCheck/uploadPicture', {
+									// task = plus.uploader.createUpload('http://10.0.0.195:8080/js_hx_control/app/sceneCheck/uploadPicture', {
+									method: 'POST'
+								},
+								// task = plus.uploader.createUpload('http://192.168.43.137:8080/js_hx_control/app/sceneCheck/uploadPicture', {
+								// 		method: 'POST'
+								// 	},
+								function(r, status) {
+									var msg = r.responseText;
+									// console.log(msg);
+									var data = JSON.parse(msg);
+									let checkPictur = data.listMap;
+									var name = [];
+									var url = [];
+									var data = []
+									for (var i = 0; i < checkPictur.length; i++) {
+										var list = checkPictur[i].split('+');
+										url.push(list[0]);
+										name.push(list[1]);
+									}
+									// console.log(name)
+									for (var j = 0; j < url.length; j++) {
+										var obj = {}
+										obj.checkRecordNum = checkRecordNum;
+										obj.checkResultTypeId = vm.checkResultTypeId;
+										obj.menuId = vm.menuId;
+										obj.checkPictureName = name[j];
+										obj.url = url[j];
+										data.push(obj);
+									}
+									if (status == 200) {
+										mui.ajax(baseURL + '/app/sceneCheck/insertCheckContentPictureInfo', {
+											dataType: 'json',
+											timeout: 5000,
+											headers: {
+												"token": app.getState().token,
+												'Content-Type': 'application/json'
+											},
+											type: 'POST',
+											data: JSON.stringify({
+												"checkRecordNum": checkRecordNum,
+												"menuId": vm.menuId,
+												"checkResultTypeId": vm.checkResultTypeId,
+												"typesOfRectification": rectification,
+												"exitProblem": remark,
+												"pictureEntities": data
+											}),
+											success: function(res) {
+												if (res.code == 0) {
+													mui.toast('保存成功');
+													mui.openWindow({
+														url: "auditDetails.html",
+														id: "auditDetails.html",
+														waiting: {
+															autoShow: true,
+															title: '正在加载 '
+														}
+													})
+												} else if (res.code == 401) {
+													alert('请重新登录！')
+												} else {
+													alert(res.msg)
+												}
+											}
+										});
+									}
+								})
+							var len = photos.length;
+							task.addData('token', token);
+							for (var i = 0; i < len; i++) {
+								var j = i + 1;
+								var temp = 'phone' + j;
+								task.addFile(photos[i].path, {
+									key: "file" + temp
+								});
+							}
+							task.start();
+						} else if (photos.length == 0 && vm.chooseImg.length > 0) {
+							console.log(3)
+							vm.saveMachinePic();
+						}
+					}
+				},
+			})
+			mui('#offCanvasSideScroll').scroll();
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能  
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title></title>
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/app.js"></script>
+		<style type="text/css">
+			html,
+			body,
+				{
+				width: 100%;
+				height: 100%;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			.my-header {
+				height: 0.88rem;
+				background-color: #FFF;
+				color: #fff;
+			}
+
+			.my-header .mui-title {
+				color: #000;
+				font-size: 0.36rem;
+				font-weight: 800;
+			}
+
+			.my-header a,
+			.my-header h1 {
+				line-height: 0.88rem;
+			}
+
+			.mui-bar-nav.mui-bar .mui-icon {
+				padding: 0;
+				margin: 0;
+				color: #000;
+			}
+
+			.detail {
+				background-color: #F0EFEE;
+				margin-top: 15px;
+				position: relative;
+			}
+
+			.bottom p {
+				line-height: 0.8rem;
+				font-size: 0.38rem;
+			}
+
+			.bottom p span {
+				color: #000;
+				margin-left: 8px;
+			}
+
+			#btn {
+				position: fixed;
+				bottom: 0;
+				z-index: 99999999999999999;
+			}
+
+			.mui-btn-block {
+				margin-bottom: 0px;
+			}
+
+			.status {
+				position: absolute;
+				top: 10px;
+				right: 10px;
+				padding: 5px 7px;
+			}
+
+			.red {
+				color: red;
+				border: 1px solid red;
+			}
+
+			.orange {
+				color: orange;
+				border: 1px solid orange;
+			}
+
+			.green {
+				color: #99cc66;
+				border: 1px solid #99cc66;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 主页面标题 -->
+			<header class="mui-bar mui-bar-nav my-header">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">领用详情</h1>
+			</header>
+			<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll" style="height: 100%;">
+				<div class="mui-scroll">
+					<div class="mui-input-row mui-search" style="display: flex;justify-content: center;align-items: center;">
+						<input type="text" id="selectData" style="width: 270px;margin-top: 15px;" placeholder="" />
+						<button type="button" class="mui-btn mui-btn-blue" style="height: 40px;margin-left: 20px;">搜索</button>
+					</div>
+					<ul>
+						<li class="detail" v-for="item in sel" @click="toDetail(item.applyCode,item.applyStatus,item)">
+							<span class="status" :class="{red:item.applyStatus == '待归还',orange:item.applyStatus == '待领用',green:item.applyStatus == '已归还'||item.applyStatus == '准备中'}">
+								{{item.applyStatus}}
+							</span>
+							<div style="padding:20px" class="bottom">
+								<p>申请单号
+									<span>{{ item.applyCode }}</span>
+								</p>
+								<p>申请时间
+									<span>{{ item.applyDate }}</span>
+								</p>
+								<p>使用时间
+									<span>{{ item.toolUseDate }}</span>
+								</p>
+								<p>预计归还时间
+									<span>{{ item.predictReturnDate }}</span>
+								</p>
+								<p>申请人
+									<span>{{ item.setupPerson }}</span>
+								</p>
+							</div>
+						</li>
+					</ul>
+
+				</div>
+				<button id="btn" type="button" class="mui-btn mui-btn-blue mui-btn-block" @click="toApply">申请领用</button>
+			</div>
+
+		</div>
+		<script type="text/javascript">
+			mui.plusReady(function() {
+
+			})
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					sel: []
+				},
+				methods: {
+					toApply() {
+						mui.openWindow({
+							url: 'applys.html',
+							id: 'applys',
+							style: {},
+							createNew: true,
+							show: {
+								autoShow: true,
+								aniShow: 'slide-in-right',
+								duration: 100
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载 '
+							}
+						})
+					},
+					toDetail(id, sta, item) {
+						var code = id;
+						// console.log(code)
+						mui.openWindow({
+							url: 'applyDetail.html',
+							id: 'applyDetail',
+							style: {},
+							createNew: true,
+							extras: {
+								"applyCode": code,
+								"status": sta,
+								"list": item
+							},
+							show: {
+								autoShow: true,
+								aniShow: 'slide-in-right',
+								duration: 100
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载 '
+							}
+						})
+					},
+					getData() {
+						mui.ajax(baseURL + '/app/toolManage/toolApply/queryList', {
+							type: 'get',
+							headers: {
+								"token": app.getState().token
+							},
+							data: {
+								"deptId": app.getState().user.awDeptId
+							},
+							dataType: 'json',
+							timeout: 5000,
+							success: function(res) {
+								if (res.code == 0) {
+									vm.sel = res.appToolApplyFormEntities;
+									vm.sel.forEach(item => {
+										switch (item.applyStatus) {
+											case 0:
+												item.applyStatus = '准备中';
+												break;
+											case 1:
+												item.applyStatus = '待领用';
+												break;
+											case 2:
+												item.applyStatus = '待归还';
+												break;
+											case 3:
+												item.applyStatus = '已归还';
+												break;
+											case 4:
+												item.applyStatus = '未同意';
+												break;
+											default:
+												break;
+										}
+									})
+								} else {
+									alert(res.msg)
+								}
+							}
+						});
+					}
+				},
+				mounted() {
+					this.getData();
+				}
+			})
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+		</script>
+	</body>
+</html>

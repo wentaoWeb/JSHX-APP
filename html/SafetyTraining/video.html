@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<title>Video Example</title>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/vue.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.min.css" />
+		<style type="text/css">
+			* {
+				-webkit-user-select: none;
+			}
+
+			html,
+			body {
+				margin: 0px;
+				padding: 0px;
+				height: 100%;
+			}
+
+			.mui-table-view {
+				margin-top: 200px;
+			}
+
+			.mui-btn {
+				border-radius: 10px;
+				margin: 0.625rem 0px;
+			}
+			.mui-table-view-cell {
+				padding: 15px 15px;
+			}
+			.mui-table-view-cell p {
+				margin-bottom: 0;
+				font-size: 0.35rem;
+			}
+		</style>
+	</head>
+	<body>
+		<ul class="mui-table-view" id="app">
+			<!-- <button id="xiazai" class="mui-btn mui-btn-block mui-icon mui-icon-plus">下载附件</button> -->
+			<button id="chakan" class="mui-btn mui-btn-block mui-icon mui-icon-plus">查看附件</button>
+			<li class="mui-table-view-cell mui-media" v-for="(item, index) in videoList" @click="zhuan(item.path,index)">
+				<a href="javascript:;">
+					<div class="mui-media-body">
+						<p class='mui-ellipsis'>{{item.titleOrig}}</p>
+					</div>
+				</a>
+			</li>
+		</ul>
+	</body>
+	<script src="../../js/app.js"></script>
+	<script type="text/javascript">
+		mui.init({})
+		mui.plusReady(function () {
+			document.addEventListener("pause", function(){  
+					mui.toast("后台") 
+					//do something....  
+			}, false); 
+		}) 
+		var vm = new Vue({
+			el: "#app",
+			data: {
+				videoList: [],
+				player: null, // 视频控件对象
+				bofang: 0, // 当前播放视频的索引
+				fileList: [],
+				detailId: null,
+				hisId: null,
+				setIntervalId: null,
+				startBj: 0
+			},
+			methods: {
+				// 创建视频播放控件
+				createVideoPlayer(srcV,index) {
+					index = this.bofang // 传入当前播放对象
+					console.log(this.videoList.length);
+					index = this.bofang // 传入当前播放对象
+					var _this = this
+					if (!_this.player) {
+						_this.player = plus.video.createVideoPlayer('videoplayer', {
+							"src": srcV,
+							"top": '0px',
+							"left": '0px',
+							"width": '100%',
+							"height": '200px',
+							"position": 'absolute',
+							"show-progress": false,
+							"autoplay": true,
+							"enable-progress-gesture": false
+							
+						});
+						plus.webview.currentWebview().append(_this.player);
+						// // 监听开始播放事件
+						_this.startBj = 0
+						_this.player.addEventListener('play', function(e) {
+							_this.startBj++
+							if(_this.startBj == 1) {
+								console.log(333);
+								_this.setIntervalId = setInterval(() => {
+									console.log(111);
+									returnTime ()
+								},5000)
+							}
+							// plus.nativeUI.alert('Video play');
+						}, false)
+						// 用户退出,返回时间
+						function returnTime () {
+							console.log(222);
+							var self = plus.webview.currentWebview();
+							var courseId = self.courseId
+							app.request1("app", 
+								"exam/onlineCourseEnd", 
+								{courseId: courseId, hisId: _this.hisId, detailId: _this.detailId}, 
+								"get", 
+								function(data) {
+									console.log(data);
+							})
+						}
+						// 监听用户暂停事件
+						_this.player.addEventListener('pause', function(e) {
+							_this.startBj = 0
+							clearInterval(_this.setIntervalId)
+						}, false)	
+						var chushiTime = 0
+						// // 监听播放进度更新事件
+						_this.player.addEventListener('timeupdate', function(e) {
+							// if(Math.abs(e.detail.currentTime - chushiTime) >= 5){
+							// 	console.log(e.detail.currentTime);
+							// 	console.log(chushiTime);
+							// 	_this.seekVideo(chushiTime);
+							// }else{
+							// 	chushiTime = parseInt(e.detail.currentTime)
+							// 	console.log(chushiTime);
+							// }
+							// console.log(JSON.stringify(e));
+							// seekVideo(e.detail.currentTime)
+							// e.detail.currentTime = this.currentTime
+							// mui.alert('禁止拖动进度条', '提示', '确定', function() {
+							// 	
+							// }, 'div')
+						}, false);
+						// // 监听播放结束事件
+						_this.player.addEventListener('ended', function(e) {
+							console.log(index == _this.videoList.length-1);
+							if (index == _this.videoList.length-1) {
+								mui.alert('这已经是最后一个视频了', '提示', '确定', function() {
+								}, 'div')
+								return false
+							}
+							index++
+							_this.bofang = index
+							console.log(index);
+							_this.closeVideo()
+							_this.createVideoPlayer(_this.videoList[index].path,index)
+						}, false);
+						plus.webview.currentWebview().append(_this.player);
+					}
+				},
+				// 关闭视频播放控件
+				closeVideo(){
+					this.player.close();
+					this.player = null
+				},
+				// 暂停播放
+				pauseVideo(){
+					this.player.pause();
+				},
+				// 切换视频
+				zhuan(srcV,index) {
+					console.log(srcV);
+					this.closeVideo()
+					this.bofang = index
+					this.createVideoPlayer(srcV,index)
+				},
+				// 调到指定位置播放
+				seekVideo(time){
+					this.player.seek(time)
+				}
+			},
+			created() {
+				var _this = this
+				mui.plusReady(function() {
+					var self = plus.webview.currentWebview();
+					var courseId = {
+						courseId: self.courseId
+					}
+					// alert(self.courseId)
+					var fileSrc
+					app.request1("app", "exam/videoPlay", courseId, "get", function(data) {
+						console.log(data);
+						// console.log(baseURL);
+						// if(data.fileList.length != 0){
+							_this.detailId = data.detailId
+							_this.hisId = data.hisId
+							for (var i=0;i<data.videoList.length;i++) {
+								_this.videoList.push(data.videoList[i])
+								_this.videoList[i].path = baseURL + "/file" +  _this.videoList[i].path.slice(16).replace(/\\/g, "/")
+							}
+							for (var i=0;i<data.fileList.length;i++) {
+								_this.fileList.push(data.fileList[i])
+								_this.fileList[i].path =baseURL + "/file" +  _this.fileList[i].path.slice(16).replace(/\\/g, "/")
+							}
+							console.log(data.videoList[0]);
+							var videoSrc = data.videoList[0].path
+							console.log(videoSrc);
+							_this.createVideoPlayer(videoSrc)
+						// }
+						
+					})
+					// 点击查看附件
+					document.getElementById("chakan").addEventListener("tap", function(){
+						_this.pauseVideo()
+						console.log(_this.fileList);
+						mui.openWindow({
+							url: "chakanfujian.html",
+							id: "chakanfujian.html",
+							createNew: false,
+							style: {},
+							extras: {
+								fileList: _this.fileList //自定义扩展参数，可以用来处理页面间传值  
+							},
+							show: {
+								autoShow: true,
+								aniShow: 'slide-in-right',
+								duration: 100
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载 '
+							}
+						})
+					})
+				})
+			}
+		})
+		
+	</script>
+</html>

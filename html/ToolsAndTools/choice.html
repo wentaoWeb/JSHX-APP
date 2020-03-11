@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title></title>
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" href="../../css/base.css">
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../libs/vue.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/app.js"></script>
+		<style type="text/css">
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			.my-header {
+				height: 0.88rem;
+				background-color: #FFF;
+				color: #fff;
+			}
+
+			.my-header .mui-title {
+				color: #000;
+				font-size: 0.36rem;
+				font-weight: 800;
+			}
+
+			.my-header a,
+			.my-header h1 {
+				line-height: 0.88rem;
+			}
+
+			.mui-bar-nav.mui-bar .mui-icon {
+				padding: 0;
+				margin: 0;
+				color: #000;
+			}
+
+			.mui-row.mui-fullscreen>[class*="mui-col-"] {
+				height: 100%;
+			}
+
+			.mui-col-xs-3,
+			.mui-control-content {
+				overflow-y: auto;
+				height: 100%;
+			}
+
+			.mui-segmented-control .mui-control-item {
+				line-height: 50px;
+				width: 100%;
+			}
+
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+				background-color: #fff;
+			}
+
+			.mui-bar-nav~.mui-content {
+				/* margin-top: 50px; */
+				padding-bottom: 0px;
+			}
+
+			#search {
+				/* margin-top: 50px; */
+			}
+
+			.products-list {
+				flex-grow: 1;
+				width: 100%;
+				/* height: calc(100vh - 122px); */
+				/* overflow: auto; */
+				padding-left: 15px;
+				padding-right: 15px;
+				margin-bottom: 15px;
+			}
+
+			.products-list h4 {
+				font-size: 18px;
+				line-height: .7rem;
+				/* border-bottom: 1px solid #DBDBDB; */
+			}
+
+			.mui-control-item.active {
+				border-left: 2px solid #009CDA !important;
+				color: #009CDA !important;
+				background-color: #FFFFFF;
+			}
+
+			.products-list ul li {
+				padding-top: 13px;
+				padding-bottom: 10px;
+				border-bottom: 1px solid #DBDBDB;
+			}
+
+			.img,
+			.img-responsive {
+				width: 80px;
+				height: 80px;
+			}
+
+			.goodsText {
+				padding-left: 10px;
+				word-wrap: break-word;
+				word-break: normal;
+				overflow: hidden;
+			}
+
+			.goodsText p:last-child {
+				margin-bottom: 0px;
+			}
+
+			.goodsText p {
+				display: flex;
+			}
+
+			.goodsText p .title {
+				display: block;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				color: #000000;
+				font-size: 14px;
+				font-weight: bold;
+				/* width: 50px; */
+			}
+
+			.mui-segmented-control.mui-segmented-control-inverted.mui-segmented-control-vertical .mui-control-item {
+				border-bottom: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 主页面标题 -->
+			<header class="mui-bar mui-bar-nav my-header">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">工器具查看</h1>
+				<!-- <a href="javascript:;" class="mui-icon mui-pull-right" style="font-size:18px;font-weight: 600;color: #51BFF7;"
+				 @click="toSearch">搜索</a> -->
+			</header>
+			<div style="position: fixed;bottom: 15%;right: 10px; width: 50px; height: 50px;z-index: 9999999999999;" @click="toCart">
+				<img src="../../images/icon/liebiao.png" style="width: 50px;height: 50px;" >
+			</div>
+			<div class="mui-content mui-row mui-fullscreen">
+				<div class="mui-col-xs-3" style="background-color: #F7F7F7;">
+					<div id="segmentedControls" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-vertical">
+						<a class="mui-control-item" :class="{active:checkIndex == index}" v-for="(item,index) in menuList" @click="chooseMenu(item.toolTypeId,index)"
+						 :key="index">{{item.toolTypeName}}</a>
+					</div>
+				</div>
+				<div id="segmentedControlContents" class="mui-col-xs-9">
+					<div id="item1" class="mui-control-content mui-active" style="display: flex;justify-content: flex-start;margin: 5px;flex-wrap: wrap;height: auto;">
+						<div style="width:30%;height: 100px; margin-top: 10px; text-align: center;padding: 20px;background-color: #dfdfdf;font-size: 10px;margin-right: 5px;"
+						 v-for="item in goods" @click="showGoods(item.modelNumByToolNameList)">
+
+							{{item.toolName}}
+
+							<!-- <ul>
+								<li v-for="goods in item.modelNumByToolNameList" style="display: flex;" @click="toDetail(goods.toolCode)">
+									<div class="img">
+										<img :src="goods.toolPictureUrl.replace('D:/js_hx_control', baseURL + '/file')" class="img-responsive">
+									</div>
+									<div class="goodsText">
+										<p>
+											<span class="title" style="width: 60px;display: inline-block;">{{goods.standardType}}</span>
+											<span class="title after" style="width: 120px;">{{goods.toolModelNumber}}</span>
+										</p>
+										<p style="font-size: 12px;">库存：{{goods.toolCountByToolStandardModel.stockNumber}}</p>
+										<p style="align-items: baseline;">
+											<span style="font-size: 10px;">可用：</span>
+											<span style="font-size: 18px;color: #FF3737;font-style: italic;">
+												{{goods.toolCountByToolStandardModel.usableNumber}}
+											</span>
+										</p>
+									</div>
+								</li>
+							</ul> -->
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+			// mui('.mui-col-xs-9').scroll({
+			// 	scrollY: true, //是否竖向滚动
+			// 	scrollX: false, //是否横向滚动
+			// 	startX: 0, //初始化时滚动至x
+			// 	// startY: 0, //初始化时滚动至y
+			// 	indicators: true, //是否显示滚动条
+			// 	deceleration: 0.0006, //阻尼系数,系数越小滑动越灵敏
+			// 	bounce: true //是否启用回弹
+			// });
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					checkIndex: 0,
+					menuList: [],
+					goods: []
+				},
+				methods: {
+					toCart(){
+						mui.openWindow({
+							url: 'lends.html',
+							id: 'lends',
+							style: {},
+							createNew: true,
+							show: {
+								autoShow: true,
+								aniShow: 'slide-in-right',
+								duration: 100
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载 '
+							}
+						})
+					},
+					showGoods(modelNumByToolNameList) {
+						// for(var i= 1;i<modelNumByToolNameList.length;i++){
+						// 	if(modelNumByToolNameList[i].toolCountByToolStandardModel == '该类型下暂无工器具数量信息'){
+						// 		alert()
+						// 	}
+						// }
+						mui.openWindow({
+							url: 'goods.html',
+							id: 'goods',
+							style: {},
+							createNew: true,
+							extras: {
+								modelNumByToolNameList: modelNumByToolNameList
+							},
+							show: {
+								autoShow: true,
+								aniShow: 'slide-in-right',
+								duration: 100
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载 '
+							}
+						})
+					},
+					toDetail(code) {
+						mui.openWindow({
+							url: 'goodsDetail.html',
+							id: 'goodsDetail',
+							style: {},
+							createNew: true,
+							extras: {
+								code: code
+							},
+							show: {
+								autoShow: true,
+								aniShow: 'slide-in-right',
+								duration: 100
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载 '
+							}
+						})
+					},
+					toSearch() {
+						mui.openWindow({
+							url: 'searchTool.html',
+							id: 'searchTool',
+							style: {},
+							createNew: true,
+							show: {
+								autoShow: true,
+								aniShow: 'slide-in-right',
+								duration: 100
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载 '
+							}
+						})
+					},
+					chooseMenu(id, index) {
+						this.checkIndex = index;
+						// console.log(id, index);
+						// plus.nativeUI.showWaiting('加载中...');
+						vm.getData(id);
+					},
+					getData(id) {
+						mui.ajax(baseURL + '/app/toolManage/tool/selectToolInfo', {
+							// dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token,
+								// 'Content-Type': 'application/json'
+							},
+							data: {
+								"toolTypeId": id,
+								"deptId":app.getState().user.awDeptId,
+								"status":1
+							},
+							type: 'get',
+							success: function(res) {
+								if (res.code == 0) {
+									// console.log(res);
+									vm.goods = res.toolNameByToolTypeList;
+
+								} else {
+									alert(res.msg)
+								}
+							}
+						});
+					},
+					getLargeClass() {
+						mui.ajax(baseURL + '/app/toolManage/tool/selectToolType', {
+							dataType: 'json',
+							timeout: 5000,
+							headers: {
+								"token": app.getState().token,
+								'Content-Type': 'application/json'
+							},
+							type: 'POST',
+							success: function(res) {
+								if (res.code == 0) {
+									// console.log(res);
+									var list = res.toolTypeMaps;
+									list.shift();
+									vm.menuList = list;
+									vm.getData(vm.menuList[0].toolTypeId);
+									// plus.nativeUI.closeWaiting();
+								} else {
+									alert(res.msg)
+								}
+							}
+						});
+					}
+				},
+				mounted() {
+					this.getLargeClass();
+				}
+			})
+		</script>
+	</body>
+</html>

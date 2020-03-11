@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="stylesheet" href="../../css/base.css">
+		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" href="../../assets/mui/css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<script src="../../libs/jquery.min.js"></script>
+		<script src="../../assets/mui/js/mui.min.js"></script>
+		<script src="../../libs/rem.js"></script>
+		<script src="../../js/main.js"></script>
+		<style>
+			.my-header {
+            height: 0.88rem;
+            background-color: #51BFF7;
+            color: #fff;
+        }
+
+        .my-header .mui-title {
+            color: #FFF;
+            font-size: 0.36rem;
+        }
+
+        .my-header a,
+        .my-header h1 {
+            line-height: 0.88rem;
+        }
+
+        .mui-bar-nav.mui-bar .mui-icon {
+            padding: 0;
+            margin: 0;
+            color: #fff;
+        }
+
+        .mui-bar-nav~.mui-content {
+            padding-top: 0px !important;
+            padding-bottom: 50px;
+            background-color: #fff;
+        }
+
+        .bg {
+            width: 100%;
+            height: 2.82rem;
+            background: url("../../images/bg.png") no-repeat center;
+            background-size: 100%;
+            padding-top: 1.0rem;
+            box-sizing: border-box;
+        }
+
+        .loopImg {
+            width: 92%;
+            margin: 0 auto;
+            height: 2.5rem;
+        }
+
+        .loopImg img {
+            width: 100%;
+        }
+
+        .menu {
+            padding-top: 0.7rem;
+            width: 92%;
+            margin: 0 auto;
+            margin-bottom: 2.0rem;
+        }
+
+        .menu ul .bigMenu {
+            padding-top: 0.7rem;
+            box-sizing: border-box;
+            /* margin-bottom:0.7rem; */
+        }
+
+        .menu ul .bigMenu h1 {
+            font-weight: 400;
+            font-size: 0.36rem;
+            color: #333;
+            font-family: "PingFang-SC-Bold";
+        }
+
+        .bigMenu .smallMenu {
+            margin-top: 0.4rem;
+            box-sizing: border-box;
+            float: left;
+            text-align: center;
+            width: 25%;
+        }
+
+        .smallMenu p {
+            margin-top: 0.2rem;
+            font-size: 0.24rem;
+            color: #333;
+            font-family: "PingFang-SC-Bold";
+        }
+
+        .smallMenu img {
+            width: 0.7rem;
+            height: 0.7rem;
+        }
+    </style>
+	</head>
+
+	<body>
+		<div id="app">
+
+			<header class="mui-bar mui-bar-nav my-header">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">更多频道</h1>
+			</header>
+			<div class="mui-content mui-scroll-wrapper" id="offCanvasContentScroll">
+				<div class="mui-scroll">
+					<div class="menu">
+						<ul>
+							<li class="bigMenu">
+								<h1>综合查询</h1>
+								<ul class="clearfix">
+									<li class="smallMenu">
+										<a href="../informationSearch/informationSearch.html">
+											<img src="../../images/search.png" alt="">
+											<p>外协信息查询</p>
+										</a>
+									</li>
+									<!-- <li class="smallMenu">
+											<a href="">
+												<img src="../../images/iconMain/icon/jczgqk.png" alt="">
+												<p>规章制度查询</p>
+											</a>
+										</li> -->
+									<!-- <li class="smallMenu">
+											<a href="../IntegralStatistics/integral.html">
+												<img src="../../images/jf.png" alt="">
+												<p>积分统计</p>
+											</a>
+										</li> -->
+									<!-- <li class="smallMenu">
+							            <a href="message.html">
+							                <img src="../../images/iconMain/icon/cfdtz.png" alt="">
+							                <p>处罚单通知</p>
+							            </a>
+							        </li> -->
+								</ul>
+							</li>
+							<li class="bigMenu">
+								<h1>稽查管理</h1>
+								<ul class="clearfix">
+									<li class="smallMenu">
+										<a href="../jicha/auditOne.html">
+											<img src="../../images/iconMain/icon/xcjcqk.png" alt="">
+											<p>现场稽查</p>
+										</a>
+									</li>
+									<!-- <li class="smallMenu">
+											<a href="">
+												<img src="../../images/iconMain/icon/jczgqk.png" alt="">
+												<p>整改反馈</p>
+											</a>
+										</li> -->
+									<li class="smallMenu">
+										<a href="../prospectingReport/prospectingReport.html">
+											<img src="../../images/icon/Record.png" alt="">
+											<p>现场勘查记录</p>
+										</a>
+									</li>
+								</ul>
+							</li>
+							<li class="bigMenu">
+								<h1>外协管理</h1>
+								<ul class="clearfix">
+									<li class="smallMenu">
+										<a href="../safe/peopleApply.html">
+											<img src="../../images/iconMain/icon/rysqgl.png" alt="">
+											<p>人员申报</p>
+										</a>
+									</li>
+									<!-- <li class="smallMenu">
+				                        <a href="../safe/information.html">
+				                            <img src="../../images/iconMain/icon/wxxxcx.png" alt="">
+				                            <p>外协信息查询</p>
+				                        </a>
+				                    </li> -->
+									<!-- <li class="smallMenu">
+											<a href="../safe/jfApply.html">
+												<img src="../../images/iconMain/icon/jfsqtb.png" alt="">
+												<p>积分申请填报</p>
+											</a>
+										</li> -->
+									<li class="smallMenu">
+										<a href="../Vehicle safety/Vehicle-Medical-Box.html">
+											<img src="../../images/iconMain/icon/claqlc.png" alt="">
+											<p>车辆管理</p>
+										</a>
+									</li>
+									<li class="smallMenu">
+										<a href="../Fire control management/Fire-Record-Inspection.html">
+											<img src="../../images/xf.png" alt="">
+											<p>消防检查记录</p>
+										</a>
+									</li>
+								</ul>
+							</li>
+							<li class="bigMenu">
+								<h1>安全培训</h1>
+								<ul class="clearfix">
+									<li class="smallMenu">
+										<a href="../../html/SafetyTraining/OnlineLearning.html">
+											<img src="../../images/iconMain/icon/zlzxxx.png" alt="">
+											<p>资料在线学习</p>
+										</a>
+									</li>
+									<li class="smallMenu">
+										<a href="../../html/onlineTest/kaoshiList.html">
+											<img src="../../images/iconMain/icon/zxks.png" alt="">
+											<p>在线考试</p>
+										</a>
+									</li>
+									<!-- <li class="smallMenu">
+											<a href="../../html/SafetyTraining/xianxia/index.html">
+												<img src="../../images/iconMain/icon/xftj.png" alt="">
+												<p>学分统计</p>
+											</a>
+										</li> -->
+									<!-- <li class="smallMenu">
+											<a href="../../html/onlineTest/assessment.html">
+												<img src="../../images/iconMain/icon/ksjggb.png" alt="">
+												<p>培训效果评估</p>
+											</a>
+										</li> -->
+									<li class="smallMenu">
+										<a href="../../html/SafetyTraining/offlineTrainingList.html">
+											<img src="../../images/iconMain/icon/zxks.png" alt="">
+											<p>线下培训</p>
+										</a>
+									</li>
+									<!-- <li class="smallMenu">
+											<a href="../../html/onlineTest/koashiResult.html">
+												<img src="../../images/icon/result.png" alt="">
+												<p>考试结果公布</p>
+											</a>
+										</li> -->
+								</ul>
+							</li>
+							<li class="bigMenu">
+								<h1>工器具管理</h1>
+								<ul class="clearfix">
+									<li class="smallMenu">
+										<a href="../../html/ToolsAndTools/choice.html">
+											<img src="../../images/icon/gqj.png" alt="">
+											<p>领用管理</p>
+										</a>
+									</li>
+									<li class="smallMenu">
+										<a href="../../html/lend/lendTool.html">
+											<img src="../../images/icon/lend.png" alt="">
+											<p>借用管理</p>
+										</a>
+									</li>
+									<li class="smallMenu">
+										<a href="../../html/returnTool/returntool.html">
+											<img src="../../images/icon/select.png" alt="">
+											<p>领借记录管理</p>
+										</a>
+									</li>
+								</ul>
+							</li>
+							<!-- <li class="bigMenu">
+				                <h1>车辆安全管理</h1>
+				                <ul class="clearfix">
+				                    <li class="smallMenu">
+				                        <a href="./qqqq.html">
+				                            <img src="../../images/iconMain/icon/claqlc.png" alt="">
+				                            <p>车辆安全里程</p>
+				                        </a>
+				                    </li>
+				                    <li class="smallMenu">
+				                        <a href="../Vehicle safety/Vehicle-Medical-Box.html">
+				                            <img src="../../images/iconMain/icon/clyyx.png" alt="">
+				                            <p>车辆医药箱</p>
+				                        </a>
+				                    </li>
+				                    <li class="smallMenu">
+				                        <a href="">
+				                            <img src="../../images/iconMain/icon/mhqdj1.png" alt="">
+				                            <p>灭火器登记</p>
+				                        </a>
+				                    </li>
+				                </ul>
+				            </li> -->
+							<!-- <li class="bigMenu">
+									<h1>监理管理</h1>
+									<ul class="clearfix">
+										<li class="smallMenu">
+											<a href="">
+												<img src="../../images/iconMain/icon/jlgzlxdkj.png" alt="">
+												<p>监理工作联系单</p>
+											</a>
+										</li>
+										<li class="smallMenu">
+											<a href="">
+												<img src="../../images/iconMain/icon/jlfj.png" alt="">
+												<p>监理复检</p>
+											</a>
+										</li>
+										<li class="smallMenu" style="width:28%">
+											<a href="">
+												<img src="../../images/iconMain/icon/gcxc.png" alt="">
+												<p>现场处理结果反馈</p>
+											</a>
+										</li>
+									</ul>
+								</li> -->
+							<!-- <li class="bigMenu">
+				                <h1>消防管理</h1>
+				                <ul class="clearfix">
+				                    <li class="smallMenu">
+				                        <a href="../Fire control management/Fire-Record-Inspection.html">
+				                            <img src="../../images/iconMain/icon/xfjljc.png" alt="">
+				                            <p>消防记录检查</p>
+				                        </a>
+				                    </li>
+				                    <li class="smallMenu">
+				                        <a href="">
+				                            <img src="../../images/iconMain/icon/mhqdj2.png" alt="">
+				                            <p>灭火器登记</p>
+				                        </a>
+				                    </li>
+				                </ul>
+				            </li> -->
+							<li class="bigMenu">
+								<h1>其它管理</h1>
+								<ul class="clearfix">
+									<!-- <li class="smallMenu">
+											<a href="">
+												<img src="../../images/iconMain/icon/anyp.png" alt="">
+												<p>安全用品发放</p>
+											</a>
+										</li>
+										<li class="smallMenu">
+											<a href="">
+												<img src="../../images/iconMain/icon/zaqhd.png" alt="">
+												<p>安全活动记录</p>
+											</a>
+										</li> -->
+									<li class="smallMenu">
+										<a href="qqqq.html">
+											<img src="../../images/iconMain/icon/qrcode.png" alt="">
+											<p>二维码扫描</p>
+										</a>
+									</li>
+									<!-- <li class="smallMenu">
+											<a href="">
+												<img src="../../images/iconMain/icon/wzyt.png" alt="">
+												<p>违章约谈管理</p>
+											</a>
+										</li> -->
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- 主页面标题 -->
+
+		</div>
+
+		<script src="../../js/app.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			mui('#offCanvasSideScroll').scroll();
+			mui('#offCanvasContentScroll').scroll();
+			mui.init({
+				swipeBack: true //启用右滑关闭功能  
+			});
+			// var first = null
+			// mui.back = function () {
+			//     if (!first) {
+			//         first = new Date().getTime()
+			//         mui.toast('再按一次退出应用')
+			//         setTimeout(function () {
+			//             first = null
+			//         }, 1000)
+			//     } else {
+			//         if (new Date().getTime() - first < 1000)
+			//             plus.runtime.quit()
+			//     }
+			// }
+			// var vm = new Vue({
+			// 	el:'#app',
+			// 	methods:{
+			// 		back(){
+			// 			mui.openWindow({
+			// 				url: "main.html",
+			// 				id: "main.html",
+			// 				waiting: {
+			// 					autoShow: true,
+			// 					title: '正在加载 '
+			// 				}
+			// 			})
+			// 		}
+			// 	}
+			// })
+
+			mui('.smallMenu').on('tap', 'a', function() {
+				var _this = this
+				var userID = {
+					userId: app.getState().user.userId
+				}
+				app.request("app", "selectUserInfo", userID, "get", function(data) {
+					if (data.code === 401) {
+						mui.alert('身份已失效,请重新登陆', '提示', '确定', function() {}, 'div')
+					} else {
+						var tagPage = _this.getAttribute('href')
+						// console.log(tagPage);
+						mui.openWindow({
+							url: tagPage,
+							id: tagPage,
+							style: {},
+							show: {
+								autoShow: true,
+								aniShow: 'slide-in-right',
+								duration: 100
+							},
+							waiting: {
+								autoShow: true,
+								title: '正在加载 '
+							}
+						})
+					}
+				})
+			})
+		</script>
+	</body>
+
+</html>
